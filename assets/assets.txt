@@ -1,2 +1,2 @@
-angry-birds-image.png
+angryBirds opening.png
 libgdx.png

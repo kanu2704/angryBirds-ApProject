@@ -1,24 +1,15 @@
 package com.ap_project.game.states;
 
-import com.ap_project.game.Core;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 
-public class playState extends abstractState implements Screen {
+public class levelState extends abstractState implements Screen {
     private Texture background;
-    final Core game;
-    OrthographicCamera camera;
-
-    public playState(gameStateManager gsm, Core game){
+    public levelState(gameStateManager gsm){
         super(gsm);
         //background=new Texture();
-        this.game = game;
-        camera=new OrthographicCamera();
-        camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
-
-        //background=?????
     }
+
     @Override
     protected void handleInput() {
 
@@ -28,30 +19,39 @@ public class playState extends abstractState implements Screen {
     protected void update(float dt) {
 
     }
+
     @Override
     public void show() {
+
     }
 
     @Override
-    public void render(float delta){
+    public void render(float v) {
+
     }
+
     @Override
     public void resize(int i, int i1) {
+
     }
 
     @Override
     public void pause() {
+
     }
 
     @Override
     public void resume() {
+
     }
 
     @Override
     public void hide() {
+
     }
 
     @Override
     public void dispose() {
+
     }
 }

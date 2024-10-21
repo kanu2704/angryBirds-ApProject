@@ -24,11 +24,15 @@ public class menuState extends abstractState implements Screen {
         this.game = game;
         camera=new OrthographicCamera();
         camera.setToOrtho(false,800,800);
+        //background=new Texture();
     }
 
     @Override
     protected void handleInput() {
-
+        //add here according to the button pressed;
+        gsm=new gameStateManager();
+        playState play=new playState(gsm,game);
+        game.setScreen(play);
     }
 
     @Override

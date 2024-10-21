@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Core extends Game {
-    public static final int WIDTH=800;
+    public static final int WIDTH=900;
     public static final int HEIGHT=800;
 
     public static final String TITLE="angry Bird";
@@ -30,8 +30,8 @@ public class Core extends Game {
 
         //setting to the main menu screen here;
         gsm=new gameStateManager();
-        openingState menu=new openingState(gsm,this);
-        this.setScreen(menu);
+        openingState openingState=new openingState(gsm,this);
+        this.setScreen(openingState);
 
 
     }

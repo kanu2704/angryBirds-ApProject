@@ -10,32 +10,46 @@ public class openingState extends abstractState implements Screen{
     private Texture background;
     final Core game;
     OrthographicCamera camera;
-    //FitViewport viewport;
+
+    private float elapsedTime = 0; // Timer to track time
+    private float fadeAlpha = 1f;  // Alpha for fading effect
+    private float fadeDuration = 2f;  // Duration of the fade-out in seconds
+    private float showTime = 4f;
+
 
 
     public openingState(gameStateManager gsm, Core game){
         super(gsm);
         this.game = game;
         camera=new OrthographicCamera();
-        camera.setToOrtho(false,800,800);
+        camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
 
+        background=new Texture("angryBirds opening.png");
 
-        background=new Texture("angry-birds-image.png");
-        //playBtn=new Texture("playbtn.png");
     }
+
     //later
     @Override
     protected void handleInput() {
-        //if(Gdx.input.justTouched()){
-        //gsm.set(new playState(gsm));
-        //}
+        gsm=new gameStateManager();
+        menuState menu=new menuState(gsm,game);
+        if (fadeAlpha <= 0) {
+            gsm.set(new menuState(gsm, game));
+        }
 
     }
+
     //later
     @Override
     protected void update(float dt) {
-        //handleInput();
-
+        elapsedTime += dt;
+        if (elapsedTime >= showTime) {
+            fadeAlpha -= dt / fadeDuration;
+            if (fadeAlpha < 0) {
+                fadeAlpha = 0;
+            }
+            handleInput();
+        }
     }
 
     @Override
@@ -51,13 +65,17 @@ public class openingState extends abstractState implements Screen{
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
+        game.batch.setColor(1, 1, 1, fadeAlpha);
         game.batch.draw(background,0,0,Core.WIDTH, Core.HEIGHT);
+        game.batch.setColor(1, 1, 1, 1);
         game.batch.end();
+        update(v);
+
     }
 
     @Override
     public void resize(int width, int height) {
-        //viewport.update(width, height);
+
 
     }
 
@@ -78,7 +96,6 @@ public class openingState extends abstractState implements Screen{
 
     @Override
     public void dispose() {
-
-
+        background.dispose();
     }
 }

@@ -14,7 +14,7 @@ public class openingState extends abstractState implements Screen{
     private float elapsedTime = 0; // Timer to track time
     private float fadeAlpha = 1f;  // Alpha for fading effect
     private float fadeDuration = 2f;  // Duration of the fade-out in seconds
-    private float showTime = 4f;
+    private float showTime = 2f;
 
 
 
@@ -34,7 +34,7 @@ public class openingState extends abstractState implements Screen{
         gsm=new gameStateManager();
         menuState menu=new menuState(gsm,game);
         if (fadeAlpha <= 0) {
-            gsm.set(new menuState(gsm, game));
+            game.setScreen(menu);
         }
 
     }

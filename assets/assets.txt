@@ -1,2 +1,7 @@
 angryBirds opening.png
+background.png
+ground.png
+heading.png
 libgdx.png
+playBtn.png
+playScreenbg.png

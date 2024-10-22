@@ -15,5 +15,4 @@ public class block {
         block=new Texture("block.png");
     }
 
-
 }

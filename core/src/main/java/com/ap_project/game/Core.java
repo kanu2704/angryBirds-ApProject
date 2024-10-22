@@ -32,8 +32,6 @@ public class Core extends Game {
         gsm=new gameStateManager();
         openingState openingState=new openingState(gsm,this);
         this.setScreen(openingState);
-
-
     }
 
     @Override

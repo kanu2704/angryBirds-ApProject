@@ -14,8 +14,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Core extends Game {
-    public static final int WIDTH=900;
-    public static final int HEIGHT=800;
+    public static final int WIDTH=1280;
+    public static final int HEIGHT=720;
 
     public static final String TITLE="angry Bird";
     public SpriteBatch batch;

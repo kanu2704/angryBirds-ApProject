@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
-public class bird {
+public abstract class bird {
     private Vector3 position;
     private Vector3 velocity;
     private final float GRAVITY= -9.8F;
@@ -17,4 +17,5 @@ public class bird {
     public void update(float dt){
 
     }
+
 }

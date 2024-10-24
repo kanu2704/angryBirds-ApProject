@@ -1,7 +1,12 @@
 angryBirds opening.png
-background.png
+backButton.png
+background.jpg
 ground.png
 heading.png
+level1btn.png
+level2btn.png
+level3btn.png
+levelSelectbg.png
 libgdx.png
 playBtn.png
 playScreenbg.png

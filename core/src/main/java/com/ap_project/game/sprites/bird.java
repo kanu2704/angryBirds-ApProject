@@ -12,7 +12,7 @@ public abstract class bird {
     private Rectangle bounds;
 
     public bird(Texture texturePath){
-        this.bird=new Texture(String.valueOf(texturePath));
+        this.bird=new Texture(texturePath);
     }
 //    public void update(float dt){
 //

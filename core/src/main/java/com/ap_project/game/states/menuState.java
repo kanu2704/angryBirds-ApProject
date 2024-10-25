@@ -24,29 +24,29 @@ public class menuState extends abstractState implements Screen {
         super();
         this.game = game;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 800);
+        camera.setToOrtho(false, Core.WIDTH, Core.HEIGHT);
+
         background = new Texture("background.jpg");
         heading = new Texture("heading.png");
         playBtn = new Texture("playBtn.png");
-
+        playWidth = playBtn.getWidth() * 0.2f;
+        playHeight = playBtn.getHeight() * 0.2f;
+        playBtnX = (Core.WIDTH - playWidth) / 2 - 20;
+        playBtnY = (Core.HEIGHT - playHeight) / 2;
     }
 
     @Override
     protected void handleInput() {
         if (Gdx.input.isTouched()) {
-            float x = Gdx.input.getX();
-            float y = Gdx.graphics.getHeight() - Gdx.input.getY();
-            if (x >= playBtnX && x <= (playBtnX + playWidth) &&
-                y >= playBtnY && y <= (playBtnY + playHeight)) {
+            Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(touchPos);
+            if (touchPos.x >= playBtnX && touchPos.x<= (playBtnX + playWidth) &&
+                touchPos.x >= playBtnY && touchPos.y <= (playBtnY + playHeight)) {
                 game.setScreen(new levelState(game));
+                dispose();
             }
+
         }
-    }
-    private void updateButtonPosition(float width, float height) {
-        playWidth = playBtn.getWidth() * 0.2f;
-        playHeight = playBtn.getHeight() * 0.2f;
-        playBtnX = (width - playWidth) / 2 - 20;
-        playBtnY = (height - playHeight) / 2;
     }
 
     @Override
@@ -76,8 +76,6 @@ public class menuState extends abstractState implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        camera.setToOrtho(false, width, height);
-        updateButtonPosition(width, height);
     }
 
     @Override
@@ -96,6 +94,6 @@ public class menuState extends abstractState implements Screen {
     public void dispose() {
         background.dispose();
         heading.dispose();
-        playBtn.dispose(); // Dispose of the play button texture
+        playBtn.dispose();
     }
 }

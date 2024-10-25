@@ -3,6 +3,7 @@ package com.ap_project.game.states;
 import com.ap_project.game.Core;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -10,12 +11,11 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class levelState extends abstractState implements Screen {
     final private Texture background;
     final Core game;
+    final private OrthographicCamera camera;
     final private Texture backButton;
-
     final private Texture level1Btn;
     final private Texture level2Btn;
     final private Texture level3Btn;
-
     final private float backWidth;
     final private float backHeight;
     final private float levelBtnWidth;
@@ -24,6 +24,9 @@ public class levelState extends abstractState implements Screen {
     public levelState(Core game){
         super();
         this.game = game;
+        camera=new OrthographicCamera();
+        camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
+
         background = new Texture("levelSelectbg.png");
         backButton = new Texture("backButton.png");
         level1Btn = new Texture("level1btn.png");
@@ -39,11 +42,13 @@ public class levelState extends abstractState implements Screen {
     @Override
     protected void handleInput() {
         if (Gdx.input.justTouched()) {
-            Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(),0);
+            camera.unproject(touchPos);
             if (touchPos.x >= 20 && touchPos.x <= 20 + backWidth && touchPos.y >= 720 - backHeight - 20 && touchPos.y <= 720 - 20) {
                 game.setScreen(new menuState(game));
             }else{
-            game.setScreen(new playState(game));}
+                game.setScreen(new playState(game));
+            }
             dispose();
         }
     }
@@ -66,7 +71,6 @@ public class levelState extends abstractState implements Screen {
         game.batch.draw(level1Btn, 100, 100, levelBtnWidth, levelBtnHeight);
         game.batch.draw(level2Btn, 100 + levelBtnWidth + spacing, 100, levelBtnWidth, levelBtnHeight);
         game.batch.draw(level3Btn, 100 + 2 * (levelBtnWidth + spacing), 100, levelBtnWidth, levelBtnHeight);
-
         game.batch.end();
         handleInput();
     }

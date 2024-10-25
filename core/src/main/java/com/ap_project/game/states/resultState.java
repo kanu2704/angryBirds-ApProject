@@ -36,7 +36,6 @@ public class resultState extends abstractState implements Screen {
         if (Gdx.input.justTouched()) {
             Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(),0);
             camera.unproject(touchPos);
-            System.out.println(touchPos.x+" "+touchPos.y);
             float homeX = 450;
             float homeY = 310;
             float homeWidth = homeBtn.getWidth() * 0.2f;

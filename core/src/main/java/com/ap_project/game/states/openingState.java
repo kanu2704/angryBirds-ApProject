@@ -1,15 +1,19 @@
 package com.ap_project.game.states;
 
 import com.ap_project.game.Core;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.audio.Music;
 
 public class openingState extends abstractState implements Screen{
     private Texture background;
     final Core game;
-    OrthographicCamera camera;
+    private OrthographicCamera camera;
+    private Music backgroundMusic;
 
     private float elapsedTime = 0; // Timer to track time
     private float fadeAlpha = 1f;  // Alpha for fading effect
@@ -25,9 +29,14 @@ public class openingState extends abstractState implements Screen{
         camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
         background=new Texture("angryBirds opening.png");
 
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("backgroundMusic.ogg"));
+
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(0.5f);
+        backgroundMusic.play();
+
     }
 
-    //later
     @Override
     protected void handleInput() {
         menuState menu=new menuState(game);

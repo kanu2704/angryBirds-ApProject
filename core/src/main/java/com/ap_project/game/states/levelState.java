@@ -86,11 +86,9 @@ public class levelState extends abstractState implements Screen {
     @Override
     public void resume() {
     }
-
     @Override
     public void hide() {
     }
-
     @Override
     public void dispose() {
         background.dispose();

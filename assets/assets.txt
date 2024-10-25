@@ -1,6 +1,7 @@
 angryBirds opening.png
 backButton.png
 background.jpg
+backgroundMusic.ogg
 bomb.png
 chuck.png
 crossBtn.png

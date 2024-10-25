@@ -68,9 +68,9 @@ public class levelState extends abstractState implements Screen {
         game.batch.draw(background, 0, 0, 1280, 720);
         game.batch.draw(backButton, 20, 720 - backHeight - 20, backWidth, backHeight);
         float spacing = 10f;
-        game.batch.draw(level1Btn, 100, 100, levelBtnWidth, levelBtnHeight);
-        game.batch.draw(level2Btn, 100 + levelBtnWidth + spacing, 100, levelBtnWidth, levelBtnHeight);
-        game.batch.draw(level3Btn, 100 + 2 * (levelBtnWidth + spacing), 100, levelBtnWidth, levelBtnHeight);
+        game.batch.draw(level1Btn, 300, 400, levelBtnWidth, levelBtnHeight);
+        game.batch.draw(level2Btn, 420 + levelBtnWidth + spacing, 400, levelBtnWidth, levelBtnHeight);
+        game.batch.draw(level3Btn, 540 + 2 * (levelBtnWidth + spacing), 400, levelBtnWidth, levelBtnHeight);
         game.batch.end();
         handleInput();
     }

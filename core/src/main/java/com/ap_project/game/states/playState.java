@@ -97,6 +97,16 @@ public class playState extends abstractState implements Screen {
                 game.setScreen(new pauseState(game));
                 dispose();
             }
+            if (touchPos.x >= winBtnX && touchPos.x <= winBtnX + winBtnWidth &&
+                touchPos.y >= winBtnY && touchPos.y <= winBtnY + winBtnHeight) {
+                game.setScreen(new resultState(game));
+                dispose();
+            }
+            if (touchPos.x >= loseBtnX && touchPos.x <= loseBtnX + loseBtnWidth &&
+                touchPos.y >= loseBtnY && touchPos.y <= loseBtnY + loseBtnHeight) {
+                game.setScreen(new resultState2(game));
+                dispose();
+            }
         }
     }
 

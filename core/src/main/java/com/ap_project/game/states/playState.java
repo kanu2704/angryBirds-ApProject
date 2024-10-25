@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 
+
 public class playState extends abstractState implements Screen {
     private final Texture background;
     final Core game;
@@ -20,6 +21,7 @@ public class playState extends abstractState implements Screen {
     private block[] blocks;
     private pig[] pigs;
     private bird[] birds;
+    private slingshot slingShot;
 
 
     private final float pauseBtnX;
@@ -40,6 +42,7 @@ public class playState extends abstractState implements Screen {
         background=new Texture("background.jpg");
         ground=new Texture("ground1.png");
         pauseBtn=new Texture("pauseBtn.png");
+        slingShot=new slingshot(400f,105f);
         pauseBtnWidth = pauseBtn.getWidth() * 0.09f;
         pauseBtnHeight = pauseBtn.getHeight() * 0.09f;
         blocks[0]=new woodenBlock("wb1.png");
@@ -47,11 +50,11 @@ public class playState extends abstractState implements Screen {
         blocks[9]=new woodenBlock("wb10.png");
 
         //adding the pigs and birds here
-        pigs[0]=new pig1("pig1.png");
-        pigs[1]=new pig2("pig2.png");
-        pigs[2]=new pig3("pig3.png");
-        pigs[3]=new pig1("pig1.png");
-        pigs[4]=new pig2("pig2.png");
+        pigs[0]=new pig1("pig1a.png");
+        pigs[1]=new pig2("pig2a.png");
+        pigs[2]=new pig3("pig3a.png");
+        pigs[3]=new pig1("pig1a.png");
+        pigs[4]=new pig2("pig2a.png");
 
         birds[0]=new redBird("redBird.png");
         birds[1]=new chuck("chuck.png");
@@ -102,6 +105,22 @@ public class playState extends abstractState implements Screen {
         game.batch.draw(blocks[9].getBlockTexture(),1075,100+20+blocks[0].height,blocks[9].width,blocks[9].height);
         game.batch.draw(blocks[9].getBlockTexture(),1150,100+20+blocks[0].height,blocks[9].width,blocks[9].height);
         //block structure ends
+        //drawing pigs
+        game.batch.draw(pigs[0].getPigTexture(),1025,100,pigs[0].width,pigs[0].height);
+        game.batch.draw(pigs[4].getPigTexture(),1100,100,pigs[4].width,pigs[4].height);
+        game.batch.draw(pigs[2].getPigTexture(),1000-20,115+blocks[0].height+blocks[9].height,pigs[2].width,pigs[2].height);
+        game.batch.draw(pigs[1].getPigTexture(),1075-10,115+blocks[0].height+blocks[9].height,pigs[1].width,pigs[1].height);
+        game.batch.draw(pigs[3].getPigTexture(),1150,115+blocks[0].height+blocks[9].height,pigs[3].width,pigs[3].height);
+        //
+        //drawing birds
+        game.batch.draw(birds[0].getBirdTexture(),170,105,birds[0].width,birds[0].height);
+        game.batch.draw(birds[1].getBirdTexture(),130,105,birds[1].width,birds[1].height);
+        game.batch.draw(birds[2].getBirdTexture(),90,105,birds[2].width,birds[2].height);
+
+        //drawing slingshot
+        game.batch.draw(slingshot.getslingFrontTexture(),200,100,slingshot.slingFront.getWidth()*0.3f,slingshot.slingFront.getHeight()*0.3f);
+        game.batch.draw(slingshot.getslingBackTexture(),185,150,slingshot.slingBack.getWidth()*0.3f,slingshot.slingBack.getHeight()*0.3f);
+
         game.batch.end();
         update(delta);
     }

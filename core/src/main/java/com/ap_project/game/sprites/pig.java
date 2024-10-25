@@ -16,8 +16,11 @@ public abstract class pig {
 
     public pig(String texturePath){
         this.pig = new Texture(texturePath);
-        this.width=this.pig.getWidth();
-        this.height=this.pig.getHeight();
+        this.width=this.pig.getWidth()*0.2f;
+        this.height=this.pig.getHeight()*0.2f;
+    }
+    public Texture getPigTexture(){
+        return pig;
     }
 
 }

@@ -1,6 +1,10 @@
 angryBirds opening.png
 backButton.png
 background.jpg
+bomb.png
+chuck.png
+crossBtn.png
+exitBtn.png
 ground1.png
 heading.png
 level1btn.png
@@ -8,8 +12,23 @@ level2btn.png
 level3btn.png
 levelSelectbg.png
 libgdx.png
+pausebg.png
 pauseBtn.png
+pig1a.png
+pig1b.png
+pig1c.png
+pig2a.png
+pig2b.png
+pig2c.png
+pig3a.png
+pig3b.png
+pig3c.png
 playBtn.png
+redBird.png
+resumeBtn.png
+saveAndExitBtn.png
+slingBack.png
+slingFront.png
 wb1.png
 wb10.png
 wb11.png

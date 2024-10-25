@@ -1,10 +1,7 @@
 package com.ap_project.game.states;
 
 import com.ap_project.game.Core;
-import com.ap_project.game.sprites.bird;
-import com.ap_project.game.sprites.block;
-import com.ap_project.game.sprites.pig;
-import com.ap_project.game.sprites.woodenBlock;
+import com.ap_project.game.sprites.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -24,6 +21,7 @@ public class playState extends abstractState implements Screen {
     private pig[] pigs;
     private bird[] birds;
 
+
     private final float pauseBtnX;
     private final float pauseBtnY;
     private final float pauseBtnWidth;
@@ -34,6 +32,8 @@ public class playState extends abstractState implements Screen {
         super();
         this.game = game;
         this.blocks=new block[14];
+        this.pigs=new pig[5];
+        this.birds=new bird[3];
 
         camera=new OrthographicCamera();
         camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
@@ -45,9 +45,18 @@ public class playState extends abstractState implements Screen {
         blocks[0]=new woodenBlock("wb1.png");
         blocks[5]=new woodenBlock("wb6.png");
         blocks[9]=new woodenBlock("wb10.png");
+
         //adding the pigs and birds here
+        pigs[0]=new pig1("pig1.png");
+        pigs[1]=new pig2("pig2.png");
+        pigs[2]=new pig3("pig3.png");
+        pigs[3]=new pig1("pig1.png");
+        pigs[4]=new pig2("pig2.png");
 
-
+        birds[0]=new redBird("redBird.png");
+        birds[1]=new chuck("chuck.png");
+        birds[2]=new bomb("bomb.png");
+        //
         pauseBtnX = 30;
         pauseBtnY = Core.HEIGHT - pauseBtnHeight - 30;
     }

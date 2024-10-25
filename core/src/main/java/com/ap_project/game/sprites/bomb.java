@@ -1,9 +1,7 @@
 package com.ap_project.game.sprites;
 
-import com.badlogic.gdx.graphics.Texture;
-
 public class bomb extends bird{
-    public bomb(Texture texturePath) {
+    public bomb(String texturePath) {
         super(texturePath);
     }
 }

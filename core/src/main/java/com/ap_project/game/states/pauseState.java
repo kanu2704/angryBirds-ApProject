@@ -13,8 +13,8 @@ public class pauseState extends abstractState implements Screen {
     private OrthographicCamera camera;  // Initialize this camera
     final Core game;
 
-    public pauseState(gameStateManager gsm, Core game) {
-        super(gsm);
+    public pauseState(Core game) {
+        super();
         this.game = game;
         background = new Texture("pauseScreen.jpg");
 

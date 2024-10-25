@@ -18,12 +18,11 @@ public class openingState extends abstractState implements Screen{
 
 
 
-    public openingState(gameStateManager gsm, Core game){
-        super(gsm);
+    public openingState(Core game){
+        super();
         this.game = game;
         camera=new OrthographicCamera();
         camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
-
         background=new Texture("angryBirds opening.png");
 
     }
@@ -31,8 +30,7 @@ public class openingState extends abstractState implements Screen{
     //later
     @Override
     protected void handleInput() {
-        gsm=new gameStateManager();
-        menuState menu=new menuState(gsm,game);
+        menuState menu=new menuState(game);
         if (fadeAlpha <= 0) {
             game.setScreen(menu);
         }

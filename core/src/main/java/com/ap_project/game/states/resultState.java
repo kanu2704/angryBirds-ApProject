@@ -6,8 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 public class resultState extends abstractState implements Screen {
     private Texture background;
 
-    public resultState(gameStateManager gsm){
-        super(gsm);
+    public resultState(){
         background=new Texture("bg.png");
     }
     @Override

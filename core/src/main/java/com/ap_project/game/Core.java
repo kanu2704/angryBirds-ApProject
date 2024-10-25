@@ -1,6 +1,5 @@
 package com.ap_project.game;
 
-import com.ap_project.game.states.gameStateManager;
 import com.ap_project.game.states.menuState;
 import com.ap_project.game.states.openingState;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -20,7 +19,6 @@ public class Core extends Game {
     public static final String TITLE="angry Bird";
     public SpriteBatch batch;
     public BitmapFont font;
-    private gameStateManager gsm;
 
 
     @Override
@@ -29,8 +27,7 @@ public class Core extends Game {
         font = new BitmapFont();
 
         //setting to the main menu screen here;
-        gsm=new gameStateManager();
-        openingState openingState=new openingState(gsm,this);
+        openingState openingState=new openingState(this);
         this.setScreen(openingState);
     }
 

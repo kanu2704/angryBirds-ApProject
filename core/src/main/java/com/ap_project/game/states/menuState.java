@@ -20,8 +20,8 @@ public class menuState extends abstractState implements Screen {
     private float playWidth;
     private float playHeight;
 
-    protected menuState(gameStateManager gsm, Core game) {
-        super(gsm);
+    protected menuState(Core game) {
+        super();
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 800);
@@ -38,7 +38,7 @@ public class menuState extends abstractState implements Screen {
             float y = Gdx.graphics.getHeight() - Gdx.input.getY();
             if (x >= playBtnX && x <= (playBtnX + playWidth) &&
                 y >= playBtnY && y <= (playBtnY + playHeight)) {
-                game.setScreen(new levelState(gsm, game));
+                game.setScreen(new levelState(game));
             }
         }
     }

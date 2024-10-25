@@ -1,7 +1,9 @@
 package com.ap_project.game.states;
 
 import com.ap_project.game.Core;
+import com.ap_project.game.sprites.bird;
 import com.ap_project.game.sprites.block;
+import com.ap_project.game.sprites.pig;
 import com.ap_project.game.sprites.woodenBlock;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -11,8 +13,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class playState extends abstractState implements Screen {
     private final Texture background;
@@ -21,6 +21,8 @@ public class playState extends abstractState implements Screen {
     private final Texture ground;
     private final Texture pauseBtn;
     private block[] blocks;
+    private pig[] pigs;
+    private bird[] birds;
 
     private final float pauseBtnX;
     private final float pauseBtnY;
@@ -43,6 +45,8 @@ public class playState extends abstractState implements Screen {
         blocks[0]=new woodenBlock("wb1.png");
         blocks[5]=new woodenBlock("wb6.png");
         blocks[9]=new woodenBlock("wb10.png");
+        //adding the pigs and birds here
+
 
         pauseBtnX = 30;
         pauseBtnY = Core.HEIGHT - pauseBtnHeight - 30;

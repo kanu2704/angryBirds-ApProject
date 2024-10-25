@@ -23,11 +23,22 @@ public class playState extends abstractState implements Screen {
     private bird[] birds;
     private slingshot slingShot;
 
+    //temperory buttons
+    private final Texture winBtn;
+    private final Texture loseBtn;
 
     private final float pauseBtnX;
     private final float pauseBtnY;
     private final float pauseBtnWidth;
     private final float pauseBtnHeight;
+    private final float winBtnX;
+    private final float winBtnY;
+    private final float winBtnWidth;
+    private final float winBtnHeight;
+    private final float loseBtnX;
+    private final float loseBtnY;
+    private final float loseBtnWidth;
+    private final float loseBtnHeight;
 
 
     public playState(Core game){
@@ -60,8 +71,21 @@ public class playState extends abstractState implements Screen {
         birds[1]=new chuck("chuck.png");
         birds[2]=new bomb("bomb.png");
         //
+        winBtn=new Texture("winBtn.png");
+        loseBtn=new Texture("loseBtn.png");
         pauseBtnX = 30;
+
         pauseBtnY = Core.HEIGHT - pauseBtnHeight - 30;
+        winBtnWidth = winBtn.getWidth() * 0.2f;
+        winBtnHeight = winBtn.getHeight() * 0.2f;
+        winBtnX = pauseBtnX-5;
+        winBtnY = pauseBtnY - winBtnHeight - 5;
+
+        loseBtnWidth = loseBtn.getWidth() * 0.2f;
+        loseBtnHeight = loseBtn.getHeight() * 0.2f;
+        loseBtnX = pauseBtnX;
+        loseBtnY = winBtnY - loseBtnHeight - 5;
+
     }
     @Override
     protected void handleInput() {
@@ -93,6 +117,8 @@ public class playState extends abstractState implements Screen {
         game.batch.draw(background, 0, 0, Core.WIDTH, Core.HEIGHT);
         game.batch.draw(ground, 0, 0, ground.getWidth()*0.5f, ground.getHeight()*0.5f);
         game.batch.draw(pauseBtn, pauseBtnX, pauseBtnY, pauseBtnWidth, pauseBtnHeight);
+        game.batch.draw(winBtn,winBtnX,winBtnY,winBtn.getWidth()*0.21f,winBtn.getHeight()*0.21f);
+        game.batch.draw(loseBtn,loseBtnX,loseBtnY,loseBtn.getWidth()*0.21f,loseBtn.getHeight()*0.21f);
 
         //drawing the block structure
         game.batch.draw(blocks[0].getBlockTexture(),1000,100,blocks[0].width,blocks[0].height);

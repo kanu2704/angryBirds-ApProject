@@ -1,14 +1,13 @@
 package com.ap_project.game.states;
+
 import com.ap_project.game.Core;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
-
-
-public class resultState extends abstractState implements Screen {
+public class resultState2 extends abstractState implements Screen{
     private Texture background;
     final Core game;
 
-    public resultState(Core game){
+    public resultState2(Core game){
         this.game=game;
         background=new Texture("bg.png");
     }
@@ -22,7 +21,6 @@ public class resultState extends abstractState implements Screen {
     protected void update(float dt) {
 
     }
-
     @Override
     public void show() {
 

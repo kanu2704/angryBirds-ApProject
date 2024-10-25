@@ -12,6 +12,7 @@ level2btn.png
 level3btn.png
 levelSelectbg.png
 libgdx.png
+loseBtn.png
 pausebg.png
 pauseBtn.png
 pig1a.png
@@ -43,3 +44,4 @@ wb6.png
 wb7.png
 wb8.png
 wb9.png
+winBtn.png

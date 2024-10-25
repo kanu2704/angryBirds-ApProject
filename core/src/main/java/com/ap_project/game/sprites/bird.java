@@ -11,11 +11,11 @@ public abstract class bird {
     private Texture bird;
     private Rectangle bounds;
 
-    public bird(){
-        bird=new Texture("bird.png");
+    public bird(Texture texturePath){
+        this.bird=new Texture(String.valueOf(texturePath));
     }
-    public void update(float dt){
-
-    }
+//    public void update(float dt){
+//
+//    }
 
 }

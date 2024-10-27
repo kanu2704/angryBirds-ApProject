@@ -181,5 +181,7 @@ public class playState extends abstractState implements Screen {
         background.dispose();
         ground.dispose();
         pauseBtn.dispose();
+        winBtn.dispose();
+        loseBtn.dispose();
     }
 }

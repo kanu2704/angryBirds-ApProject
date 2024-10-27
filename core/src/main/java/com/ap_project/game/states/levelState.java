@@ -46,10 +46,12 @@ public class levelState extends abstractState implements Screen {
             camera.unproject(touchPos);
             if (touchPos.x >= 20 && touchPos.x <= 20 + backWidth && touchPos.y >= 720 - backHeight - 20 && touchPos.y <= 720 - 20) {
                 game.setScreen(new menuState(game));
+                dispose();
             }else{
                 game.setScreen(new playState(game));
+                dispose();
             }
-            dispose();
+
         }
     }
 

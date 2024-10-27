@@ -42,6 +42,7 @@ public class openingState extends abstractState implements Screen{
         menuState menu=new menuState(game);
         if (fadeAlpha <= 0) {
             game.setScreen(menu);
+
         }
 
     }

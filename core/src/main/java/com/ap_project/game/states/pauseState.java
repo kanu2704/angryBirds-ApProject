@@ -44,23 +44,27 @@ public class pauseState extends abstractState implements Screen {
             if (touchPos.x >= resumeBtnX && touchPos.x <= resumeBtnX + resumeBtn.getWidth() * 0.4f &&
                 touchPos.y >= resumeBtnY && touchPos.y <= resumeBtnY + resumeBtn.getHeight() * 0.4f) {
                 game.setScreen(new playState(game));
+                dispose();
             }
 
             if (touchPos.x >= saveAndExitBtnX && touchPos.x <= saveAndExitBtnX + saveAndExitBtn.getWidth() * 0.4f &&
                 touchPos.y >= saveAndExitBtnY && touchPos.y <= saveAndExitBtnY + saveAndExitBtn.getHeight() * 0.4f) {
                 //saveGameProgress();
                 game.setScreen(new menuState(game));
+                dispose();
             }
 
             if (touchPos.x >= exitBtnX && touchPos.x <= exitBtnX + exitBtn.getWidth() * 0.4f &&
                 touchPos.y >= exitBtnY && touchPos.y <= exitBtnY + exitBtn.getHeight() * 0.4f) {
                 game.setScreen(new menuState(game));
+                dispose();
             }
 
             // Check if Cross Button is pressed (to close the pause menu)
             if (touchPos.x >= crossBtnX && touchPos.x <= crossBtnX + crossBtn.getWidth() * 0.4f &&
                 touchPos.y >= crossBtnY && touchPos.y <= crossBtnY + crossBtn.getHeight() * 0.4f) {
                 game.setScreen(new playState(game));
+                dispose();
             }
         }
     }

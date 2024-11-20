@@ -1,5 +1,6 @@
 package com.ap_project.game;
 
+import com.ap_project.game.states.levelManager;
 import com.ap_project.game.states.menuState;
 import com.ap_project.game.states.openingState;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -19,8 +20,6 @@ public class Core extends Game {
     public static final String TITLE="angry Bird";
     public SpriteBatch batch;
     public BitmapFont font;
-
-
 
     @Override
     public void create() {

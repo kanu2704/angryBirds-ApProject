@@ -11,9 +11,8 @@ public abstract class pig {
     protected Texture pigTexture;
     public float width;
     public float height;
-    protected World world;
+    protected final World world;
     protected int hits;
-
 
     public pig(String texturePath, World world) {
         this.world = world;
@@ -29,7 +28,7 @@ public abstract class pig {
         bodyDef.position.set(this.position);
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width / 2, height / 2); // Define shape
+        shape.setAsBox(width / 2, height / 2);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1.0f;
@@ -47,6 +46,7 @@ public abstract class pig {
     public void setVelocity(Vector2 velocity) {
         this.velocity = velocity;
     }
+
 
 
     public void setPosition(Vector2 position) {
@@ -73,8 +73,6 @@ public abstract class pig {
     public Body getBody() {
         return body;
     }
-
-    // Dispose resources to avoid memory leaks
     public void dispose() {
         pigTexture.dispose();  // Dispose the texture
         world.destroyBody(body);  // Destroy the Box2D body

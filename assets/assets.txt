@@ -42,6 +42,7 @@ wb11.png
 wb12.png
 wb13.png
 wb14.png
+wb1r.png
 wb2.png
 wb3.png
 wb4.png

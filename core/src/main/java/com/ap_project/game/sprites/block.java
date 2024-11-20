@@ -2,60 +2,49 @@ package com.ap_project.game.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 
 public abstract class block {
-    public float x;
-    public float y;
+    Vector2 position;
+    Vector2 velocity;
     public float width;
     public float height;
     public Texture block;
     protected World world;
     private Body body;
-    private final float GRAVITY = -9.8F;
     private Rectangle bounds;
 
     public block(String texturePath, World world) {
         this.world = world;
         this.block = new Texture(texturePath);
-        this.width = this.block.getWidth() * 0.1f;
-        this.height = this.block.getHeight() * 0.1f;
-        this.bounds = new Rectangle(x, y, width, height);
+        this.width = this.block.getWidth() * 0.2f;
+        this.height = this.block.getHeight() * 0.2f;
 
+        this.position = new Vector2(0, 0);
+        this.velocity = new Vector2(0, 0);
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;  // Dynamic body (affected by gravity, force, etc.)
-        bodyDef.position.set(x, y);  // Initial position
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(this.position);
         body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(width / 2, height / 2);  // Define the shape of the bird
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.density = 1f;  // Adjust the density as needed
-        fixtureDef.friction = 0.5f;  // Adjust the friction as needed
-        fixtureDef.restitution = 0.2f;  // Adjust restitution for bounciness
-
-        com.badlogic.gdx.physics.box2d.PolygonShape shape = new com.badlogic.gdx.physics.box2d.PolygonShape();
-        shape.setAsBox(width / 2, height / 2);  // Define the size of the block shape
-
         fixtureDef.shape = shape;
+        fixtureDef.density = 1.0f;
+        fixtureDef.friction = 0.5f;
+        fixtureDef.restitution = 0.5f;
         body.createFixture(fixtureDef);
-
         shape.dispose();
+        body.setUserData(this);
     }
-    public void setPosition(float x,float y){
-        this.x = x;
-        this.y = y;
-        if (body != null) {
-            body.setTransform(x, y, 0);  // Set the position of the Box2D body
-        }
+    public void setPosition(Vector2 position) {
+        this.position.set(position);
+        this.getBody().setTransform(position.x, position.y, this.getBody().getAngle());  // Update Box2D body position
     }
     public abstract Texture getBlockTexture();
-
-    public void update(float deltaTime) {
-        x = body.getPosition().x;
-        y = body.getPosition().y;
-        bounds.setPosition(x, y);  // Update bounds based on new position
+    public Vector2 getPosition() {
+        return this.getBody().getPosition();
     }
     public void dispose() {
         block.dispose();
@@ -63,9 +52,6 @@ public abstract class block {
     }
     public Body getBody() {
         return body;
-    }
-    public Rectangle getBounds() {
-        return bounds;
     }
 }
 

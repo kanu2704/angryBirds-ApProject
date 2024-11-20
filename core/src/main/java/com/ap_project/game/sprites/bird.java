@@ -23,7 +23,6 @@ public abstract class bird {
 
         this.position = new Vector2(0, 0);
         this.velocity = new Vector2(0, 0);
-
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(this.position);
@@ -31,7 +30,6 @@ public abstract class bird {
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width / 2, height / 2);  // Define the shape of the bird
-
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1.0f;
@@ -52,7 +50,6 @@ public abstract class bird {
         this.position.set(position);  // Update the visual position
         this.getBody().setTransform(position.x, position.y, this.getBody().getAngle());  // Update Box2D body position
     }
-
     public void setDragging(boolean dragging) {
         this.isDragging = dragging;
     }

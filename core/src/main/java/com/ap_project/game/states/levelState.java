@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class levelState extends abstractState implements Screen {
@@ -21,8 +22,7 @@ public class levelState extends abstractState implements Screen {
     final private float levelBtnWidth;
     final private float levelBtnHeight;
 
-    public levelState(Core game){
-        super();
+    public levelState(Core game){;
         this.game = game;
         camera=new OrthographicCamera();
         camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
@@ -57,6 +57,11 @@ public class levelState extends abstractState implements Screen {
 
     @Override
     protected void update(float dt) {
+    }
+
+    @Override
+    public void create() {
+
     }
 
     @Override

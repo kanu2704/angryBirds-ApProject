@@ -1,5 +1,5 @@
 package com.ap_project.game.states;
-
+import com.badlogic.gdx.physics.box2d.World;
 import com.ap_project.game.Core;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -9,18 +9,16 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.audio.Music;
 
+
 public class openingState extends abstractState implements Screen{
     private Texture background;
     final Core game;
     private OrthographicCamera camera;
     private Music backgroundMusic;
-
     private float elapsedTime = 0; // Timer to track time
     private float fadeAlpha = 1f;  // Alpha for fading effect
     private float fadeDuration = 2f;  // Duration of the fade-out in seconds
     private float showTime = 2f;
-
-
 
     public openingState(Core game){
         super();
@@ -58,6 +56,11 @@ public class openingState extends abstractState implements Screen{
             }
             handleInput();
         }
+    }
+
+    @Override
+    public void create() {
+
     }
 
     @Override

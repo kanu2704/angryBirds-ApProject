@@ -10,23 +10,22 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-
+import com.badlogic.gdx.physics.box2d.World;
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Core extends Game {
     public static final int WIDTH=1280;
     public static final int HEIGHT=720;
-
+    private static World world;
     public static final String TITLE="angry Bird";
     public SpriteBatch batch;
     public BitmapFont font;
+
 
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         font = new BitmapFont();
-
-        //setting to the main menu screen here;
         openingState openingState=new openingState(this);
         this.setScreen(openingState);
     }

@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "../../coding_questions"
+		},
+		{
+			"path": "\\\\wsl.localhost\\Ubuntu-20.04\\home\\kanupriya_gupta\\all_projects\\my_Projects\\calculator"
+		},
+		{
+			"path": "../../../CourseRegistrationSystem-20241024T041123Z-001/CourseRegistrationSystem"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "calculator"
+	}
+}

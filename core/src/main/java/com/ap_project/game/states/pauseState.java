@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class pauseState extends abstractState implements Screen {
@@ -72,6 +73,11 @@ public class pauseState extends abstractState implements Screen {
     @Override
     protected void update(float dt) {
         handleInput();
+    }
+
+    @Override
+    public void create() {
+
     }
 
     @Override

@@ -1,4 +1,5 @@
 package com.ap_project.game.states;
+import com.badlogic.gdx.physics.box2d.World;
 import com.ap_project.game.Core;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -52,6 +53,11 @@ public class menuState extends abstractState implements Screen {
     @Override
     protected void update(float dt) {
         handleInput();
+    }
+
+    @Override
+    public void create() {
+
     }
 
     @Override

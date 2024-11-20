@@ -13,6 +13,7 @@ public abstract class pig {
     public float height;
     protected final World world;
     protected int hits;
+    private static final float PPM = 1.0f;
 
     public pig(String texturePath, World world) {
         this.world = world;
@@ -25,15 +26,18 @@ public abstract class pig {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(this.position);
+        bodyDef.position.set(this.position.x/PPM,this.position.y/PPM);
+        bodyDef.linearVelocity.set(0,0);
+        bodyDef.angularVelocity=0;
+        bodyDef.angularDamping=0.5f;
         body = world.createBody(bodyDef);
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width / 2, height / 2);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(Math.min(width, height)/2/PPM);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 1.0f;
-        fixtureDef.friction = 0.5f;
-        fixtureDef.restitution = 0.5f;
+        fixtureDef.density = 10.0f;
+        fixtureDef.friction = 1f;
+        fixtureDef.restitution = 0.001f;
         body.createFixture(fixtureDef);
         shape.dispose();
         body.setUserData(this);
@@ -45,6 +49,8 @@ public abstract class pig {
 
     public void setVelocity(Vector2 velocity) {
         this.velocity = velocity;
+        this.getBody().setLinearVelocity(velocity);
+        this.getBody().setAngularVelocity(0);
     }
 
 

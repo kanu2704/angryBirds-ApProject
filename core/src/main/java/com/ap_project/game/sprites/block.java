@@ -14,6 +14,7 @@ public abstract class block {
     protected World world;
     private Body body;
     private Rectangle bounds;
+    private static final float PPM = 1.0f;
 
     public block(String texturePath, World world) {
         this.world = world;
@@ -25,14 +26,17 @@ public abstract class block {
         this.velocity = new Vector2(0, 0);
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(this.position);
+        bodyDef.position.set((this.position.x-width/2)/PPM,(this.position.y-height/2)/PPM);
+        bodyDef.linearVelocity.set(0,0);
+        bodyDef.angularVelocity=0;
+        bodyDef.angularDamping=0;
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width / 2, height / 2);  // Define the shape of the bird
+        shape.setAsBox(width /4/PPM, height /4/PPM);  // Define the shape of the bird
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 1.0f;
-        fixtureDef.friction = 0.5f;
+        fixtureDef.density = 15.0f;
+        fixtureDef.friction = 1f;
         fixtureDef.restitution = 0.5f;
         body.createFixture(fixtureDef);
         shape.dispose();
@@ -41,6 +45,11 @@ public abstract class block {
     public void setPosition(Vector2 position) {
         this.position.set(position);
         this.getBody().setTransform(position.x, position.y, this.getBody().getAngle());  // Update Box2D body position
+    }
+    public void setVelocity(Vector2 velocity){
+        this.velocity=velocity;
+        this.getBody().setLinearVelocity(velocity);
+        this.getBody().setAngularVelocity(0);
     }
     public abstract Texture getBlockTexture();
     public Vector2 getPosition() {

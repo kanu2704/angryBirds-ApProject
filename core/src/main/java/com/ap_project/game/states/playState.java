@@ -12,12 +12,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
-
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +29,7 @@ public class playState extends abstractState implements Screen {
     OrthographicCamera camera;
     private final ShapeRenderer shapeRenderer;
     private physicsEngine engine;
-    public World world; // Box2D world
+    public World world;
     private Array<Body> bodies;
     private Array<block> blocks;
     private Array<pig> pigs;
@@ -57,6 +55,8 @@ public class playState extends abstractState implements Screen {
     private boolean isMovingToPerch;
     private List<Vector2> blockPositions;
     private List<Vector2> pigPositions;
+    private Box2DDebugRenderer debugRenderer;
+    private static final float PPM = 1.0f;
 
     public playState(Core game){
         super();
@@ -92,13 +92,16 @@ public class playState extends abstractState implements Screen {
             new Vector2(90, 105)
         };
         for (int i = 0; i < birds.size; i++) {
+            birds.get(i).setVelocity(new Vector2(0,0));
             birds.get(i).setPosition(birdGroundPositions[i]);
         }
         levelManager.constructLevel(currentLevel,world,blocks,pigs,blockPositions,pigPositions);
         for(int i=0;i<blocks.size;i++){
+            blocks.get(i).setVelocity(new Vector2(0,0));
             blocks.get(i).setPosition(blockPositions.get(i));
         }
         for(int i=0;i<pigs.size;i++){
+            pigs.get(i).setVelocity(new Vector2(0,0));
             pigs.get(i).setPosition(pigPositions.get(i));
         }
         winBtn=new Texture("winBtn.png");
@@ -113,6 +116,7 @@ public class playState extends abstractState implements Screen {
         loseBtnHeight = loseBtn.getHeight() * 0.2f;
         loseBtnX = pauseBtnX;
         loseBtnY = winBtnY - loseBtnHeight - 5;
+        debugRenderer = new Box2DDebugRenderer();
 
     }
 
@@ -144,6 +148,7 @@ public class playState extends abstractState implements Screen {
         handleInput();
 
     }
+
 //
 
     @Override
@@ -164,17 +169,19 @@ public class playState extends abstractState implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(background, 0, 0, Core.WIDTH, Core.HEIGHT);
-        game.batch.draw(ground, 0, 0, ground.getWidth()*0.5f, ground.getHeight()*0.5f);
+        createGround();
+        game.batch.draw(ground, -ground.getWidth() / 2f, -ground.getHeight() / 2f, ground.getWidth()*0.5f, ground.getHeight()*0.5f);
         game.batch.draw(pauseBtn, pauseBtnX, pauseBtnY, pauseBtnWidth, pauseBtnHeight);
         game.batch.draw(winBtn,winBtnX,winBtnY,winBtn.getWidth()*0.21f,winBtn.getHeight()*0.21f);
         game.batch.draw(loseBtn,loseBtnX,loseBtnY,loseBtn.getWidth()*0.21f,loseBtn.getHeight()*0.21f);
         for(int i=0;i<blocks.size;i++){
-            game.batch.draw(blocks.get(i).getBlockTexture(),blocks.get(i).getPosition().x,blocks.get(i).getPosition().y,blocks.get(i).width*0.5f,blocks.get(i).height*0.5f);
+            game.batch.draw(blocks.get(i).getBlockTexture(),blocks.get(i).getPosition().x*PPM-blocks.get(i).width/4,blocks.get(i).getPosition().y*PPM-blocks.get(i).height/4,blocks.get(i).width*0.5f,blocks.get(i).height*0.5f);
         }
         for(int i=0;i<pigs.size;i++){
-            game.batch.draw(pigs.get(i).getPigTexture(),pigs.get(i).getPosition().x,pigs.get(i).getPosition().y,pigs.get(i).width,pigs.get(i).height);
+            game.batch.draw(pigs.get(i).getPigTexture(),pigs.get(i).getPosition().x*PPM-pigs.get(i).width/2,pigs.get(i).getPosition().y*PPM-pigs.get(i).height/2,pigs.get(i).width,pigs.get(i).height);
         }
         game.batch.end();
+        debugRenderer.render(world, camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         float frontAnchorX = 234;
         float frontAnchorY = 208;
@@ -184,7 +191,7 @@ public class playState extends abstractState implements Screen {
         game.batch.begin();
         game.batch.draw(slingshot.getslingFrontTexture(),200,100,slingshot.slingFront.getWidth()*0.3f,slingshot.slingFront.getHeight()*0.3f);
         for(int i=0;i<3;i++){
-            game.batch.draw(birds.get(i).getBirdTexture(),birds.get(i).getPosition().x,birds.get(i).getPosition().y,birds.get(i).width,birds.get(i).height);
+            game.batch.draw(birds.get(i).getBirdTexture(),birds.get(i).getPosition().x*PPM-birds.get(i).width/2,birds.get(i).getPosition().y*PPM-birds.get(i).height/2,birds.get(i).width,birds.get(i).height);
         }
         game.batch.draw(slingshot.getslingBackTexture(),185,150,slingshot.slingBack.getWidth()*0.3f,slingshot.slingBack.getHeight()*0.3f);
         game.batch.end();
@@ -197,13 +204,30 @@ public class playState extends abstractState implements Screen {
         update(delta);
     }
 
+    public void createGround() {
+        BodyDef groundBodyDef = new BodyDef();
+        groundBodyDef.type = BodyDef.BodyType.StaticBody;
+        groundBodyDef.position.set(0, 0);  // Position the body at (0, 0), the center
+        Body groundBody = world.createBody(groundBodyDef);
+        PolygonShape groundShape = new PolygonShape();
+        groundShape.setAsBox(ground.getWidth() / 2f, ground.getHeight() / 2f);  // Set Box2D shape to half the width/height
+        FixtureDef groundFixtureDef = new FixtureDef();
+        groundFixtureDef.shape = groundShape;
+        groundFixtureDef.density=100f;
+        groundFixtureDef.friction = 0.2f;
+        groundFixtureDef.restitution = 0f;  // No bounce
+        groundBody.createFixture(groundFixtureDef);
+        groundShape.dispose();
+        groundBody.setUserData(ground);
+    }
+
+
     public void launchBird(){
 
     }
     private void handleDragging(){
 
     }
-
     @Override
     public void resize(int i, int i1) {
     }
@@ -232,6 +256,7 @@ public class playState extends abstractState implements Screen {
         for (bird b : birds) b.dispose();
         slingShot.dispose();
         world.dispose();
+        debugRenderer.dispose();
         shapeRenderer.dispose();
     }
 

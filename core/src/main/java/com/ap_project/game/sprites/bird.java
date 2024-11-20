@@ -14,6 +14,7 @@ public abstract class bird {
     protected final World world;
     private boolean isLaunched = false;
     public boolean isDragging = false;
+    private static final float PPM = 1.0f;
 
     public bird(String texturePath, World world) {
         this.world = world;
@@ -26,16 +27,18 @@ public abstract class bird {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(this.position);
+        bodyDef.linearVelocity.set(0,0);
+        bodyDef.angularVelocity=0;
+        bodyDef.angularDamping=0;
         body = world.createBody(bodyDef);
 
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width / 2, height / 2);  // Define the shape of the bird
+        CircleShape shape = new CircleShape();
+        shape.setRadius(Math.min(width, height) / 2/PPM);  // Define the shape of the bird
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 1.0f;
+        fixtureDef.density = 4.0f;
         fixtureDef.friction = 0.5f;
         fixtureDef.restitution = 0.5f;  // Bounciness of the bird
-
         body.createFixture(fixtureDef);
         shape.dispose();
         body.setUserData(this);  // Attach the Bird instance to the body
@@ -43,8 +46,15 @@ public abstract class bird {
     public Texture getBirdTexture() {
         return birdTexture;
     }
+
     public Vector2 getPosition() {
         return this.getBody().getPosition();
+    }
+
+    public void setVelocity(Vector2 velocity) {
+        this.velocity.set(velocity);  // Set the velocity directly
+        this.getBody().setLinearVelocity(velocity);
+        this.getBody().setAngularVelocity(0);
     }
     public void setPosition(Vector2 position) {
         this.position.set(position);  // Update the visual position
@@ -62,9 +72,6 @@ public abstract class bird {
         isLaunched = launched;
     }
 
-    public void setVelocity(Vector2 velocity) {
-        this.velocity.set(velocity);  // Set the velocity directly
-    }
     public Vector2 getVelocity() {
         return velocity;
     }

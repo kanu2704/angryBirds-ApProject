@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-public abstract class pig {
+public abstract class pig<T extends pig<T>> {
     private final Body body;
     private Vector2 position;
     private Vector2 velocity;
@@ -29,7 +29,7 @@ public abstract class pig {
         bodyDef.position.set(this.position.x/PPM,this.position.y/PPM);
         bodyDef.linearVelocity.set(0,0);
         bodyDef.angularVelocity=0;
-        bodyDef.angularDamping=0.5f;
+        bodyDef.angularDamping=0.8f;
         body = world.createBody(bodyDef);
         CircleShape shape = new CircleShape();
         shape.setRadius(Math.min(width, height)/2/PPM);
@@ -37,7 +37,7 @@ public abstract class pig {
         fixtureDef.shape = shape;
         fixtureDef.density = 10.0f;
         fixtureDef.friction = 1f;
-        fixtureDef.restitution = 0.001f;
+        fixtureDef.restitution = 0f;
         body.createFixture(fixtureDef);
         shape.dispose();
         body.setUserData(this);

@@ -10,8 +10,8 @@ import java.util.List;
 
 public class level {
     private int levelNo;
-    public static void getLevel1(World world, Array<block> blocks, Array<pig> pigs, List<Vector2> blockPositions,List<Vector2> pigPositions){
-        Array<block> blocksLevel1=new Array<>();
+    public static void getLevel1(World world, Array<block<?>> blocks, Array<pig<?>> pigs, List<Vector2> blockPositions,List<Vector2> pigPositions){
+        Array<block<?>> blocksLevel1=new Array<>();
         blocksLevel1.add(new woodenBlock("wb1.png",world));
         blocksLevel1.add(new woodenBlock("wb6.png",world));
         blocksLevel1.add(new woodenBlock("wb6.png",world));
@@ -34,18 +34,17 @@ public class level {
             new Vector2(1150, 100 + 20 + blocksLevel1.get(0).height*0.5f+26)
         ));
 
-        Array<pig> pigsLevel1=new Array<>();
+        Array<pig<?>> pigsLevel1=new Array<>();
         pigsLevel1.add(new pig1("pig1a.png",world));
         pigsLevel1.add(new pig2("pig2a.png",world));
-        pigsLevel1.add(new pig3("pig3a.png",world));
+        pigsLevel1.add(new pig3("pig2a.png",world));
         pigsLevel1.add(new pig1("pig1a.png",world));
         pigsLevel1.add(new pig2("pig2a.png",world));
-
         List<Vector2> pigsPositionsLevel1 = new ArrayList<>(Arrays.asList(
             new Vector2(1028, 100),
             new Vector2(1075, 100 + 20 + blocksLevel1.get(0).height*0.5f+35+blocksLevel1.get(8).height*0.5f),
-            new Vector2(1000, 100 + 20 + blocksLevel1.get(0).height*0.5f+48+blocksLevel1.get(8).height*0.5f),
-            new Vector2(1150, 100 + 20 + blocksLevel1.get(0).height*0.5f+29+blocksLevel1.get(8).height*0.5f),
+            new Vector2(1000, 100 + 20 + blocksLevel1.get(0).height*0.5f+35+blocksLevel1.get(8).height*0.5f),
+            new Vector2(1151, 100 + 20 + blocksLevel1.get(0).height*0.5f+29+blocksLevel1.get(8).height*0.5f),
             new Vector2(1112, 100)
         ));
 

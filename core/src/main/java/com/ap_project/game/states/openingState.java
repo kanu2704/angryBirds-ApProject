@@ -73,7 +73,6 @@ public class openingState extends abstractState implements Screen{
     public void render(float v) {
         ScreenUtils.clear(0,0,0.2f,1);
         camera.update();
-
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.setColor(1, 1, 1, fadeAlpha);

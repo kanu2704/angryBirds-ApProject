@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-public abstract class bird {
+public abstract class bird<T extends bird<T>> {
     private Vector2 position;
     private Vector2 velocity;
     private Texture birdTexture;
@@ -15,13 +15,13 @@ public abstract class bird {
     private boolean isLaunched = false;
     public boolean isDragging = false;
     private static final float PPM = 1.0f;
-
+    public BirdState state;
     public bird(String texturePath, World world) {
         this.world = world;
         this.birdTexture = new Texture(texturePath);
         this.width = this.birdTexture.getWidth() * 0.2f;
         this.height = this.birdTexture.getHeight() * 0.2f;
-
+        this.state=BirdState.WAITING;
         this.position = new Vector2(0, 0);
         this.velocity = new Vector2(0, 0);
         BodyDef bodyDef = new BodyDef();
@@ -58,18 +58,37 @@ public abstract class bird {
     }
     public void setPosition(Vector2 position) {
         this.position.set(position);  // Update the visual position
-        this.getBody().setTransform(position.x, position.y, this.getBody().getAngle());  // Update Box2D body position
+        this.getBody().setTransform(position.x, position.y, this.getBody().getAngle());
     }
-    public void setDragging(boolean dragging) {
-        this.isDragging = dragging;
+    public void jumpToSling(Vector2 slingPerchPosition) {
+        if (state == BirdState.WAITING) {
+            state = BirdState.JUMPING;
+            Vector2 direction = slingPerchPosition.cpy().sub(getPosition()).nor();
+            System.out.println(direction);
+            float speed = 80f;
+            getBody().setLinearVelocity(direction.scl(speed));
+        }
+    }
+
+    public void updateJump(Vector2 slingPerchPosition) {
+        if (state == BirdState.JUMPING) {
+            if (body.getPosition().dst(slingPerchPosition) < 11f) {
+                body.setLinearVelocity(0, 0); // Set velocity to zero
+                body.setTransform(slingPerchPosition, 0); // Place it at the perch
+                body.setGravityScale(0);
+                state = BirdState.READY;
+            }
+        }
+    }
+    public void launchBird(){
+
     }
 
     public boolean isLaunched() {
-        return isLaunched;
+        return state == BirdState.LAUNCHED;
     }
-
-    public void setLaunched(boolean launched) {
-        isLaunched = launched;
+    public boolean isLanded() {
+        return state == BirdState.LANDED;
     }
 
     public Vector2 getVelocity() {
@@ -78,7 +97,6 @@ public abstract class bird {
     public Body getBody() {
         return body;
     }
-    // Dispose resources
     public void dispose() {
         birdTexture.dispose();  // Dispose texture to free memory
         world.destroyBody(body);  // Destroy the Box2D body from the world

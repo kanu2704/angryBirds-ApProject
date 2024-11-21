@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import java.util.List;
 
 public class levelManager {
-    public static void constructLevel(int num, World world, Array<block> blocks, Array<pig> pigs, List<Vector2> blockPositions, List<Vector2> pigPositions){
+    public static void constructLevel(int num, World world, Array<block<?>> blocks, Array<pig<?>> pigs, List<Vector2> blockPositions, List<Vector2> pigPositions){
         if(num==1){
             level.getLevel1(world,blocks,pigs,blockPositions,pigPositions);
         }

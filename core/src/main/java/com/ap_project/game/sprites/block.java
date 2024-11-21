@@ -1,11 +1,12 @@
 package com.ap_project.game.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-public abstract class block {
+public abstract class block<T extends block<T>> {
     Vector2 position;
     Vector2 velocity;
     public float width;
@@ -35,7 +36,7 @@ public abstract class block {
         shape.setAsBox(width /4/PPM, height /4/PPM);  // Define the shape of the bird
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 15.0f;
+        fixtureDef.density = 7.0f;
         fixtureDef.friction = 1f;
         fixtureDef.restitution = 0.5f;
         body.createFixture(fixtureDef);
@@ -51,7 +52,7 @@ public abstract class block {
         this.getBody().setLinearVelocity(velocity);
         this.getBody().setAngularVelocity(0);
     }
-    public abstract Texture getBlockTexture();
+    public abstract TextureRegion getBlockTexture();
     public Vector2 getPosition() {
         return this.getBody().getPosition();
     }

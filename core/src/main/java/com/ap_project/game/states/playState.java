@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
@@ -54,12 +57,14 @@ public class playState extends abstractState implements Screen {
     private Box2DDebugRenderer debugRenderer;
     private static final float PPM = 1.0f;
     //float birdLaunchTimer = 0;
+    Vector2 dragPos;
+    final Vector2 initialPos=new Vector2(200,215);
 
     public playState(Core game){
         super();
         this.currentLevel=1;
         this.game = game;
-        this.world = new World(new Vector2(0, -9.8f), true);//
+        this.world = new World(new Vector2(0, -30.0f), true);//
         this.blocks = new Array<>();
         this.pigs = new Array<>();
         this.birds = new Array<>();
@@ -114,31 +119,82 @@ public class playState extends abstractState implements Screen {
     }
     @Override
     protected void handleInput() {
-        if(Gdx.input.justTouched()){
+        if (Gdx.input.justTouched()) {
             Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
             if (touchPos.x >= pauseBtnX && touchPos.x <= pauseBtnX + pauseBtnWidth &&
                 touchPos.y >= pauseBtnY && touchPos.y <= pauseBtnY + pauseBtnHeight) {
                 game.setScreen(new pauseState(game));
                 dispose();
+                return;
             }
             if (touchPos.x >= winBtnX && touchPos.x <= winBtnX + winBtnWidth &&
                 touchPos.y >= winBtnY && touchPos.y <= winBtnY + winBtnHeight) {
                 game.setScreen(new resultState(game));
                 dispose();
+                return;
             }
             if (touchPos.x >= loseBtnX && touchPos.x <= loseBtnX + loseBtnWidth &&
                 touchPos.y >= loseBtnY && touchPos.y <= loseBtnY + loseBtnHeight) {
                 game.setScreen(new resultState2(game));
                 dispose();
+                return;
             }
         }
+        float maxDragRadius = 65f;
+        float maxForce = 500f;
+        bird<?> currentBird = birds.get(currentBirdIndex);
+        Vector2 birdBodyPos = currentBird.getBody().getPosition();
+        System.out.println(initialPos);
+        Rectangle birdBounds = new Rectangle(
+            birdBodyPos.x - currentBird.width / 2 / PPM,
+            birdBodyPos.y - currentBird.height / 2 / PPM,
+            currentBird.width / PPM, currentBird.height / PPM
+        );
+
+        if (Gdx.input.isTouched()) {
+            Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(touchPos);
+            if (birdBounds.contains(touchPos.x / PPM, touchPos.y / PPM) &&
+                !currentBird.isLaunched() && !currentBird.isDragging) {
+                currentBird.isDragging = true;  // Start dragging
+            }
+            if (currentBird.isDragging) {
+                dragPos = new Vector2(touchPos.x / PPM, touchPos.y / PPM);
+                if (dragPos.dst(initialPos.x / PPM, initialPos.y / PPM) > maxDragRadius) {
+                    dragPos = new Vector2(initialPos.x / PPM, initialPos.y / PPM)
+                        .add(dragPos.sub(initialPos.x / PPM, initialPos.y / PPM).nor().scl(maxDragRadius));
+                }
+                currentBird.setPosition(dragPos);
+            }
+
+        } else if (currentBird.isDragging) {
+            currentBird.isDragging = false;
+            System.out.println("dragPos: " + dragPos);
+            System.out.println("currentBirdps: " + currentBird.getPosition());
+            Vector2 dragVector = new Vector2(initialPos).sub(dragPos);
+            float dragDistance = dragVector.len();
+            dragDistance = Math.min(dragDistance, maxDragRadius);
+            System.out.println("Drag vector magnitude: " + dragDistance);
+            Vector2 normalizedDirection = dragVector.cpy().nor();
+            System.out.println("Normalized direction: " + normalizedDirection);
+            float forceMagnitude = (dragDistance / maxDragRadius) * maxForce;
+            System.out.println("maxforce "+maxForce);
+            Vector2 launchForce = normalizedDirection.scl(forceMagnitude*currentBird.getBody().getMass());
+            System.out.println("Launch Force: " + launchForce);
+            currentBird.getBody().setGravityScale(1f);
+            currentBird.getBody().setLinearDamping(0f);
+            currentBird.getBody().applyLinearImpulse(launchForce, currentBird.getPosition(), true);
+            currentBird.getBody().applyForceToCenter(launchForce.x,launchForce.y,true);
+            System.out.println(currentBird.getVelocity());
+            currentBird.state = BirdState.LAUNCHED;
+        }
     }
+
     @Override
     protected void update(float dt) {
         handleInput();
         updateBirds(dt);
-
     }
     @Override
     public void create() {
@@ -150,7 +206,7 @@ public class playState extends abstractState implements Screen {
     }
     @Override
     public void render(float delta){
-        world.step(2/60f, 6, 2);
+        world.step(1/90f, 6, 2);
         ScreenUtils.clear(0, 0, 0.2f, 1);
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
@@ -249,11 +305,6 @@ public class playState extends abstractState implements Screen {
                     currentBird.updateJump(slingPerchPosition);
                     break;
                 case LAUNCHED:
-                    if (currentBird.getBody().getPosition().y < 0) {
-                        currentBird.state = BirdState.LANDED;
-                    }
-                    break;
-                case LANDED:
                     if (currentBirdIndex < birds.size-1) {
                         currentBirdIndex++;
                         bird<?> nextBird = birds.get(currentBirdIndex);
@@ -262,6 +313,7 @@ public class playState extends abstractState implements Screen {
                         checkGameOver();
                     }
                     break;
+
             }
         }
     }

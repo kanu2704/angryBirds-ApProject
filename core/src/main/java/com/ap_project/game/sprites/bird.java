@@ -31,12 +31,15 @@ public abstract class bird<T extends bird<T>> {
         bodyDef.angularVelocity=0;
         bodyDef.angularDamping=0;
         body = world.createBody(bodyDef);
-
         CircleShape shape = new CircleShape();
-        shape.setRadius(Math.min(width, height) / 2/PPM);  // Define the shape of the bird
+        shape.setRadius(Math.min(width, height) / 2/PPM);
+        float radius = Math.min(width, height) / 2 / PPM;// Define the shape of the bird
+        float area = (float) (Math.PI * Math.pow(radius, 2));
+        float desiredMass = 10000f;
+        float newDensity = desiredMass / area;
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 4.0f;
+        fixtureDef.density = newDensity;
         fixtureDef.friction = 0.5f;
         fixtureDef.restitution = 0.5f;  // Bounciness of the bird
         body.createFixture(fixtureDef);
@@ -52,19 +55,18 @@ public abstract class bird<T extends bird<T>> {
     }
 
     public void setVelocity(Vector2 velocity) {
-        this.velocity.set(velocity);  // Set the velocity directly
+        this.velocity.set(velocity);
         this.getBody().setLinearVelocity(velocity);
         this.getBody().setAngularVelocity(0);
     }
     public void setPosition(Vector2 position) {
-        this.position.set(position);  // Update the visual position
+        this.position.set(position);
         this.getBody().setTransform(position.x, position.y, this.getBody().getAngle());
     }
     public void jumpToSling(Vector2 slingPerchPosition) {
         if (state == BirdState.WAITING) {
             state = BirdState.JUMPING;
             Vector2 direction = slingPerchPosition.cpy().sub(getPosition()).nor();
-            System.out.println(direction);
             float speed = 80f;
             getBody().setLinearVelocity(direction.scl(speed));
         }
@@ -76,14 +78,11 @@ public abstract class bird<T extends bird<T>> {
                 body.setLinearVelocity(0, 0); // Set velocity to zero
                 body.setTransform(slingPerchPosition, 0); // Place it at the perch
                 body.setGravityScale(0);
+                setPosition(body.getPosition());
                 state = BirdState.READY;
             }
         }
     }
-    public void launchBird(){
-
-    }
-
     public boolean isLaunched() {
         return state == BirdState.LAUNCHED;
     }

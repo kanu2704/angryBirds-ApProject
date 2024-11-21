@@ -36,7 +36,7 @@ public abstract class block<T extends block<T>> {
         shape.setAsBox(width /4/PPM, height /4/PPM);  // Define the shape of the bird
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 7.0f;
+        fixtureDef.density = 5.0f;
         fixtureDef.friction = 1f;
         fixtureDef.restitution = 0.5f;
         body.createFixture(fixtureDef);

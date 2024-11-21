@@ -35,7 +35,7 @@ public abstract class pig<T extends pig<T>> {
         shape.setRadius(Math.min(width, height)/2/PPM);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 10.0f;
+        fixtureDef.density = 8.0f;
         fixtureDef.friction = 1f;
         fixtureDef.restitution = 0f;
         body.createFixture(fixtureDef);

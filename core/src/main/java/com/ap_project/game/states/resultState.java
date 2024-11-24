@@ -45,7 +45,7 @@ public class resultState extends abstractState implements Screen {
 
             if (touchPos.x >= homeX && touchPos.x <= homeX + homeWidth &&
                 touchPos.y >= homeY && touchPos.y <= homeY + homeHeight) {
-                game.setScreen(new menuState(game));
+                game.setScreen(Core.menuScreen);
             }
 
 

@@ -32,9 +32,9 @@ public class playState extends abstractState implements Screen {
     private final ShapeRenderer shapeRenderer;
     private physicsEngine engine;
     public World world;
-    private Array<block<?>> blocks;
-    private Array<pig<?>> pigs;
-    private Array<bird<?>> birds;
+    protected Array<block<?>> blocks;
+    protected Array<pig<?>> pigs;
+    protected Array<bird<?>> birds;
     private slingshot slingShot;
     private int currentBirdIndex;
     private final Vector2 slingPerchPosition = new Vector2(200, 215);
@@ -66,6 +66,7 @@ public class playState extends abstractState implements Screen {
         this.currentLevel=1;
         this.game = game;
         this.world = new World(new Vector2(0, -12f), true);//
+        world.setContactListener(new collisionHandler());
         this.blocks = new Array<>();
         this.pigs = new Array<>();
         this.birds = new Array<>();
@@ -126,25 +127,30 @@ public class playState extends abstractState implements Screen {
             camera.unproject(touchPos);
             if (touchPos.x >= pauseBtnX && touchPos.x <= pauseBtnX + pauseBtnWidth &&
                 touchPos.y >= pauseBtnY && touchPos.y <= pauseBtnY + pauseBtnHeight) {
-                game.setScreen(new pauseState(game));
+                pauseState pauseScreen=new pauseState(game);
+                Core.pauseScreen=pauseScreen;
+                game.setScreen(Core.pauseScreen);
                 dispose();
                 return;
             }
             if (touchPos.x >= winBtnX && touchPos.x <= winBtnX + winBtnWidth &&
                 touchPos.y >= winBtnY && touchPos.y <= winBtnY + winBtnHeight) {
-                game.setScreen(new resultState(game));
+                resultState resultScreen=new resultState(game);
+                Core.resultScreen=new resultState(game);
+                game.setScreen(Core.resultScreen);
                 dispose();
                 return;
             }
             if (touchPos.x >= loseBtnX && touchPos.x <= loseBtnX + loseBtnWidth &&
                 touchPos.y >= loseBtnY && touchPos.y <= loseBtnY + loseBtnHeight) {
-                game.setScreen(new resultState2(game));
+                resultState2 resultScreen=new resultState2(game);
+                Core.resultScreen2=new resultState2(game);
+                game.setScreen(Core.resultScreen);
                 dispose();
                 return;
             }
         }
-
-        float maxDragRadius = 65f;
+        float maxDragRadius = 75f;
         float maxForce = 125f;
         bird<?> currentBird = birds.get(currentBirdIndex);
         Vector2 birdBodyPos = currentBird.getBody().getPosition();
@@ -153,6 +159,7 @@ public class playState extends abstractState implements Screen {
             birdBodyPos.y - currentBird.height / 2 / PPM,
             currentBird.width / PPM, currentBird.height / PPM
         );
+
         //handling the bird launching part here
         if (Gdx.input.isTouched()) {
             Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -191,7 +198,24 @@ public class playState extends abstractState implements Screen {
     @Override
     protected void update(float dt) {
         handleInput();
+        for (block<?> block : blocks) {
+            //block.update(delta);
+            if (block.isDestroyed()) {
+                removeObjectFromWorld(block.getBody());
+                blocks.removeValue(block, true);
+            }
+        }
+
+        // Update pigs
+        for (pig<?> pig : pigs) {
+            //pig.update(delta);
+            if (pig.isDestroyed()) {
+                removeObjectFromWorld(pig.getBody());
+                pigs.removeValue(pig, true);
+            }
+        }
         updateBirds(dt);
+        checkGameOver();
     }
     @Override
     public void create() {
@@ -215,30 +239,34 @@ public class playState extends abstractState implements Screen {
         game.batch.draw(loseBtn,loseBtnX,loseBtnY,loseBtn.getWidth()*0.21f,loseBtn.getHeight()*0.21f);
         for (int i = 0; i < blocks.size; i++) {
             block<?> currentBlock = blocks.get(i);
-            float blockAngle = (float) Math.toDegrees(currentBlock.getBody().getAngle());
-            game.batch.draw(new TextureRegion(blocks.get(i).getBlockTexture()),
-                currentBlock.getPosition().x * PPM - currentBlock.width / 4,
-                currentBlock.getPosition().y * PPM - currentBlock.height / 4,
-                currentBlock.width /4, currentBlock.height/4,
-                currentBlock.width*0.5f, currentBlock.height*0.5f,
-                1f, 1f,
-                blockAngle);
+            if(!currentBlock.isDestroyed()){
+                float blockAngle = (float) Math.toDegrees(currentBlock.getBody().getAngle());
+                game.batch.draw(new TextureRegion(blocks.get(i).getBlockTexture()),
+                    currentBlock.getPosition().x * PPM - currentBlock.width / 4,
+                    currentBlock.getPosition().y * PPM - currentBlock.height / 4,
+                    currentBlock.width /4, currentBlock.height/4,
+                    currentBlock.width*0.5f, currentBlock.height*0.5f,
+                    1f, 1f,
+                    blockAngle);
+            }
         }
         for (int i = 0; i < pigs.size; i++) {
             pig<?> currentPig = pigs.get(i);
-            float pigAngle = (float) Math.toDegrees(currentPig.getBody().getAngle()); // Get angle in degrees
-            game.batch.draw(
-                new TextureRegion(currentPig.getPigTexture()),
-                currentPig.getPosition().x * PPM - currentPig.width / 2, // X position
-                currentPig.getPosition().y * PPM - currentPig.height / 2, // Y position
-                currentPig.width / 2,
-                currentPig.height / 2,
-                currentPig.width,
-                currentPig.height,
-                1f,
-                1f,
-                pigAngle
-            );
+            if(!currentPig.isDestroyed()){
+                float pigAngle = (float) Math.toDegrees(currentPig.getBody().getAngle()); // Get angle in degrees
+                game.batch.draw(
+                    new TextureRegion(currentPig.getPigTexture()),
+                    currentPig.getPosition().x * PPM - currentPig.width / 2, // X position
+                    currentPig.getPosition().y * PPM - currentPig.height / 2, // Y position
+                    currentPig.width / 2,
+                    currentPig.height / 2,
+                    currentPig.width,
+                    currentPig.height,
+                    1f,
+                    1f,
+                    pigAngle
+                );
+            }
         }
         game.batch.draw(slingshot.getslingFrontTexture(),180,100,slingshot.slingFront.getWidth()*0.3f,slingshot.slingFront.getHeight()*0.3f);
         for (int i = 0; i<birds.size; i++) {
@@ -293,24 +321,34 @@ public class playState extends abstractState implements Screen {
                             currentBirdIndex++;
                             bird<?> nextBird = birds.get(currentBirdIndex);
                             nextBird.state = BirdState.WAITING;
-                            timeGap=0;
-                        } else {
-                            checkGameOver();
-                        }
+                            timeGap=0;}
+//                        } else {
+//                            checkGameOver();
+//                        }
                         break;
                 }
             }
         }
     }
-
-    private void checkGameOver() {
-        if (pigs.size == 0) {
-            game.setScreen(new resultState(game)); // Win screen
-        } else if (currentBirdIndex >= birds.size) {
-            game.setScreen(new resultState2(game)); // Lose screen
+    public void checkGameOver(){
+        if(birds.size==0 && pigs.size>0){
+            game.setScreen(new resultState2(game));
+        }else if(birds.size>=0 && pigs.size==0){
+            game.setScreen(new resultState(game));
         }
     }
-
+    public Array<block<?>> getBlocks() {
+        return blocks;
+    }
+    public void setBlocks(Array<block<?>> blocks) {
+        this.blocks = blocks;
+    }
+    public Array<pig<?>> getPigs() {
+        return pigs;
+    }
+    public void setPigs(Array<pig<?>> pigs) {
+        this.pigs = pigs;
+    }
     @Override
     public void resize(int i, int i1) {
     }
@@ -322,6 +360,9 @@ public class playState extends abstractState implements Screen {
     }
     @Override
     public void hide() {
+    }
+    private void removeObjectFromWorld(Body body) {
+        world.destroyBody(body);
     }
     @Override
     public void dispose() {

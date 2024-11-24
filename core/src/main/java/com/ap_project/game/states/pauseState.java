@@ -43,19 +43,20 @@ public class pauseState extends abstractState implements Screen {
 
             if (touchPos.x >= resumeBtnX && touchPos.x <= resumeBtnX + resumeBtn.getWidth() * 0.4f &&
                 touchPos.y >= resumeBtnY && touchPos.y <= resumeBtnY + resumeBtn.getHeight() * 0.4f) {
-                game.setScreen(new playState(game));
+                playState playScreen =new playState(game);
+                game.setScreen(playScreen);
                 dispose();
             }
 
             if (touchPos.x >= saveAndExitBtnX && touchPos.x <= saveAndExitBtnX + saveAndExitBtn.getWidth() * 0.4f &&
                 touchPos.y >= saveAndExitBtnY && touchPos.y <= saveAndExitBtnY + saveAndExitBtn.getHeight() * 0.4f) {
-                game.setScreen(new menuState(game));
+                game.setScreen(Core.menuScreen);
                 dispose();
             }
 
             if (touchPos.x >= exitBtnX && touchPos.x <= exitBtnX + exitBtn.getWidth() * 0.4f &&
                 touchPos.y >= exitBtnY && touchPos.y <= exitBtnY + exitBtn.getHeight() * 0.4f) {
-                game.setScreen(new menuState(game));
+                game.setScreen(Core.menuScreen);
                 dispose();
             }
 

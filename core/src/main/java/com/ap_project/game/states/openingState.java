@@ -36,9 +36,9 @@ public class openingState extends abstractState implements Screen{
     @Override
     protected void handleInput() {
         menuState menu=new menuState(game);
+        Core.menuScreen=menu;
         if (fadeAlpha <= 0) {
             game.setScreen(menu);
-
         }
 
     }
@@ -108,8 +108,6 @@ public class openingState extends abstractState implements Screen{
         if (background != null) {
             background.dispose();
         }
-
-        // Dispose of the background music
         if (backgroundMusic != null) {
             backgroundMusic.dispose();
         }

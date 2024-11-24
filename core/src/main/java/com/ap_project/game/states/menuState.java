@@ -43,10 +43,11 @@ public class menuState extends abstractState implements Screen {
             camera.unproject(touchPos);
             if (touchPos.x >= playBtnX && touchPos.x<= (playBtnX + playWidth) &&
                 touchPos.x >= playBtnY && touchPos.y <= (playBtnY + playHeight)) {
-                game.setScreen(new levelState(game));
+                levelState levelState=new levelState(game);
+                Core.levelScreen=levelState;
+                game.setScreen(levelState);
                 dispose();
             }
-
         }
     }
 

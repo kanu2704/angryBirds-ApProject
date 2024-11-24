@@ -57,9 +57,6 @@ public abstract class pig<T extends pig<T>> {
         this.getBody().setLinearVelocity(velocity);
         this.getBody().setAngularVelocity(0);
     }
-
-
-
     public void setPosition(Vector2 position) {
         this.position.set(position);
         this.getBody().setTransform(position.x, position.y, this.getBody().getAngle()); // Sync Box2D body position with visual position
@@ -85,7 +82,6 @@ public abstract class pig<T extends pig<T>> {
     public boolean isDestroyed() {
         return this.hits <= 0;
     }
-
     public Body getBody() {
         return body;
     }

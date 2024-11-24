@@ -26,9 +26,7 @@ public class openingState extends abstractState implements Screen{
         camera=new OrthographicCamera();
         camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
         background=new Texture("angryBirds opening.png");
-
         backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("backgroundMusic.ogg"));
-
         backgroundMusic.setLooping(true);
         backgroundMusic.setVolume(0.5f);
         backgroundMusic.play();
@@ -106,6 +104,15 @@ public class openingState extends abstractState implements Screen{
 
     @Override
     public void dispose() {
-        background.dispose();
+        // Dispose of the background texture
+        if (background != null) {
+            background.dispose();
+        }
+
+        // Dispose of the background music
+        if (backgroundMusic != null) {
+            backgroundMusic.dispose();
+        }
     }
+
 }

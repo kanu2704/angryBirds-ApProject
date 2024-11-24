@@ -1,6 +1,7 @@
 package com.ap_project.game.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
@@ -35,13 +36,17 @@ public abstract class pig<T extends pig<T>> {
         shape.setRadius(Math.min(width, height)/2/PPM);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 8.0f;
+        shape.setRadius(Math.min(width, height) / 2/PPM);
+        float radius = Math.min(width, height) / 2/PPM;// Define the shape of the bird
+        float area = (float) (Math.PI * Math.pow(radius, 2));
+        float desiredMass = 10f;
+        fixtureDef.density =desiredMass/area;
         fixtureDef.friction = 1f;
-        fixtureDef.restitution = 0f;
+        fixtureDef.restitution = 0.5f;
         body.createFixture(fixtureDef);
         shape.dispose();
+        //this.bounds=new Circle(this.position.x,this.position.y,radius);
         body.setUserData(this);
-        this.hits = 0;
     }
     public Vector2 getVelocity() {
         return velocity;
@@ -71,9 +76,14 @@ public abstract class pig<T extends pig<T>> {
     public int getHits() {
         return hits;
     }
-
     public void setHits(int hits) {
         this.hits = hits;
+    }
+    public void decreaseHitPoints() {
+        this.hits--;
+    }
+    public boolean isDestroyed() {
+        return this.hits <= 0;
     }
 
     public Body getBody() {

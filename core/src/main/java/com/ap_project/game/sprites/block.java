@@ -16,6 +16,8 @@ public abstract class block<T extends block<T>> {
     private Body body;
     private Rectangle bounds;
     private static final float PPM = 1.0f;
+    public int hits;
+
 
     public block(String texturePath, World world) {
         this.world = world;
@@ -29,19 +31,20 @@ public abstract class block<T extends block<T>> {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set((this.position.x-width/2)/PPM,(this.position.y-height/2)/PPM);
         bodyDef.linearVelocity.set(0,0);
-        bodyDef.angularVelocity=0;
-        bodyDef.angularDamping=0;
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width /4/PPM, height /4/PPM);  // Define the shape of the bird
+        shape.setAsBox(width /4/PPM, height /4/PPM);
         FixtureDef fixtureDef = new FixtureDef();
+        float area=2*5f;
+        float desiredMass=0.6f;
         fixtureDef.shape = shape;
-        fixtureDef.density = 5.0f;
-        fixtureDef.friction = 1f;
-        fixtureDef.restitution = 0.5f;
+        fixtureDef.density = desiredMass/area;
+        fixtureDef.friction = 0.5f;
+        fixtureDef.restitution = 0.3f;
         body.createFixture(fixtureDef);
         shape.dispose();
         body.setUserData(this);
+        bounds=new Rectangle(this.position.x,this.position.y,this.width,this.height);
     }
     public void setPosition(Vector2 position) {
         this.position.set(position);
@@ -52,7 +55,6 @@ public abstract class block<T extends block<T>> {
         this.getBody().setLinearVelocity(velocity);
         this.getBody().setAngularVelocity(0);
     }
-    public abstract TextureRegion getBlockTexture();
     public Vector2 getPosition() {
         return this.getBody().getPosition();
     }
@@ -60,6 +62,19 @@ public abstract class block<T extends block<T>> {
         block.dispose();
         world.destroyBody(body);  // Dispose the Box2D body
     }
+    public Texture getBlockTexture() {
+        return block;
+    }
+    public void setBlockTexture(Texture block) {
+        this.block = block;
+    }
+    public void decreaseHitPoints() {
+        this.hits--;
+    }
+    public boolean isDestroyed() {
+        return this.hits <= 0;
+    }
+
     public Body getBody() {
         return body;
     }

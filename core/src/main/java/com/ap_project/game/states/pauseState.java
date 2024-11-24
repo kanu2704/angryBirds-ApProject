@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class pauseState extends abstractState implements Screen {
     private Texture background;
     private OrthographicCamera camera;
-    final Core game;
+    private final Core game;
     private final Texture crossBtn;
     private final Texture resumeBtn;
     private final Texture saveAndExitBtn;
@@ -22,7 +22,7 @@ public class pauseState extends abstractState implements Screen {
         super();
         this.game = game;
         background = new Texture("pausebg.png");
-        this.crossBtn = new Texture("crossBtn.png");
+        crossBtn = new Texture("crossBtn.png");
         resumeBtn = new Texture("resumeBtn.png");
         saveAndExitBtn = new Texture("saveAndExitBtn.png");
         exitBtn = new Texture("exitBtn.png");
@@ -30,7 +30,6 @@ public class pauseState extends abstractState implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Core.WIDTH, Core.HEIGHT);
     }
-
     @Override
     protected void handleInput() {
         if (Gdx.input.justTouched()) {
@@ -50,7 +49,6 @@ public class pauseState extends abstractState implements Screen {
 
             if (touchPos.x >= saveAndExitBtnX && touchPos.x <= saveAndExitBtnX + saveAndExitBtn.getWidth() * 0.4f &&
                 touchPos.y >= saveAndExitBtnY && touchPos.y <= saveAndExitBtnY + saveAndExitBtn.getHeight() * 0.4f) {
-                //saveGameProgress();
                 game.setScreen(new menuState(game));
                 dispose();
             }
@@ -61,7 +59,6 @@ public class pauseState extends abstractState implements Screen {
                 dispose();
             }
 
-            // Check if Cross Button is pressed (to close the pause menu)
             if (touchPos.x >= crossBtnX && touchPos.x <= crossBtnX + crossBtn.getWidth() * 0.4f &&
                 touchPos.y >= crossBtnY && touchPos.y <= crossBtnY + crossBtn.getHeight() * 0.4f) {
                 game.setScreen(new playState(game));
@@ -69,21 +66,16 @@ public class pauseState extends abstractState implements Screen {
             }
         }
     }
-
     @Override
     protected void update(float dt) {
         handleInput();
     }
-
     @Override
     public void create() {
-
     }
-
     @Override
     public void show() {
     }
-
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0.2f, 1);
@@ -98,29 +90,25 @@ public class pauseState extends abstractState implements Screen {
         game.batch.end();
         update(delta);
     }
-
     @Override
     public void resize(int width, int height) {
     }
-
     @Override
     public void pause() {
     }
-
     @Override
     public void resume() {
     }
-
     @Override
     public void hide() {
+        dispose();
     }
-
     @Override
     public void dispose() {
-        background.dispose();
-        resumeBtn.dispose();
-        saveAndExitBtn.dispose();
-        exitBtn.dispose();
-        crossBtn.dispose();
+        if (background != null) background.dispose();
+        if (resumeBtn != null) resumeBtn.dispose();
+        if (saveAndExitBtn != null) saveAndExitBtn.dispose();
+        if (exitBtn != null) exitBtn.dispose();
+        if (crossBtn != null) crossBtn.dispose();
     }
 }

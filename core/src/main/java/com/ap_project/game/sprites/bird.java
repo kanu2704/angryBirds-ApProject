@@ -1,6 +1,7 @@
 package com.ap_project.game.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
@@ -8,6 +9,7 @@ public abstract class bird<T extends bird<T>> {
     private Vector2 position;
     private Vector2 velocity;
     private Texture birdTexture;
+    private TextureRegion textureRegion;
     public float width;
     public float height;
     private Body body;
@@ -16,9 +18,12 @@ public abstract class bird<T extends bird<T>> {
     public boolean isDragging = false;
     private static final float PPM = 1.0f;
     public BirdState state;
+
+
     public bird(String texturePath, World world) {
         this.world = world;
         this.birdTexture = new Texture(texturePath);
+        this.textureRegion=new TextureRegion(birdTexture);
         this.width = this.birdTexture.getWidth() * 0.2f;
         this.height = this.birdTexture.getHeight() * 0.2f;
         this.state=BirdState.WAITING;
@@ -29,13 +34,13 @@ public abstract class bird<T extends bird<T>> {
         bodyDef.position.set(this.position);
         bodyDef.linearVelocity.set(0,0);
         bodyDef.angularVelocity=0;
-        bodyDef.angularDamping=0;
+        bodyDef.angularDamping=10;
         body = world.createBody(bodyDef);
         CircleShape shape = new CircleShape();
         shape.setRadius(Math.min(width, height) / 2/PPM);
         float radius = Math.min(width, height) / 2 / PPM;// Define the shape of the bird
         float area = (float) (Math.PI * Math.pow(radius, 2));
-        float desiredMass = 10000f;
+        float desiredMass = 80f;
         float newDensity = desiredMass / area;
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -65,22 +70,10 @@ public abstract class bird<T extends bird<T>> {
     }
     public void jumpToSling(Vector2 slingPerchPosition) {
         if (state == BirdState.WAITING) {
-            state = BirdState.JUMPING;
-            Vector2 direction = slingPerchPosition.cpy().sub(getPosition()).nor();
-            float speed = 80f;
-            getBody().setLinearVelocity(direction.scl(speed));
-        }
-    }
-
-    public void updateJump(Vector2 slingPerchPosition) {
-        if (state == BirdState.JUMPING) {
-            if (body.getPosition().dst(slingPerchPosition) < 11f) {
-                body.setLinearVelocity(0, 0); // Set velocity to zero
-                body.setTransform(slingPerchPosition, 0); // Place it at the perch
-                body.setGravityScale(0);
-                setPosition(body.getPosition());
-                state = BirdState.READY;
-            }
+            body.setGravityScale(0);
+            state=BirdState.READY;
+            setPosition(body.getPosition());
+            body.setTransform(slingPerchPosition, 0);
         }
     }
     public boolean isLaunched() {
@@ -89,6 +82,14 @@ public abstract class bird<T extends bird<T>> {
     public boolean isLanded() {
         return state == BirdState.LANDED;
     }
+    public TextureRegion getTextureRegion() {
+        return textureRegion;
+    }
+
+    public void setTextureRegion(TextureRegion textureRegion) {
+        this.textureRegion = textureRegion;
+    }
+
 
     public Vector2 getVelocity() {
         return velocity;

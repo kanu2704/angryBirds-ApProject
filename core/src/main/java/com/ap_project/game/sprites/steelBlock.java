@@ -7,8 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class steelBlock extends block{
     public steelBlock(String texture, World world) {
         super(texture,world);
+        this.hits=4;
     }
-    public TextureRegion getBlockTexture() {
-        return new TextureRegion(block);
-    }
+
 }

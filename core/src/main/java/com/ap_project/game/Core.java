@@ -20,11 +20,6 @@ public class Core extends Game {
     public SpriteBatch batch;
     public BitmapFont font;
     public static playState playScreen;
-    public static openingState openingScreen;
-    public static levelState levelScreen;
-    public static pauseState pauseScreen;
-    public static menuState menuScreen;
-    public static resultState resultScreen;
 
 
     @Override
@@ -32,7 +27,6 @@ public class Core extends Game {
         batch = new SpriteBatch();
         font = new BitmapFont();
         openingState openingState=new openingState(this);
-        openingScreen=openingState;
         this.setScreen(openingState);
     }
 

@@ -1,17 +1,12 @@
 package com.ap_project.game.states;
 import com.ap_project.game.Core;
-import com.ap_project.game.physicsEngine;
 import com.ap_project.game.sprites.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -24,13 +19,12 @@ import java.util.List;
 
 public class playState extends abstractState implements Screen {
     int currentLevel;
-    private final Texture ground;
+    public final Texture ground;
     private final Texture pauseBtn;
     private final Texture background;
     final Core game;
     OrthographicCamera camera;
     private final ShapeRenderer shapeRenderer;
-    private physicsEngine engine;
     public World world;
     protected Array<block<?>> blocks;
     protected Array<pig<?>> pigs;
@@ -57,9 +51,12 @@ public class playState extends abstractState implements Screen {
     private Box2DDebugRenderer debugRenderer;
     private static final float PPM = 1.0f;
     //float birdLaunchTimer = 0;
+    private Array<Body> bodiesToDestroy = new Array<>();
     Vector2 dragPos;
     final Vector2 initialPos=new Vector2(200,215);
     float timeGap=0;
+    float gameWinTimer=0;
+    float gameLoseTimer=0;
 
     public playState(Core game){
         super();
@@ -73,7 +70,6 @@ public class playState extends abstractState implements Screen {
         blockPositions=new ArrayList<>();
         pigPositions=new ArrayList<>();
         shapeRenderer = new ShapeRenderer();
-        engine = new physicsEngine();
         currentBirdIndex = 0;
         camera=new OrthographicCamera();
         camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
@@ -102,7 +98,7 @@ public class playState extends abstractState implements Screen {
             blocks.get(i).setPosition(blockPositions.get(i));
         }
         for(int i=0;i<pigs.size;i++){
-            pigs.get(i).setVelocity(new Vector2(0,0));
+            //pigs.get(i).setVelocity(new Vector2(0,0));
             pigs.get(i).setPosition(pigPositions.get(i));
         }
         winBtn=new Texture("winBtn.png");
@@ -121,101 +117,93 @@ public class playState extends abstractState implements Screen {
     }
     @Override
     protected void handleInput() {
-        //the button handling part is here
         if (Gdx.input.justTouched()) {
             Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
             if (touchPos.x >= pauseBtnX && touchPos.x <= pauseBtnX + pauseBtnWidth &&
                 touchPos.y >= pauseBtnY && touchPos.y <= pauseBtnY + pauseBtnHeight) {
                 pauseState pauseScreen=new pauseState(game);
-                Core.pauseScreen=pauseScreen;
-                game.setScreen(Core.pauseScreen);
+                game.setScreen(pauseScreen);
                 dispose();
                 return;
             }
             if (touchPos.x >= winBtnX && touchPos.x <= winBtnX + winBtnWidth &&
                 touchPos.y >= winBtnY && touchPos.y <= winBtnY + winBtnHeight) {
                 resultState resultScreen=new resultState(game);
-                Core.resultScreen=new resultState(game);
-                game.setScreen(Core.resultScreen);
+                game.setScreen(resultScreen);
                 dispose();
                 return;
             }
             if (touchPos.x >= loseBtnX && touchPos.x <= loseBtnX + loseBtnWidth &&
                 touchPos.y >= loseBtnY && touchPos.y <= loseBtnY + loseBtnHeight) {
                 resultState2 resultScreen=new resultState2(game);
-                Core.resultScreen2=new resultState2(game);
-                game.setScreen(Core.resultScreen);
+                game.setScreen(resultScreen);
                 dispose();
                 return;
             }
         }
         float maxDragRadius = 75f;
         float maxForce = 125f;
-        bird<?> currentBird = birds.get(currentBirdIndex);
-        Vector2 birdBodyPos = currentBird.getBody().getPosition();
-        Rectangle birdBounds = new Rectangle(
-            birdBodyPos.x - currentBird.width / 2 / PPM,
-            birdBodyPos.y - currentBird.height / 2 / PPM,
-            currentBird.width / PPM, currentBird.height / PPM
-        );
-
-        //handling the bird launching part here
-        if (Gdx.input.isTouched()) {
-            Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(touchPos);
-            if (birdBounds.contains(touchPos.x / PPM, touchPos.y / PPM) &&
-                !currentBird.isLaunched() && !currentBird.isDragging) {
-                currentBird.isDragging = true;
-            }
-            if (currentBird.isDragging) {
-                dragPos = new Vector2(touchPos.x / PPM, touchPos.y / PPM);
-                if (dragPos.dst(initialPos.x / PPM, initialPos.y / PPM) > maxDragRadius) {
-                    dragPos = new Vector2(initialPos.x / PPM, initialPos.y / PPM)
-                        .add(dragPos.sub(initialPos.x / PPM, initialPos.y / PPM).nor().scl(maxDragRadius));
+        bird<?> currentBird=null;
+        if(currentBirdIndex<birds.size){
+            currentBird = birds.get(currentBirdIndex);
+            Vector2 birdBodyPos = currentBird.getBody().getPosition();
+            Rectangle birdBounds = new Rectangle(
+                birdBodyPos.x - currentBird.width / 2 / PPM,
+                birdBodyPos.y - currentBird.height / 2 / PPM,
+                currentBird.width / PPM, currentBird.height / PPM
+            );
+            if (Gdx.input.isTouched()) {
+                Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+                camera.unproject(touchPos);
+                if (birdBounds.contains(touchPos.x / PPM, touchPos.y / PPM) &&
+                    !currentBird.isLaunched() && !currentBird.isDragging) {
+                    currentBird.isDragging = true;
                 }
-                currentBird.setPosition(dragPos);
+                if (currentBird.isDragging) {
+                    dragPos = new Vector2(touchPos.x / PPM, touchPos.y / PPM);
+                    if (dragPos.dst(initialPos.x / PPM, initialPos.y / PPM) > maxDragRadius) {
+                        dragPos = new Vector2(initialPos.x / PPM, initialPos.y / PPM)
+                            .add(dragPos.sub(initialPos.x / PPM, initialPos.y / PPM).nor().scl(maxDragRadius));
+                    }
+                    currentBird.setPosition(dragPos);
+                }
+            }
+            else if (currentBird.isDragging) {
+                currentBird.isDragging = false;
+                Vector2 dragVector= new Vector2(initialPos).sub(dragPos);
+                float dragDistance = dragVector.len();
+                dragDistance = Math.min(dragDistance, maxDragRadius);
+                Vector2 normalizedDirection = dragVector.cpy().nor();
+                float forceMagnitude = (dragDistance / maxDragRadius) * maxForce;
+                Vector2 launchForce = normalizedDirection.scl(forceMagnitude*currentBird.getBody().getMass());
+                currentBird.getBody().setGravityScale(1f);
+                currentBird.getBody().applyLinearImpulse(launchForce, currentBird.getBody().getWorldCenter(), true);
+                currentBird.state = BirdState.LAUNCHED;
             }
         }
-        else if (currentBird.isDragging) {
-            currentBird.isDragging = false;
-            Vector2 dragVector= new Vector2(initialPos).sub(dragPos);
-            System.out.println(dragVector);
-            System.out.println(dragPos);
-            float dragDistance = dragVector.len();
-            dragDistance = Math.min(dragDistance, maxDragRadius);
-            System.out.println(dragDistance);
-            Vector2 normalizedDirection = dragVector.cpy().nor();
-            float forceMagnitude = (dragDistance / maxDragRadius) * maxForce;
-            System.out.println(forceMagnitude);
-            Vector2 launchForce = normalizedDirection.scl(forceMagnitude*currentBird.getBody().getMass());
-            currentBird.getBody().setGravityScale(1f);
-            currentBird.getBody().applyLinearImpulse(launchForce, currentBird.getBody().getWorldCenter(), true);
-            currentBird.state = BirdState.LAUNCHED;
-        }
+
     }
 
     @Override
     protected void update(float dt) {
         handleInput();
         for (block<?> block : blocks) {
-            //block.update(delta);
             if (block.isDestroyed()) {
                 removeObjectFromWorld(block.getBody());
                 blocks.removeValue(block, true);
             }
         }
 
-        // Update pigs
         for (pig<?> pig : pigs) {
-            //pig.update(delta);
             if (pig.isDestroyed()) {
                 removeObjectFromWorld(pig.getBody());
                 pigs.removeValue(pig, true);
             }
         }
         updateBirds(dt);
-        checkGameOver();
+        System.out.println(pigs.size);
+        checkGameOver(dt);
     }
     @Override
     public void create() {
@@ -286,7 +274,7 @@ public class playState extends abstractState implements Screen {
         world.step(1/60f, 6, 2);
         world.step(1/60f, 6, 2);
         world.step(1/60f, 6, 2);
-        world.step(1/60f, 6, 2);
+        processQueuedBodies();
         game.batch.end();
         update(delta);
     }
@@ -309,7 +297,7 @@ public class playState extends abstractState implements Screen {
     private void updateBirds(float delta) {
         timeGap+=delta;
         if(timeGap>=2){
-            if (currentBirdIndex < birds.size) {
+            if(currentBirdIndex<birds.size){
                 bird<?> currentBird = birds.get(currentBirdIndex);
                 switch (currentBird.state) {
                     case WAITING:
@@ -317,25 +305,52 @@ public class playState extends abstractState implements Screen {
                         currentBird.jumpToSling(slingPerchPosition);
                         break;
                     case LAUNCHED:
-                        if (currentBirdIndex < birds.size-1) {
-                            currentBirdIndex++;
+                        currentBirdIndex++;
+                        if(currentBirdIndex<birds.size){
                             bird<?> nextBird = birds.get(currentBirdIndex);
                             nextBird.state = BirdState.WAITING;
-                            timeGap=0;}
-//                        } else {
-//                            checkGameOver();
-//                        }
+                            timeGap=0;
+                        }
                         break;
                 }
             }
         }
     }
-    public void checkGameOver(){
-        if(birds.size==0 && pigs.size>0){
-            game.setScreen(new resultState2(game));
-        }else if(birds.size>=0 && pigs.size==0){
-            game.setScreen(new resultState(game));
+    public void checkGameOver(float delta){
+        if(pigs.size==0){
+            gameWinTimer+=delta;
+            if(gameWinTimer>2){
+                if(currentBirdIndex<birds.size){
+                    game.setScreen(new resultState(game));
+                    dispose();
+                }
+            }
+        }else{
+            if(currentBirdIndex>=birds.size){
+                gameLoseTimer+=delta;
+                if(gameLoseTimer>16){
+                    game.setScreen(new resultState2(game));
+                    dispose();
+                }
+            }
         }
+    }
+    public void queueBodyForDestruction(Body body,Object obj) {
+        bodiesToDestroy.add(body);
+        if(obj instanceof block<?>){
+            block<?> block=(block<?>) obj;
+            block.getBlockTexture().dispose();
+        }else{
+            pig<?> pig=(pig<?>) obj;
+            pig.getPigTexture().dispose();
+        }
+    }
+
+    public void processQueuedBodies() {
+        for (Body body : bodiesToDestroy) {
+            world.destroyBody(body);
+        }
+        bodiesToDestroy.clear();
     }
     public Array<block<?>> getBlocks() {
         return blocks;
@@ -361,7 +376,7 @@ public class playState extends abstractState implements Screen {
     @Override
     public void hide() {
     }
-    private void removeObjectFromWorld(Body body) {
+    void removeObjectFromWorld(Body body) {
         world.destroyBody(body);
     }
     @Override
@@ -380,6 +395,7 @@ public class playState extends abstractState implements Screen {
             currentBird.getBirdTexture().dispose();
         }
         for (block<?> currentBlock : blocks) {
+            System.out.println("block");
             currentBlock.getBlockTexture().dispose();
         }
         for (pig<?> currentPig : pigs) {

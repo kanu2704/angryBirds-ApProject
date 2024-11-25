@@ -21,33 +21,26 @@ public class level {
         blocksLevel1.add(new woodenBlock("wb10.png",world));
         blocksLevel1.add(new woodenBlock("wb10.png",world));
         blocksLevel1.add(new woodenBlock("wb10.png",world));
-
         List<Vector2> blockPositionsLevel1 = new ArrayList<>(Arrays.asList(
-            new Vector2(900, 100),
-            new Vector2(950  + 25, 100),
-            new Vector2(950 + 25, 100 + blocksLevel1.get(2).height-20),
-            new Vector2(1000  + 28 + 25, 100),
-            new Vector2(900, 100+blocksLevel1.get(0).height*0.5f+20),
-            new Vector2(900+blocksLevel1.get(4).width/2, 100+blocksLevel1.get(0).height*0.5f+20),
-            new Vector2(898, 100 + 20 + blocksLevel1.get(0).height*0.5f+26),
-            new Vector2(975, 100 + 20 + blocksLevel1.get(0).height*0.5f+26),
-            new Vector2(1050, 100 + 20 + blocksLevel1.get(0).height*0.5f+26)
+            new Vector2(850, 100),
+            new Vector2(900  + 25, 100),
+            new Vector2(900 + 25, 100 + blocksLevel1.get(2).height-20),
+            new Vector2(950  + 28 + 25, 100),
+            new Vector2(850, 100+blocksLevel1.get(0).height*0.5f+20),
+            new Vector2(850+blocksLevel1.get(4).width/2, 100+blocksLevel1.get(0).height*0.5f+20),
+            new Vector2(848, 100 + 20 + blocksLevel1.get(0).height*0.5f+26),
+            new Vector2(925, 100 + 20 + blocksLevel1.get(0).height*0.5f+26),
+            new Vector2(1000, 100 + 20 + blocksLevel1.get(0).height*0.5f+26)
         ));
-
         Array<pig<?>> pigsLevel1=new Array<>();
         pigsLevel1.add(new pig1("pig1a.png",world));
         pigsLevel1.add(new pig2("pig2a.png",world));
-        pigsLevel1.add(new pig3("pig2a.png",world));
-        pigsLevel1.add(new pig1("pig1a.png",world));
         pigsLevel1.add(new pig2("pig2a.png",world));
         List<Vector2> pigsPositionsLevel1 = new ArrayList<>(Arrays.asList(
-            new Vector2(928, 100),
-            new Vector2(975, 100 + 20 + blocksLevel1.get(0).height*0.5f+35+blocksLevel1.get(8).height*0.5f),
-            new Vector2(900, 100 + 20 + blocksLevel1.get(0).height*0.5f+35+blocksLevel1.get(8).height*0.5f),
-            new Vector2(1051, 100 + 20 + blocksLevel1.get(0).height*0.5f+29+blocksLevel1.get(8).height*0.5f),
-            new Vector2(1012, 100)
+            new Vector2(928-50, 100),
+            new Vector2(925, 100 + 20 + blocksLevel1.get(0).height*0.5f+35+blocksLevel1.get(8).height*0.5f),
+            new Vector2(1012-50, 100)
         ));
-
         blocks.addAll(blocksLevel1);
         pigs.addAll(pigsLevel1);
         blockPositions.addAll(blockPositionsLevel1);

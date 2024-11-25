@@ -45,7 +45,7 @@ public class levelState extends abstractState implements Screen {
             Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(),0);
             camera.unproject(touchPos);
             if (touchPos.x >= 20 && touchPos.x <= 20 + backWidth && touchPos.y >= 720 - backHeight - 20 && touchPos.y <= 720 - 20) {
-                game.setScreen(Core.menuScreen);
+                game.setScreen(new menuState(game));
                 dispose();
             }else{
                 playState playScreen=new playState(game);
@@ -53,7 +53,6 @@ public class levelState extends abstractState implements Screen {
                 game.setScreen(playScreen);
                 dispose();
             }
-
         }
     }
 

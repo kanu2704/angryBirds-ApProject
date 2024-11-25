@@ -44,7 +44,10 @@ public class collisionHandler implements ContactListener {
             pig<?> pig = (pig<?>) objB;
             pig.decreaseHitPoints();
             checkAndRemovePig(pig);
-        }
+        }else if (objA instanceof block<?> && objB instanceof block<?>) {
+            block<?> block = (block<?>) objB;
+            block.decreaseHitPoints();
+            checkAndRemoveBlock(block);}
     }
     private void checkAndRemoveBlock(block<?> block) {
         if (block.isDestroyed()) {
@@ -54,14 +57,18 @@ public class collisionHandler implements ContactListener {
     private void checkAndRemovePig(pig<?> pig) {
         if (pig.isDestroyed()) {
             removePig(pig);
-            Core.playScreen.checkGameOver(); // Check if all pigs are destroyed
         }
     }
     private void removeBlock(block<?> block) {
-        Core.playScreen.getBlocks().removeValue(block, true); // 'true' ensures reference comparison
+        Core.playScreen.queueBodyForDestruction(block.getBody(),block);
+        Core.playScreen.getBlocks().removeValue(block, true);
     }
+
     private void removePig(pig<?> pig) {
+        Core.playScreen.queueBodyForDestruction(pig.getBody(),pig);
         Core.playScreen.getPigs().removeValue(pig, true);
+        System.out.println("pigs size :" + Core.playScreen.getPigs().size);
     }
+
 
 }

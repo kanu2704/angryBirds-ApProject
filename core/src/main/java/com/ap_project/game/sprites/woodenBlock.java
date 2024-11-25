@@ -7,7 +7,7 @@ public class woodenBlock extends block{
 
     public woodenBlock(String texture,World world) {
         super(texture,world);
-        this.hits=2;
+        this.hits=30;
     }
 
 }

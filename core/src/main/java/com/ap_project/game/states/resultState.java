@@ -29,8 +29,6 @@ public class resultState extends abstractState implements Screen {
         homeBtn = new Texture("homeBtn.png");
         playAgain = new Texture("playAgain.png");
         nextLevelBtn = new Texture("nextLevelBtn.png");
-
-
     }
 
     @Override
@@ -42,32 +40,35 @@ public class resultState extends abstractState implements Screen {
             float homeY = 310;
             float homeWidth = homeBtn.getWidth() * 0.2f;
             float homeHeight = homeBtn.getHeight() * 0.2f;
-
             if (touchPos.x >= homeX && touchPos.x <= homeX + homeWidth &&
                 touchPos.y >= homeY && touchPos.y <= homeY + homeHeight) {
                 game.setScreen(new menuState(game));
             }
-
-
+            //for next level
             float playAgainX = 750;
             float playAgainY = 300;
             float playAgainWidth = playAgain.getWidth() * 0.3f;
             float playAgainHeight = playAgain.getHeight() * 0.3f;
-
             if (touchPos.x >= playAgainX && touchPos.x <= playAgainX + playAgainWidth &&
                 touchPos.y >= playAgainY && touchPos.y <= playAgainY + playAgainHeight) {
-                game.setScreen(new playState(game));
+                int l=Core.playScreen.getPlayingLevel()+1;
+                Core.playScreen.dispose();
+                playState newPlayScreen=new playState(game,l);
+                Core.playScreen=newPlayScreen;
+                game.setScreen(newPlayScreen);
             }
-
-
+            //for resuming
             float nextLevelX = 600;
             float nextLevelY = 300;
             float nextLevelWidth = nextLevelBtn.getWidth() * 0.3f;
             float nextLevelHeight = nextLevelBtn.getHeight() * 0.3f;
-
             if (touchPos.x >= nextLevelX && touchPos.x <= nextLevelX + nextLevelWidth &&
                 touchPos.y >= nextLevelY && touchPos.y <= nextLevelY + nextLevelHeight) {
-                game.setScreen(new playState(game));
+                int l=Core.playScreen.getPlayingLevel();
+                playState newPlayScreen=new playState(game,l);
+                Core.playScreen.dispose();
+                Core.playScreen=newPlayScreen;
+                game.setScreen(newPlayScreen);
             }
         }
     }
@@ -96,8 +97,7 @@ public class resultState extends abstractState implements Screen {
         game.batch.draw(nextLevelBtn, 600, 300, nextLevelBtn.getWidth() * 0.3f, nextLevelBtn.getHeight() * 0.3f);
         game.batch.draw(playAgain, 750, 300, playAgain.getWidth() * 0.3f, playAgain.getHeight() * 0.3f);
         game.batch.end();
-
-        update(delta); // Check for inputs in update
+        update(delta);
     }
 
     @Override

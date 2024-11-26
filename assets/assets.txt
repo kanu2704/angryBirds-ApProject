@@ -9,6 +9,10 @@ exitBtn.png
 ground1.png
 heading.png
 homeBtn.png
+ib1.png
+ib2.png
+ib3.png
+ib4.png
 level1btn.png
 level2btn.png
 level3btn.png
@@ -33,6 +37,10 @@ playBtn.png
 redBird.png
 resumeBtn.png
 saveAndExitBtn.png
+sb1.png
+sb2.png
+sb3.png
+sb4.png
 slingBack.png
 slingFront.png
 stars.png

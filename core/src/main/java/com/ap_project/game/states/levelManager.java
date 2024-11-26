@@ -13,10 +13,10 @@ public class levelManager {
         if(num==1){
             level.getLevel1(world,blocks,pigs,blockPositions,pigPositions);
         }
-//        }else if(num==2){
-//            level.getLevel2(world);
-//        }else{
-//            getLevel3(world);
+//        else if(num==2){
+//            level.getLevel2(world,blocks,pigs,blockPositions,pigPositions);
+//        }else if(num==3){
+//            level.getLevel3(world,blocks,pigs,blockPositions,pigPositions);
 //        }
     }
 }

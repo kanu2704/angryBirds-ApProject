@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class playState extends abstractState implements Screen {
-    int currentLevel;
+    public int playingLevel;
     public final Texture ground;
     private final Texture pauseBtn;
     private final Texture background;
@@ -50,7 +50,6 @@ public class playState extends abstractState implements Screen {
     private List<Vector2> pigPositions;
     private Box2DDebugRenderer debugRenderer;
     private static final float PPM = 1.0f;
-    //float birdLaunchTimer = 0;
     private Array<Body> bodiesToDestroy = new Array<>();
     Vector2 dragPos;
     final Vector2 initialPos=new Vector2(200,215);
@@ -58,10 +57,10 @@ public class playState extends abstractState implements Screen {
     float gameWinTimer=0;
     float gameLoseTimer=0;
 
-    public playState(Core game){
+    public playState(Core game,int playingLevel){
         super();
-        this.currentLevel=1;
         this.game = game;
+        this.playingLevel=playingLevel;
         this.world = new World(new Vector2(0, -12f), true);//
         world.setContactListener(new collisionHandler());
         this.blocks = new Array<>();
@@ -82,7 +81,6 @@ public class playState extends abstractState implements Screen {
         birds.add(new redBird("redBird.png",world));
         birds.add(new chuck("chuck.png",world));
         birds.add(new bomb("bomb.png",world));
-
         Vector2[] birdGroundPositions = new Vector2[]{
             new Vector2(170, 105), // First bird
             new Vector2(130, 105),
@@ -92,9 +90,10 @@ public class playState extends abstractState implements Screen {
             birds.get(i).setVelocity(new Vector2(0,0));
             birds.get(i).setPosition(birdGroundPositions[i]);
         }
-        levelManager.constructLevel(currentLevel,world,blocks,pigs,blockPositions,pigPositions);
+        System.out.println("current level of playing is "+playingLevel);
+        levelManager.constructLevel(playingLevel,world,blocks,pigs,blockPositions,pigPositions);
         for(int i=0;i<blocks.size;i++){
-            blocks.get(i).setVelocity(new Vector2(0,0));
+            //blocks.get(i).setVelocity(new Vector2(0,0));
             blocks.get(i).setPosition(blockPositions.get(i));
         }
         for(int i=0;i<pigs.size;i++){
@@ -127,20 +126,21 @@ public class playState extends abstractState implements Screen {
                 dispose();
                 return;
             }
-            if (touchPos.x >= winBtnX && touchPos.x <= winBtnX + winBtnWidth &&
-                touchPos.y >= winBtnY && touchPos.y <= winBtnY + winBtnHeight) {
-                resultState resultScreen=new resultState(game);
-                game.setScreen(resultScreen);
-                dispose();
-                return;
-            }
-            if (touchPos.x >= loseBtnX && touchPos.x <= loseBtnX + loseBtnWidth &&
-                touchPos.y >= loseBtnY && touchPos.y <= loseBtnY + loseBtnHeight) {
-                resultState2 resultScreen=new resultState2(game);
-                game.setScreen(resultScreen);
-                dispose();
-                return;
-            }
+//            if (touchPos.x >= winBtnX && touchPos.x <= winBtnX + winBtnWidth &&
+//                touchPos.y >= winBtnY && touchPos.y <= winBtnY + winBtnHeight) {
+//
+//                resultState resultScreen=new resultState(game);
+//                game.setScreen(resultScreen);
+//                dispose();
+//                return;
+//            }
+//            if (touchPos.x >= loseBtnX && touchPos.x <= loseBtnX + loseBtnWidth &&
+//                touchPos.y >= loseBtnY && touchPos.y <= loseBtnY + loseBtnHeight) {
+//                resultState2 resultScreen=new resultState2(game);
+//                game.setScreen(resultScreen);
+//                dispose();
+//                return;
+//            }
         }
         float maxDragRadius = 75f;
         float maxForce = 125f;
@@ -202,8 +202,7 @@ public class playState extends abstractState implements Screen {
             }
         }
         updateBirds(dt);
-        System.out.println(pigs.size);
-        checkGameOver(dt);
+        //checkGameOver(dt);
     }
     @Override
     public void create() {
@@ -301,7 +300,6 @@ public class playState extends abstractState implements Screen {
                 bird<?> currentBird = birds.get(currentBirdIndex);
                 switch (currentBird.state) {
                     case WAITING:
-                        System.out.println("Bird is going to jump to the slingshot");
                         currentBird.jumpToSling(slingPerchPosition);
                         break;
                     case LAUNCHED:
@@ -321,6 +319,9 @@ public class playState extends abstractState implements Screen {
             gameWinTimer+=delta;
             if(gameWinTimer>2){
                 if(currentBirdIndex<birds.size){
+                    if(Core.currentLevel==getPlayingLevel() && Core.currentLevel<=2){
+                        Core.currentLevel++;
+                    }
                     game.setScreen(new resultState(game));
                     dispose();
                 }
@@ -328,7 +329,7 @@ public class playState extends abstractState implements Screen {
         }else{
             if(currentBirdIndex>=birds.size){
                 gameLoseTimer+=delta;
-                if(gameLoseTimer>16){
+                if(gameLoseTimer>12){
                     game.setScreen(new resultState2(game));
                     dispose();
                 }
@@ -345,7 +346,6 @@ public class playState extends abstractState implements Screen {
             pig.getPigTexture().dispose();
         }
     }
-
     public void processQueuedBodies() {
         for (Body body : bodiesToDestroy) {
             world.destroyBody(body);
@@ -379,6 +379,15 @@ public class playState extends abstractState implements Screen {
     void removeObjectFromWorld(Body body) {
         world.destroyBody(body);
     }
+    public int getPlayingLevel() {
+        return playingLevel;
+    }
+
+//    public void setPlayingLevel(int playingLevel) {
+//        System.out.println("playing level set to playing level"+ playingLevel);
+//        this.playingLevel = playingLevel;
+//    }
+
     @Override
     public void dispose() {
         ground.dispose();

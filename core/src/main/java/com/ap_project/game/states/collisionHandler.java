@@ -67,7 +67,6 @@ public class collisionHandler implements ContactListener {
     private void removePig(pig<?> pig) {
         Core.playScreen.queueBodyForDestruction(pig.getBody(),pig);
         Core.playScreen.getPigs().removeValue(pig, true);
-        System.out.println("pigs size :" + Core.playScreen.getPigs().size);
     }
 
 

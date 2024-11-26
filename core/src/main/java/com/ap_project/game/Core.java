@@ -20,6 +20,7 @@ public class Core extends Game {
     public SpriteBatch batch;
     public BitmapFont font;
     public static playState playScreen;
+    public static int currentLevel;
 
 
     @Override
@@ -28,6 +29,7 @@ public class Core extends Game {
         font = new BitmapFont();
         openingState openingState=new openingState(this);
         this.setScreen(openingState);
+        currentLevel=1;
     }
 
     @Override

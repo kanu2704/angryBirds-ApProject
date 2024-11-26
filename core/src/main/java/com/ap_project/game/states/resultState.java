@@ -17,11 +17,13 @@ public class resultState extends abstractState implements Screen {
     private final Texture homeBtn;
     private final Texture playAgain;
     private final Texture nextLevelBtn;
+    private int level;
 
 
-    public resultState(Core game){
+    public resultState(Core game,int level){
         super();
         this.game = game;
+        this.level=level;
         camera=new OrthographicCamera();
         camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
         background = new Texture("winbg.png");
@@ -43,6 +45,7 @@ public class resultState extends abstractState implements Screen {
             if (touchPos.x >= homeX && touchPos.x <= homeX + homeWidth &&
                 touchPos.y >= homeY && touchPos.y <= homeY + homeHeight) {
                 game.setScreen(new menuState(game));
+                dispose();
             }
             //for next level
             float playAgainX = 750;
@@ -51,11 +54,13 @@ public class resultState extends abstractState implements Screen {
             float playAgainHeight = playAgain.getHeight() * 0.3f;
             if (touchPos.x >= playAgainX && touchPos.x <= playAgainX + playAgainWidth &&
                 touchPos.y >= playAgainY && touchPos.y <= playAgainY + playAgainHeight) {
-                int l=Core.playScreen.getPlayingLevel()+1;
-                Core.playScreen.dispose();
-                playState newPlayScreen=new playState(game,l);
-                Core.playScreen=newPlayScreen;
+                if(Core.currentLevel==level){
+                    Core.currentLevel++;
+                }
+                level++;
+                playState newPlayScreen=new playState(game,level);
                 game.setScreen(newPlayScreen);
+                dispose();
             }
             //for resuming
             float nextLevelX = 600;
@@ -64,11 +69,13 @@ public class resultState extends abstractState implements Screen {
             float nextLevelHeight = nextLevelBtn.getHeight() * 0.3f;
             if (touchPos.x >= nextLevelX && touchPos.x <= nextLevelX + nextLevelWidth &&
                 touchPos.y >= nextLevelY && touchPos.y <= nextLevelY + nextLevelHeight) {
-                int l=Core.playScreen.getPlayingLevel();
-                playState newPlayScreen=new playState(game,l);
-                Core.playScreen.dispose();
-                Core.playScreen=newPlayScreen;
+                if(Core.currentLevel==level){
+                    Core.currentLevel++;
+                }
+                level++;
+                playState newPlayScreen=new playState(game,level);
                 game.setScreen(newPlayScreen);
+                dispose();
             }
         }
     }

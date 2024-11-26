@@ -10,6 +10,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.physics.box2d.World;
+
+import java.io.Serial;
+import java.io.Serializable;
+
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Core extends Game {
     public static final int WIDTH=1280;
@@ -19,7 +23,6 @@ public class Core extends Game {
     public static final String TITLE="angry Bird";
     public SpriteBatch batch;
     public BitmapFont font;
-    public static playState playScreen;
     public static int currentLevel;
 
 

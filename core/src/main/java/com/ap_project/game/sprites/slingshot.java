@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
-public class slingshot {
+import java.io.Serializable;
+
+public class slingshot  {
     public static Texture slingBack;
     public static Texture slingFront;
     public final float x;

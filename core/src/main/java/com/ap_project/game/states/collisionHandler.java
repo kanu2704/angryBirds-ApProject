@@ -10,6 +10,10 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
 public class collisionHandler implements ContactListener {
+    private final playState playState;
+    collisionHandler(playState playState){
+        this.playState=playState;
+    }
     @Override
     public void beginContact(Contact contact) {
         Object userDataA = contact.getFixtureA().getBody().getUserData();
@@ -60,13 +64,13 @@ public class collisionHandler implements ContactListener {
         }
     }
     private void removeBlock(block<?> block) {
-        Core.playScreen.queueBodyForDestruction(block.getBody(),block);
-        Core.playScreen.getBlocks().removeValue(block, true);
+        playState.queueBodyForDestruction(block.getBody(),block);
+        playState.getBlocks().remove(block);
     }
 
     private void removePig(pig<?> pig) {
-        Core.playScreen.queueBodyForDestruction(pig.getBody(),pig);
-        Core.playScreen.getPigs().removeValue(pig, true);
+        playState.queueBodyForDestruction(pig.getBody(),pig);
+        playState.getPigs().remove(pig);
     }
 
 

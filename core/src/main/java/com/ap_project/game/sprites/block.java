@@ -6,8 +6,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-public abstract class block<T extends block<T>> {
+import java.io.Serializable;
+
+public abstract class block<T extends block<T>>  {
     Vector2 position;
+
     Vector2 velocity;
     public float width;
     public float height;
@@ -73,6 +76,10 @@ public abstract class block<T extends block<T>> {
     }
     public boolean isDestroyed() {
         return this.hits <= 0;
+    }
+
+    public Vector2 getVelocity() {
+        return velocity;
     }
 
     public Body getBody() {

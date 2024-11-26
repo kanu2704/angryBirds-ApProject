@@ -1,6 +1,7 @@
 package com.ap_project.game.states;
 
 import com.ap_project.game.Core;
+import com.ap_project.game.pauseGameSave;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,6 +18,7 @@ public class pauseState extends abstractState implements Screen {
     private final Texture resumeBtn;
     private final Texture saveAndExitBtn;
     private final Texture exitBtn;
+    pauseGameSave pauseGameSave;
 
     public pauseState(Core game) {
         super();
@@ -26,7 +28,7 @@ public class pauseState extends abstractState implements Screen {
         resumeBtn = new Texture("resumeBtn.png");
         saveAndExitBtn = new Texture("saveAndExitBtn.png");
         exitBtn = new Texture("exitBtn.png");
-
+        pauseGameSave=new pauseGameSave();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Core.WIDTH, Core.HEIGHT);
     }
@@ -39,10 +41,14 @@ public class pauseState extends abstractState implements Screen {
             float saveAndExitBtnX = 525, saveAndExitBtnY = 250;
             float exitBtnX = 550, exitBtnY = 150;
             float crossBtnX = 910, crossBtnY = 610;
-
             if (touchPos.x >= resumeBtnX && touchPos.x <= resumeBtnX + resumeBtn.getWidth() * 0.4f &&
                 touchPos.y >= resumeBtnY && touchPos.y <= resumeBtnY + resumeBtn.getHeight() * 0.4f) {
-                game.setScreen(Core.playScreen);
+                Gdx.graphics.setContinuousRendering(true);
+                playState playScreen=pauseGameSave.loadGameState();
+                if(playScreen==null){
+                    playScreen=new playState(game,Core.currentLevel);// check here
+                }
+                game.setScreen(playScreen);
                 dispose();
             }
             if (touchPos.x >= saveAndExitBtnX && touchPos.x <= saveAndExitBtnX + saveAndExitBtn.getWidth() * 0.4f &&
@@ -57,7 +63,12 @@ public class pauseState extends abstractState implements Screen {
             }
             if (touchPos.x >= crossBtnX && touchPos.x <= crossBtnX + crossBtn.getWidth() * 0.4f &&
                 touchPos.y >= crossBtnY && touchPos.y <= crossBtnY + crossBtn.getHeight() * 0.4f) {
-                game.setScreen(Core.playScreen);
+                Gdx.graphics.setContinuousRendering(true);
+                playState playScreen= pauseGameSave.loadGameState();
+                if(playScreen==null){
+                    playScreen=new playState(game,Core.currentLevel);// check here
+                }
+                game.setScreen(playScreen);
                 dispose();
             }
         }

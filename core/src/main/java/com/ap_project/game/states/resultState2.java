@@ -15,11 +15,14 @@ public class resultState2 extends abstractState implements Screen {
     final private OrthographicCamera camera;
     final private Texture homeBtn;
     final private Texture playAgain;
+    final private int level;
 
 
-    public resultState2(Core game){
+
+    public resultState2(Core game, int level){
         super();
         this.game=game;
+        this.level = level;
         camera=new OrthographicCamera();
         camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
         background=new Texture("losebg.png");
@@ -41,6 +44,7 @@ public class resultState2 extends abstractState implements Screen {
             if (touchPos.x >= homeX && touchPos.x <= homeX + homeWidth &&
                 touchPos.y >= homeY && touchPos.y <= homeY + homeHeight) {
                 game.setScreen(new menuState(game));
+                dispose();
             }
 
             float playAgainX = 750;
@@ -50,14 +54,11 @@ public class resultState2 extends abstractState implements Screen {
 
             if (touchPos.x >= playAgainX && touchPos.x <= playAgainX + playAgainWidth &&
                 touchPos.y >= playAgainY && touchPos.y <= playAgainY + playAgainHeight) {
-                int l=Core.playScreen.getPlayingLevel();
-                playState newPlayScreen=new playState(game,l);
-                Core.playScreen.dispose();
-                Core.playScreen=newPlayScreen;
+                playState newPlayScreen=new playState(game,level);
                 game.setScreen(newPlayScreen);
+                dispose();
             }
         }
-
     }
 
     @Override
@@ -84,16 +85,13 @@ public class resultState2 extends abstractState implements Screen {
         game.batch.draw(homeBtn, 450, 330, homeBtn.getWidth() * 0.2f, homeBtn.getHeight() * 0.2f);
         game.batch.draw(playAgain, 750, 320, playAgain.getWidth() * 0.3f, playAgain.getHeight() * 0.3f);
         game.batch.end();
-
         update(v);
-
     }
 
     @Override
     public void resize(int i, int i1) {
 
     }
-
     @Override
     public void pause() {
 

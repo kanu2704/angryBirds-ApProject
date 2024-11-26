@@ -38,6 +38,7 @@ public class openingState extends abstractState implements Screen{
         menuState menu=new menuState(game);
         if (fadeAlpha <= 0) {
             game.setScreen(menu);
+            dispose();
         }
     }
 
@@ -102,12 +103,8 @@ public class openingState extends abstractState implements Screen{
 
     @Override
     public void dispose() {
-        // Dispose of the background texture
         if (background != null) {
             background.dispose();
-        }
-        if(backgroundMusic!=null){
-            backgroundMusic.dispose();
         }
     }
 

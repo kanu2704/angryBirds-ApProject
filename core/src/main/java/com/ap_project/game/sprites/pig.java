@@ -5,7 +5,9 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-public abstract class pig<T extends pig<T>> {
+import java.io.Serializable;
+
+public abstract class pig<T extends pig<T>>  {
     private final Body body;
     private Vector2 position;
     private Vector2 velocity;

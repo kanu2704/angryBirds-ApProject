@@ -45,33 +45,21 @@ public class levelState extends abstractState implements Screen {
             Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(),0);
             camera.unproject(touchPos);
             if(touchPos.x>=300 && touchPos.x<=300+level1Btn.getWidth() && touchPos.y>=400 && touchPos.y<=400+level1Btn.getHeight()){
-                if(Core.playScreen!=null){
-                    Core.playScreen.dispose();
-                }
                 playState playScreen=new playState(game,1);
-                Core.playScreen=playScreen;
                 game.setScreen(playScreen);
                 dispose();
-                //set your logic here for serialization add stuff
             }else if(touchPos.x>=420+levelBtnWidth+10f && touchPos.x<=420+levelBtnWidth+10f +levelBtnWidth && touchPos.y>=400 && touchPos.y<=400+level2Btn.getHeight()){
-                if(Core.playScreen!=null){
-                    Core.playScreen.dispose();
-                }
-                if(Core.currentLevel>=1){
+                if(Core.currentLevel>1){
+                    System.out.println("clicked here...");
                     playState playScreen=new playState(game,2);
-                    Core.playScreen=playScreen;
                     game.setScreen(playScreen);
                 }else{
-                    System.out.println("previous levels no cleared......");
+                    System.out.println("previous levels not cleared......");
                 }
                 dispose();
             }else if(touchPos.x>=540 + 2 * (levelBtnWidth + 10f) && touchPos.x<=540 + 2 * (levelBtnWidth + 10f) +levelBtnWidth && touchPos.y>=400 && touchPos.y<=400+level2Btn.getHeight()){
-                if(Core.playScreen!=null){
-                    Core.playScreen.dispose();
-                }
-                if(Core.currentLevel>=2){
-                    playState playScreen=new playState(game,2);
-                    Core.playScreen=playScreen;
+                if(Core.currentLevel>2){
+                    playState playScreen=new playState(game,3);
                     game.setScreen(playScreen);
                 }else{
                     System.out.println("previous levels not cleared.....");

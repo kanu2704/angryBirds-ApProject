@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-public abstract class bird<T extends bird<T>> {
+import java.io.Serializable;
+
+public abstract class bird<T extends bird<T>>  {
     private Vector2 position;
     private Vector2 velocity;
     private Texture birdTexture;

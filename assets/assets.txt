@@ -13,6 +13,11 @@ ib1.png
 ib2.png
 ib3.png
 ib4.png
+ib5.png
+ib6.png
+ib7.png
+img_6.png
+img_7.png
 level1btn.png
 level2btn.png
 level3btn.png
@@ -41,6 +46,9 @@ sb1.png
 sb2.png
 sb3.png
 sb4.png
+sb5.png
+sb6.png
+sb7.png
 slingBack.png
 slingFront.png
 stars.png
@@ -50,6 +58,9 @@ wb11.png
 wb12.png
 wb13.png
 wb14.png
+wb15.png
+wb16.png
+wb17.png
 wb1r.png
 wb2.png
 wb3.png

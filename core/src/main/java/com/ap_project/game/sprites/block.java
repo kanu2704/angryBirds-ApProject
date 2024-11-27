@@ -8,45 +8,26 @@ import com.badlogic.gdx.physics.box2d.*;
 
 import java.io.Serializable;
 
-public abstract class block<T extends block<T>>  {
+public abstract class block<T extends block<T>> implements Serializable  {
     Vector2 position;
-
     Vector2 velocity;
     public float width;
     public float height;
-    public Texture block;
-    protected World world;
-    private Body body;
+    public transient Texture block;
+    protected transient World world;
+    private transient Body body;
     private Rectangle bounds;
     private static final float PPM = 1.0f;
     public int hits;
-
 
     public block(String texturePath, World world) {
         this.world = world;
         this.block = new Texture(texturePath);
         this.width = this.block.getWidth() * 0.2f;
         this.height = this.block.getHeight() * 0.2f;
-
         this.position = new Vector2(0, 0);
         this.velocity = new Vector2(0, 0);
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set((this.position.x-width/2)/PPM,(this.position.y-height/2)/PPM);
-        bodyDef.linearVelocity.set(0,0);
-        body = world.createBody(bodyDef);
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width /4/PPM, height /4/PPM);
-        FixtureDef fixtureDef = new FixtureDef();
-        float area=2*5f;
-        float desiredMass=0.6f;
-        fixtureDef.shape = shape;
-        fixtureDef.density = desiredMass/area;
-        fixtureDef.friction = 0.5f;
-        fixtureDef.restitution = 0.3f;
-        body.createFixture(fixtureDef);
-        shape.dispose();
-        body.setUserData(this);
+        createBody(world);
         bounds=new Rectangle(this.position.x,this.position.y,this.width,this.height);
     }
     public void setPosition(Vector2 position) {
@@ -79,7 +60,27 @@ public abstract class block<T extends block<T>>  {
     }
 
     public Vector2 getVelocity() {
+        System.out.println("getting block velocity ");
         return velocity;
+    }
+    public void createBody(World world){
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set((this.position.x-width/2)/PPM,(this.position.y-height/2)/PPM);
+        bodyDef.linearVelocity.set(0,0);
+        this.body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(width /4/PPM, height /4/PPM);
+        FixtureDef fixtureDef = new FixtureDef();
+        float area=2*5f;
+        float desiredMass=0.6f;
+        fixtureDef.shape = shape;
+        fixtureDef.density = desiredMass/area;
+        fixtureDef.friction = 0.5f;
+        fixtureDef.restitution = 0.3f;
+        this.body.createFixture(fixtureDef);
+        shape.dispose();
+        this.body.setUserData(this);
     }
 
     public Body getBody() {

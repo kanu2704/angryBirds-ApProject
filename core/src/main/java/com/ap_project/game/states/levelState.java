@@ -1,6 +1,7 @@
 package com.ap_project.game.states;
 
 import com.ap_project.game.Core;
+import com.ap_project.game.pauseGameSave;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -21,12 +22,13 @@ public class levelState extends abstractState implements Screen {
     final private float backHeight;
     final private float levelBtnWidth;
     final private float levelBtnHeight;
+    private pauseGameSave pauseGameSave;
 
     public levelState(Core game){;
         this.game = game;
         camera=new OrthographicCamera();
         camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
-
+        this.pauseGameSave=new pauseGameSave();
         background = new Texture("levelSelectbg.png");
         backButton = new Texture("backButton.png");
         level1Btn = new Texture("level1btn.png");
@@ -45,13 +47,15 @@ public class levelState extends abstractState implements Screen {
             Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(),0);
             camera.unproject(touchPos);
             if(touchPos.x>=300 && touchPos.x<=300+level1Btn.getWidth() && touchPos.y>=400 && touchPos.y<=400+level1Btn.getHeight()){
-                playState playScreen=new playState(game,1);
+                playState playScreen=pauseGameSave.loadLevelWiseGameData(1,game);
+                //playState playScreen=new playState(game,1);
                 game.setScreen(playScreen);
                 dispose();
             }else if(touchPos.x>=420+levelBtnWidth+10f && touchPos.x<=420+levelBtnWidth+10f +levelBtnWidth && touchPos.y>=400 && touchPos.y<=400+level2Btn.getHeight()){
                 if(Core.currentLevel>1){
                     System.out.println("clicked here...");
-                    playState playScreen=new playState(game,2);
+                    playState playScreen=pauseGameSave.loadLevelWiseGameData(2,game);
+                    //playState playScreen=new playState(game,2);
                     game.setScreen(playScreen);
                 }else{
                     System.out.println("previous levels not cleared......");
@@ -59,7 +63,8 @@ public class levelState extends abstractState implements Screen {
                 dispose();
             }else if(touchPos.x>=540 + 2 * (levelBtnWidth + 10f) && touchPos.x<=540 + 2 * (levelBtnWidth + 10f) +levelBtnWidth && touchPos.y>=400 && touchPos.y<=400+level2Btn.getHeight()){
                 if(Core.currentLevel>2){
-                    playState playScreen=new playState(game,3);
+                    playState playScreen=pauseGameSave.loadLevelWiseGameData(3,game);
+                    //playState playScreen=new playState(game,3);
                     game.setScreen(playScreen);
                 }else{
                     System.out.println("previous levels not cleared.....");

@@ -19,9 +19,11 @@ public class pauseState extends abstractState implements Screen {
     private final Texture saveAndExitBtn;
     private final Texture exitBtn;
     pauseGameSave pauseGameSave;
+    private int level;
 
-    public pauseState(Core game) {
+    public pauseState(Core game,int level) {
         super();
+        this.level=level;
         this.game = game;
         background = new Texture("pausebg.png");
         crossBtn = new Texture("crossBtn.png");
@@ -44,10 +46,7 @@ public class pauseState extends abstractState implements Screen {
             if (touchPos.x >= resumeBtnX && touchPos.x <= resumeBtnX + resumeBtn.getWidth() * 0.4f &&
                 touchPos.y >= resumeBtnY && touchPos.y <= resumeBtnY + resumeBtn.getHeight() * 0.4f) {
                 Gdx.graphics.setContinuousRendering(true);
-                playState playScreen=pauseGameSave.loadGameState();
-                if(playScreen==null){
-                    playScreen=new playState(game,Core.currentLevel);// check here
-                }
+                playState playScreen=pauseGameSave.loadLevelWiseGameData(level,game);
                 game.setScreen(playScreen);
                 dispose();
             }
@@ -64,10 +63,7 @@ public class pauseState extends abstractState implements Screen {
             if (touchPos.x >= crossBtnX && touchPos.x <= crossBtnX + crossBtn.getWidth() * 0.4f &&
                 touchPos.y >= crossBtnY && touchPos.y <= crossBtnY + crossBtn.getHeight() * 0.4f) {
                 Gdx.graphics.setContinuousRendering(true);
-                playState playScreen= pauseGameSave.loadGameState();
-                if(playScreen==null){
-                    playScreen=new playState(game,Core.currentLevel);// check here
-                }
+                playState playScreen= pauseGameSave.loadLevelWiseGameData(level,game);
                 game.setScreen(playScreen);
                 dispose();
             }

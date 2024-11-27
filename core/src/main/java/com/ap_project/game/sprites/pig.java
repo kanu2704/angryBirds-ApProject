@@ -7,14 +7,14 @@ import com.badlogic.gdx.physics.box2d.*;
 
 import java.io.Serializable;
 
-public abstract class pig<T extends pig<T>>  {
-    private final Body body;
+public abstract class pig<T extends pig<T>> implements Serializable {
+    private transient Body body;
     private Vector2 position;
     private Vector2 velocity;
-    protected Texture pigTexture;
+    protected transient Texture pigTexture;
     public float width;
     public float height;
-    protected final World world;
+    protected transient final World world;
     protected int hits;
     private static final float PPM = 1.0f;
 
@@ -23,32 +23,9 @@ public abstract class pig<T extends pig<T>>  {
         this.pigTexture = new Texture(texturePath);
         this.width = this.pigTexture.getWidth() * 0.2f;
         this.height = this.pigTexture.getHeight() * 0.2f;
-
         this.position = new Vector2(0, 0);
         this.velocity = new Vector2(0, 0);
-
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(this.position.x/PPM,this.position.y/PPM);
-        bodyDef.linearVelocity.set(0,0);
-        bodyDef.angularVelocity=0;
-        bodyDef.angularDamping=0.8f;
-        body = world.createBody(bodyDef);
-        CircleShape shape = new CircleShape();
-        shape.setRadius(Math.min(width, height)/2/PPM);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        shape.setRadius(Math.min(width, height) / 2/PPM);
-        float radius = Math.min(width, height) / 2/PPM;// Define the shape of the bird
-        float area = (float) (Math.PI * Math.pow(radius, 2));
-        float desiredMass = 10f;
-        fixtureDef.density =desiredMass/area;
-        fixtureDef.friction = 1f;
-        fixtureDef.restitution = 0.5f;
-        body.createFixture(fixtureDef);
-        shape.dispose();
-        //this.bounds=new Circle(this.position.x,this.position.y,radius);
-        body.setUserData(this);
+        createBody(world);
     }
     public Vector2 getVelocity() {
         return velocity;
@@ -87,6 +64,35 @@ public abstract class pig<T extends pig<T>>  {
     public Body getBody() {
         return body;
     }
+    public void createBody(World world){
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(this.position.x/PPM,this.position.y/PPM);
+        bodyDef.linearVelocity.set(0,0);
+        bodyDef.angularVelocity=0;
+        bodyDef.angularDamping=0.8f;
+        this.body = world.createBody(bodyDef);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(Math.min(width, height)/2/PPM);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        shape.setRadius(Math.min(width, height) / 2/PPM);
+        float radius = Math.min(width, height) / 2/PPM;// Define the shape of the bird
+        float area = (float) (Math.PI * Math.pow(radius, 2));
+        float desiredMass = 10f;
+        fixtureDef.density =desiredMass/area;
+        fixtureDef.friction = 1f;
+        fixtureDef.restitution = 0.5f;
+        this.body.createFixture(fixtureDef);
+        shape.dispose();
+        //this.bounds=new Circle(this.position.x,this.position.y,radius);
+        this.body.setUserData(this);
+    }
+
+    public void setPigTexture(Texture pigTexture) {
+        this.pigTexture = pigTexture;
+    }
+
     public void dispose() {
         pigTexture.dispose();  // Dispose the texture
         world.destroyBody(body);  // Destroy the Box2D body

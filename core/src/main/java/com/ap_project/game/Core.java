@@ -15,25 +15,32 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class Core extends Game {
+public class Core extends Game implements Serializable {
     public static final int WIDTH=1280;
     public static final int HEIGHT=720;
     public static resultState2 resultScreen2;
-    private static World world;
+    private transient static World world;
     public static final String TITLE="angry Bird";
-    public SpriteBatch batch;
-    public BitmapFont font;
+    public static transient SpriteBatch batch;
     public static int currentLevel;
+    private totalSaveGame totalSaveGame;
 
 
     @Override
     public void create() {
+        totalSaveGame=new totalSaveGame();
+        Integer level=totalSaveGame.loadCurrentLevel();
+        if(level==null){
+            currentLevel=1;
+        }else{
+            currentLevel=(int) level;
+        }
+        //System.out.println("core current level "+currentLevel);
         batch = new SpriteBatch();
-        font = new BitmapFont();
         openingState openingState=new openingState(this);
         this.setScreen(openingState);
-        currentLevel=1;
     }
+
 
     @Override
     public void render() {
@@ -43,6 +50,5 @@ public class Core extends Game {
     @Override
     public void dispose() {
         batch.dispose();
-        font.dispose();
     }
 }

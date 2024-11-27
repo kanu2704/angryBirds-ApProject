@@ -7,10 +7,10 @@ import com.badlogic.gdx.math.Vector3;
 
 import java.io.Serializable;
 
-public class slingshot  {
-    public static Texture slingBack;
-    public static Texture slingFront;
-    public final float x;
+public class slingshot implements Serializable {
+    public transient static Texture slingBack;
+    public transient static Texture slingFront;
+    public transient final float x;
     public final float y;
 
     public slingshot(float x, float y) {
@@ -27,7 +27,6 @@ public class slingshot  {
         return slingBack;
     }
 
-    // Dispose of the textures when done
     public void dispose() {
         slingBack.dispose();
         slingFront.dispose();

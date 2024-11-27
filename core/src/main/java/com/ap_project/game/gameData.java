@@ -23,19 +23,17 @@ public class gameData implements Serializable {
     public List<Vector2> blockPositions;
     public List<Vector2> pigPositions;
     public List<Vector2> birdPositions;
-    public Array<Body> bodiesToDestroy = new Array<>();
+    public ArrayList<Body> bodiesToDestroy ;
     public ArrayList<Integer> pigHealth;
     public float timeGap=0;
     public float gameWinTimer=0;
     public float gameLoseTimer=0;
-    public int playingLevel;
-    public Core game;
     public int currentGameLevel;//figure this out.
     public List<Vector2> blockVelocities;
     public List<Vector2> pigVelocities;
     public List<Vector2> birdVelocities;
     public gameData(ArrayList<block<?>> blocks, ArrayList<pig<?>> pigs, ArrayList<bird<?>> birds, int currentBirdIndex, List<Vector2> blockPositions,List<Vector2> birdPositions,
-                    List<Vector2> pigPositions,ArrayList<Integer> pigHealth,int level,Core game,float timeGap,float gameWinTimer,float gameLoseTimer,Array<Body> bodies,List<Vector2> blockVelocity,List<Vector2> birdVelocity,
+                    List<Vector2> pigPositions,ArrayList<Integer> pigHealth,float timeGap,float gameWinTimer,float gameLoseTimer,ArrayList<Body> bodies,List<Vector2> blockVelocity,List<Vector2> birdVelocity,
                     List<Vector2> pigVelocity) {
         this.blocks = blocks != null ? blocks : new ArrayList<>();
         this.pigs = pigs != null ? pigs : new ArrayList<>();
@@ -49,10 +47,9 @@ public class gameData implements Serializable {
         this.gameWinTimer = gameWinTimer;
         this.gameLoseTimer = gameLoseTimer;
         this.pigHealth=pigHealth;
-        this.playingLevel=level;
-        this.game=game;
         this.currentGameLevel=currentLevel;
         this.blockVelocities=blockVelocity;
+        System.out.println("when block velocity set the  block velocity size is "+blockVelocities.size());
         this.pigVelocities=pigVelocity;
         this.birdVelocities=birdVelocity;
 

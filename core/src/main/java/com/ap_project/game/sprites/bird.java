@@ -7,15 +7,15 @@ import com.badlogic.gdx.physics.box2d.*;
 
 import java.io.Serializable;
 
-public abstract class bird<T extends bird<T>>  {
+public abstract class bird<T extends bird<T>> implements Serializable {
     private Vector2 position;
     private Vector2 velocity;
-    private Texture birdTexture;
-    private TextureRegion textureRegion;
+    private transient Texture birdTexture;
+    private transient TextureRegion textureRegion;
     public float width;
     public float height;
-    private Body body;
-    protected final World world;
+    private transient Body body;
+    protected transient final World world;
     private boolean isLaunched = false;
     public boolean isDragging = false;
     private static final float PPM = 1.0f;
@@ -31,27 +31,7 @@ public abstract class bird<T extends bird<T>>  {
         this.state=BirdState.WAITING;
         this.position = new Vector2(0, 0);
         this.velocity = new Vector2(0, 0);
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(this.position);
-        bodyDef.linearVelocity.set(0,0);
-        bodyDef.angularVelocity=0;
-        bodyDef.angularDamping=10;
-        body = world.createBody(bodyDef);
-        CircleShape shape = new CircleShape();
-        shape.setRadius(Math.min(width, height) / 2/PPM);
-        float radius = Math.min(width, height) / 2 / PPM;// Define the shape of the bird
-        float area = (float) (Math.PI * Math.pow(radius, 2));
-        float desiredMass = 80f;
-        float newDensity = desiredMass / area;
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = newDensity;
-        fixtureDef.friction = 0.5f;
-        fixtureDef.restitution = 0.5f;  // Bounciness of the bird
-        body.createFixture(fixtureDef);
-        shape.dispose();
-        body.setUserData(this);  // Attach the Bird instance to the body
+        createBody(world);
     }
     public Texture getBirdTexture() {
         return birdTexture;
@@ -91,7 +71,33 @@ public abstract class bird<T extends bird<T>>  {
     public void setTextureRegion(TextureRegion textureRegion) {
         this.textureRegion = textureRegion;
     }
+    public void createBody(World world){
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(this.position);
+        bodyDef.linearVelocity.set(0,0);
+        bodyDef.angularVelocity=0;
+        bodyDef.angularDamping=10;
+        this.body = world.createBody(bodyDef);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(Math.min(width, height) / 2/PPM);
+        float radius = Math.min(width, height) / 2 / PPM;// Define the shape of the bird
+        float area = (float) (Math.PI * Math.pow(radius, 2));
+        float desiredMass = 80f;
+        float newDensity = desiredMass / area;
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = newDensity;
+        fixtureDef.friction = 0.5f;
+        fixtureDef.restitution = 0.5f;  // Bounciness of the bird
+        this.body.createFixture(fixtureDef);
+        shape.dispose();
+        this.body.setUserData(this);
+    }
 
+    public void setBirdTexture(Texture birdTexture) {
+        this.birdTexture = birdTexture;
+    }
 
     public Vector2 getVelocity() {
         return velocity;

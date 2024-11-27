@@ -5,8 +5,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import java.io.Serializable;
 
-public class woodenBlock extends block  {
-
+public class woodenBlock extends block implements Serializable {
     public woodenBlock(String texture,World world) {
         super(texture,world);
         this.hits=30;

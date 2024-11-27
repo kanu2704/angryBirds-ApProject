@@ -6,6 +6,7 @@ bomb.png
 chuck.png
 crossBtn.png
 exitBtn.png
+exitButton.png
 ground1.png
 heading.png
 homeBtn.png

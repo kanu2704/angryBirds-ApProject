@@ -13,8 +13,7 @@ import java.util.List;
 public class levelManager {
     public static void constructLevel(int num, World world, ArrayList<block<?>> blocks, ArrayList<pig<?>> pigs, ArrayList<bird<?>> birds, List<Vector2> blockPositions, List<Vector2> pigPositions, List<Vector2> birdPositions){
         if(num==1){
-            level.getLevel1(world,blocks,pigs,birds,blockPositions,pigPositions,birdPositions);
-        }
+            level.getLevel1(world,blocks,pigs,birds,blockPositions,pigPositions,birdPositions);}
         else if(num==2){
             level.getLevel2(world,blocks,pigs,birds,blockPositions,pigPositions,birdPositions);
         }else if(num==3){

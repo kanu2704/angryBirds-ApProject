@@ -1,4 +1,5 @@
 package com.ap_project.game.states;
+import com.ap_project.game.totalSaveGame;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ap_project.game.Core;
 import com.badlogic.gdx.Gdx;
@@ -14,6 +15,7 @@ public class menuState extends abstractState implements Screen {
     OrthographicCamera camera;
     final private Texture playBtn;
     private Texture heading;
+    final private Texture exitButton;
 
     //  play button position attributes
     private float playBtnX;
@@ -21,6 +23,11 @@ public class menuState extends abstractState implements Screen {
     private float playWidth;
     private float playHeight;
 
+    private float exitBtnX;
+    private float exitBtnY;
+    private float exitWidth;
+    private float exitHeight;
+    private totalSaveGame totalSaveGame;
     protected menuState(Core game) {
         super();
         this.game = game;
@@ -34,7 +41,15 @@ public class menuState extends abstractState implements Screen {
         playHeight = playBtn.getHeight() * 0.2f;
         playBtnX = (Core.WIDTH - playWidth) / 2 - 20;
         playBtnY = (Core.HEIGHT - playHeight) / 2;
+
+        exitButton=new Texture("exitButton.png");
+        exitWidth=exitButton.getWidth()*0.5f;
+        exitHeight=exitButton.getHeight()*0.5f;
+        exitBtnX=Core.WIDTH-50f;
+        exitBtnY=20;
     }
+
+
 
     @Override
     protected void handleInput() {
@@ -42,9 +57,12 @@ public class menuState extends abstractState implements Screen {
             Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
             if (touchPos.x >= playBtnX && touchPos.x<= (playBtnX + playWidth) &&
-                touchPos.x >= playBtnY && touchPos.y <= (playBtnY + playHeight)) {
+                touchPos.y >= playBtnY && touchPos.y <= (playBtnY + playHeight)) {
                 levelState levelState=new levelState(game);
                 game.setScreen(levelState);
+                dispose();
+            }else if(touchPos.x>exitBtnX && touchPos.x<=exitBtnX+exitWidth && touchPos.y>=exitBtnY && touchPos.y<=exitBtnY+exitHeight){
+                totalSaveGame.saveCurrentLevel(Core.currentLevel);
                 dispose();
             }
         }

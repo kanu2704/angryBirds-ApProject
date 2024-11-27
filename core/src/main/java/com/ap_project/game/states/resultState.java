@@ -1,6 +1,7 @@
 package com.ap_project.game.states;
 
 import com.ap_project.game.Core;
+import com.ap_project.game.pauseGameSave;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -18,12 +19,14 @@ public class resultState extends abstractState implements Screen {
     private final Texture playAgain;
     private final Texture nextLevelBtn;
     private int level;
+    private pauseGameSave pauseGameSave;
 
 
     public resultState(Core game,int level){
         super();
         this.game = game;
         this.level=level;
+        pauseGameSave=new pauseGameSave();
         camera=new OrthographicCamera();
         camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
         background = new Texture("winbg.png");
@@ -57,12 +60,11 @@ public class resultState extends abstractState implements Screen {
                 if(Core.currentLevel==level){
                     Core.currentLevel++;
                 }
-                level++;
-                playState newPlayScreen=new playState(game,level);
+                playState newPlayScreen=new playState(game,level,null);
                 game.setScreen(newPlayScreen);
                 dispose();
             }
-            //for resuming
+            //for resuming the same Level
             float nextLevelX = 600;
             float nextLevelY = 300;
             float nextLevelWidth = nextLevelBtn.getWidth() * 0.3f;
@@ -73,7 +75,8 @@ public class resultState extends abstractState implements Screen {
                     Core.currentLevel++;
                 }
                 level++;
-                playState newPlayScreen=new playState(game,level);
+                playState newPlayScreen=pauseGameSave.loadLevelWiseGameData(level,game);
+                //playState newPlayScreen=new playState(game,level,null);
                 game.setScreen(newPlayScreen);
                 dispose();
             }

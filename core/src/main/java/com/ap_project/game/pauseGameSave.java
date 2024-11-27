@@ -11,7 +11,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
@@ -22,7 +21,7 @@ import java.util.HashMap;
 
 public class pauseGameSave implements Serializable{
     private static HashMap<Integer, gameData> levelWiseGameData=new HashMap<>();
-    public void saveGameState(ArrayList<block<?>> blocks, ArrayList<pig<?>> pigs, ArrayList<bird<?>> birds, int currentBirdIndex,int playingLevel,float timeGap,float gameWinTimer,float gameLoseTimer,ArrayList<Body> bodies) {
+    public void saveGameState(ArrayList<block<?>> blocks, ArrayList<pig<?>> pigs, ArrayList<bird<?>> birds, int currentBirdIndex,int playingLevel,float timeGap,float gameWinTimer,float gameLoseTimer,ArrayList<Object> bodies) {
         ArrayList<Vector2> BirdPositions = new ArrayList<>();
         for (bird<?> b : birds) {
             BirdPositions.add(b.getPosition());

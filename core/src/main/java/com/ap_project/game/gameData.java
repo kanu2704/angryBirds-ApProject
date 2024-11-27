@@ -23,7 +23,7 @@ public class gameData implements Serializable {
     public List<Vector2> blockPositions;
     public List<Vector2> pigPositions;
     public List<Vector2> birdPositions;
-    public ArrayList<Body> bodiesToDestroy ;
+    public ArrayList<Object> bodiesToDestroy ;
     public ArrayList<Integer> pigHealth;
     public float timeGap=0;
     public float gameWinTimer=0;
@@ -33,7 +33,7 @@ public class gameData implements Serializable {
     public List<Vector2> pigVelocities;
     public List<Vector2> birdVelocities;
     public gameData(ArrayList<block<?>> blocks, ArrayList<pig<?>> pigs, ArrayList<bird<?>> birds, int currentBirdIndex, List<Vector2> blockPositions,List<Vector2> birdPositions,
-                    List<Vector2> pigPositions,ArrayList<Integer> pigHealth,float timeGap,float gameWinTimer,float gameLoseTimer,ArrayList<Body> bodies,List<Vector2> blockVelocity,List<Vector2> birdVelocity,
+                    List<Vector2> pigPositions,ArrayList<Integer> pigHealth,float timeGap,float gameWinTimer,float gameLoseTimer,ArrayList<Object> bodies,List<Vector2> blockVelocity,List<Vector2> birdVelocity,
                     List<Vector2> pigVelocity) {
         this.blocks = blocks != null ? blocks : new ArrayList<>();
         this.pigs = pigs != null ? pigs : new ArrayList<>();

@@ -31,6 +31,7 @@ public abstract class block<T extends block<T>> implements Serializable  {
         bounds=new Rectangle(this.position.x,this.position.y,this.width,this.height);
     }
     public void setPosition(Vector2 position) {
+
         this.position.set(position);
         this.getBody().setTransform(position.x, position.y, this.getBody().getAngle());  // Update Box2D body position
     }

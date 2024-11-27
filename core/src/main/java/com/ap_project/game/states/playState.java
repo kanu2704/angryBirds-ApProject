@@ -54,13 +54,12 @@ public class playState extends abstractState implements Screen,Serializable{
     private List<Vector2> birdGroundPositions;
     private Box2DDebugRenderer debugRenderer;
     private static final float PPM = 1.0f;
-    private ArrayList<Body> bodiesToDestroy = new ArrayList<>();
+    private ArrayList<Object> bodiesToDestroy = new ArrayList<>();
     Vector2 dragPos;
     final Vector2 initialPos=new Vector2(200,215);
     float timeGap;
     float gameWinTimer;
     float gameLoseTimer;
-    boolean isPaused;
     private pauseState pauseScreen;
     pauseGameSave pauseGameSave;
     public boolean levelConstructed;
@@ -69,7 +68,6 @@ public class playState extends abstractState implements Screen,Serializable{
         super();
         this.game = game;
         this.playingLevel=playingLevel;
-        isPaused=false;
         this.levelConstructed=false;
         camera=new OrthographicCamera();
         camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
@@ -90,6 +88,7 @@ public class playState extends abstractState implements Screen,Serializable{
             System.out.println("world is set");
             this.world = new World(new Vector2(0, -12f), true);//
             this.world.setContactListener(new collisionHandler(this));
+            this.bodiesToDestroy=new ArrayList<>();
         }else{
             System.out.println("assigning previous structures.......");
             blocks=gameData.blocks;
@@ -106,6 +105,7 @@ public class playState extends abstractState implements Screen,Serializable{
             this.world = new World(new Vector2(0, -12f), true);//
             this.world.setContactListener(new collisionHandler(this));
             levelConstructed=true;
+            this.bodiesToDestroy=gameData.bodiesToDestroy;
             if(playingLevel==1){
                 level.getLevel1Textures(this.world,blocks,pigs,birds,blockPositions,pigPositions,birdGroundPositions, (ArrayList<Vector2>) gameData.birdVelocities, (ArrayList<Vector2>) gameData.pigVelocities, (ArrayList<Vector2>) gameData.blockVelocities,gameData.pigHealth);
             }else if(playingLevel==2){
@@ -122,7 +122,6 @@ public class playState extends abstractState implements Screen,Serializable{
             camera.unproject(touchPos);
             if (touchPos.x >= pauseBtnX && touchPos.x <= pauseBtnX + pauseBtnWidth &&
                 touchPos.y >= pauseBtnY && touchPos.y <= pauseBtnY + pauseBtnHeight) {
-                isPaused=true;
                 pauseGameSave.saveGameState(blocks,pigs,birds,currentBirdIndex,playingLevel,timeGap,gameWinTimer,gameLoseTimer,bodiesToDestroy);
                 pauseState pauseScreen=new pauseState(game,playingLevel);
                 game.setScreen(pauseScreen);
@@ -199,23 +198,23 @@ public class playState extends abstractState implements Screen,Serializable{
 //            birds.get(i).setVelocity(birds.get(i).getBody().getLinearVelocity());
 //        }
 
-        if(!isPaused){
-            handleInput();
-            for (block<?> block : blocks) {
-                if (block.isDestroyed()) {
-                    removeObjectFromWorld(block.getBody());
-                    blocks.remove(block);
-                }
+
+        handleInput();
+        for (block<?> block : blocks) {
+            if (block.isDestroyed()) {
+                removeObjectFromWorld(block.getBody());
+                blocks.remove(block);
             }
-            for (pig<?> pig : pigs) {
-                if (pig.isDestroyed()) {
-                    removeObjectFromWorld(pig.getBody());
-                    pigs.remove(pig);
-                }
-            }
-            updateBirds(dt);
-            checkGameOver(dt);
         }
+        for (pig<?> pig : pigs) {
+            if (pig.isDestroyed()) {
+                removeObjectFromWorld(pig.getBody());
+                pigs.remove(pig);
+            }
+        }
+        updateBirds(dt);
+        checkGameOver(dt);
+
     }
     @Override
     public void create() {
@@ -232,71 +231,66 @@ public class playState extends abstractState implements Screen,Serializable{
         world.step(1/60f, 6, 2);
         world.step(1/60f, 6, 2);
         if(levelConstructed){
-            if(isPaused){
-                Gdx.graphics.setContinuousRendering(false);//
-                ////////////////////////////
-                pauseScreen.render(delta);
-            }else{
-                Gdx.graphics.setContinuousRendering(true);
-                ScreenUtils.clear(0, 0, 0.2f, 1);
-                camera.update();
-                game.batch.setProjectionMatrix(camera.combined);
-                game.batch.begin();
-                game.batch.draw(background, 0, 0, Core.WIDTH, Core.HEIGHT);
-                createGround();
-                game.batch.draw(ground, -ground.getWidth() / 2f, -ground.getHeight() / 2f, ground.getWidth()*0.5f, ground.getHeight()*0.5f);
-                game.batch.draw(pauseBtn, pauseBtnX, pauseBtnY, pauseBtnWidth, pauseBtnHeight);
-                game.batch.draw(winBtn,winBtnX,winBtnY,winBtn.getWidth()*0.21f,winBtn.getHeight()*0.21f);
-                game.batch.draw(loseBtn,loseBtnX,loseBtnY,loseBtn.getWidth()*0.21f,loseBtn.getHeight()*0.21f);
-                for (int i = 0; i < blocks.size(); i++) {
-                    block<?> currentBlock = blocks.get(i);
-                    if(!currentBlock.isDestroyed()){
-                        float blockAngle = (float) Math.toDegrees(currentBlock.getBody().getAngle());
-                        game.batch.draw(new TextureRegion(blocks.get(i).getBlockTexture()),
-                            currentBlock.getPosition().x * PPM - currentBlock.width / 4,
-                            currentBlock.getPosition().y * PPM - currentBlock.height / 4,
-                            currentBlock.width /4, currentBlock.height/4,
-                            currentBlock.width*0.5f, currentBlock.height*0.5f,
-                            1f, 1f,
-                            blockAngle);
-                    }
+            Gdx.graphics.setContinuousRendering(true);
+            ScreenUtils.clear(0, 0, 0.2f, 1);
+            camera.update();
+            game.batch.setProjectionMatrix(camera.combined);
+            game.batch.begin();
+            game.batch.draw(background, 0, 0, Core.WIDTH, Core.HEIGHT);
+            createGround();
+            game.batch.draw(ground, -ground.getWidth() / 2f, -ground.getHeight() / 2f, ground.getWidth()*0.5f, ground.getHeight()*0.5f);
+            game.batch.draw(pauseBtn, pauseBtnX, pauseBtnY, pauseBtnWidth, pauseBtnHeight);
+            game.batch.draw(winBtn,winBtnX,winBtnY,winBtn.getWidth()*0.21f,winBtn.getHeight()*0.21f);
+            game.batch.draw(loseBtn,loseBtnX,loseBtnY,loseBtn.getWidth()*0.21f,loseBtn.getHeight()*0.21f);
+            for (int i = 0; i < blocks.size(); i++) {
+                block<?> currentBlock = blocks.get(i);
+                if(!currentBlock.isDestroyed()){
+                    float blockAngle = (float) Math.toDegrees(currentBlock.getBody().getAngle());
+                    game.batch.draw(new TextureRegion(blocks.get(i).getBlockTexture()),
+                        currentBlock.getPosition().x * PPM - currentBlock.width / 4,
+                        currentBlock.getPosition().y * PPM - currentBlock.height / 4,
+                        currentBlock.width /4, currentBlock.height/4,
+                        currentBlock.width*0.5f, currentBlock.height*0.5f,
+                        1f, 1f,
+                        blockAngle);
                 }
-                for (int i = 0; i < pigs.size(); i++) {
-                    pig<?> currentPig = pigs.get(i);
-                    if(!currentPig.isDestroyed()){
-                        float pigAngle = (float) Math.toDegrees(currentPig.getBody().getAngle()); // Get angle in degrees
-                        game.batch.draw(
-                            new TextureRegion(currentPig.getPigTexture()),
-                            currentPig.getPosition().x * PPM - currentPig.width / 2, // X position
-                            currentPig.getPosition().y * PPM - currentPig.height / 2, // Y position
-                            currentPig.width / 2,
-                            currentPig.height / 2,
-                            currentPig.width,
-                            currentPig.height,
-                            1f,
-                            1f,
-                            pigAngle
-                        );
-                    }
-                }
-                game.batch.draw(slingshot.getslingFrontTexture(),180,100,slingshot.slingFront.getWidth()*0.3f,slingshot.slingFront.getHeight()*0.3f);
-                for (int i = 0; i<birds.size(); i++) {
-                    bird<?> currentBird = birds.get(i);
-                    float birdAngle = (float) Math.toDegrees(currentBird.getBody().getAngle());
+            }
+            for (int i = 0; i < pigs.size(); i++) {
+                pig<?> currentPig = pigs.get(i);
+                if(!currentPig.isDestroyed()){
+                    float pigAngle = (float) Math.toDegrees(currentPig.getBody().getAngle()); // Get angle in degrees
                     game.batch.draw(
-                        new TextureRegion(currentBird.getBirdTexture()),
-                        currentBird.getPosition().x * PPM - currentBird.width / 2, currentBird.getPosition().y * PPM - currentBird.height / 2, currentBird.width / 2, currentBird.height / 2,
-                        currentBird.width,
-                        currentBird.height,
+                        new TextureRegion(currentPig.getPigTexture()),
+                        currentPig.getPosition().x * PPM - currentPig.width / 2, // X position
+                        currentPig.getPosition().y * PPM - currentPig.height / 2, // Y position
+                        currentPig.width / 2,
+                        currentPig.height / 2,
+                        currentPig.width,
+                        currentPig.height,
                         1f,
                         1f,
-                        birdAngle
+                        pigAngle
                     );
                 }
-                game.batch.draw(slingshot.getslingBackTexture(),165,150,slingshot.slingBack.getWidth()*0.3f,slingshot.slingBack.getHeight()*0.3f);
-                processQueuedBodies();
-                game.batch.end();
             }
+            game.batch.draw(slingshot.getslingFrontTexture(),180,100,slingshot.slingFront.getWidth()*0.3f,slingshot.slingFront.getHeight()*0.3f);
+            for (int i = 0; i<birds.size(); i++) {
+                bird<?> currentBird = birds.get(i);
+                float birdAngle = (float) Math.toDegrees(currentBird.getBody().getAngle());
+                game.batch.draw(
+                    new TextureRegion(currentBird.getBirdTexture()),
+                    currentBird.getPosition().x * PPM - currentBird.width / 2, currentBird.getPosition().y * PPM - currentBird.height / 2, currentBird.width / 2, currentBird.height / 2,
+                    currentBird.width,
+                    currentBird.height,
+                    1f,
+                    1f,
+                    birdAngle
+                );
+            }
+            game.batch.draw(slingshot.getslingBackTexture(),165,150,slingshot.slingBack.getWidth()*0.3f,slingshot.slingBack.getHeight()*0.3f);
+            processQueuedBodies();
+            game.batch.end();
+
         }
         update(delta);
     }
@@ -369,7 +363,7 @@ public class playState extends abstractState implements Screen,Serializable{
         }
     }
     public void queueBodyForDestruction(Body body,Object obj) {
-        bodiesToDestroy.add(body);
+        bodiesToDestroy.add(obj);
         if(obj instanceof block<?>){
             block<?> block=(block<?>) obj;
             block.getBlockTexture().dispose();
@@ -379,8 +373,14 @@ public class playState extends abstractState implements Screen,Serializable{
         }
     }
     public void processQueuedBodies() {
-        for (Body body : bodiesToDestroy) {
-            world.destroyBody(body);
+        for (Object obj : bodiesToDestroy) {
+            if(obj instanceof block<?>){
+                block<?> block=(block<?>) obj;
+                world.destroyBody(block.getBody());
+            }else{
+                pig<?> pig=(pig<?>) obj;
+                world.destroyBody(pig.getBody());
+            }
         }
         bodiesToDestroy.clear();
     }
@@ -474,11 +474,11 @@ public class playState extends abstractState implements Screen,Serializable{
         this.birds = birds;
     }
 
-    public ArrayList<Body> getBodiesToDestroy() {
+    public ArrayList<Object> getBodiesToDestroy() {
         return bodiesToDestroy;
     }
 
-    public void setBodiesToDestroy(ArrayList<Body> bodiesToDestroy) {
+    public void setBodiesToDestroy(ArrayList<Object> bodiesToDestroy) {
         this.bodiesToDestroy = bodiesToDestroy;
     }
 

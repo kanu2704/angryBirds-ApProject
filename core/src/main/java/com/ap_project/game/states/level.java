@@ -262,7 +262,9 @@ public class level {
         }
         System.out.println("blocks size :"+blocks.size());
         for (int i = 0; i < blocks.size(); i++) {
-            blocks.get(i).createBody(world);
+            if(!blocks.get(i).isDestroyed()){
+                blocks.get(i).createBody(world);
+            }
             System.out.println("done 1");
             blocks.get(i).setPosition(blockPositions.get(i));
             System.out.println("done 2");
@@ -272,7 +274,9 @@ public class level {
         }
         System.out.println("pigs size: "+pigs.size());
         for (int i = 0; i < pigs.size(); i++) {
-            pigs.get(i).createBody(world);
+            if(!pigs.get(i).isDestroyed()){
+                pigs.get(i).createBody(world);
+            }
             pigs.get(i).setPosition(pigPositions.get(i));
             pigs.get(i).setHits(pigsHealth.get(i));
             pigs.get(i).setVelocity(pigsVelocity.get(i));

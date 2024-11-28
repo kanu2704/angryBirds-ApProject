@@ -33,7 +33,7 @@ public class menuState extends abstractState implements Screen {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Core.WIDTH, Core.HEIGHT);
-
+        this.totalSaveGame=new totalSaveGame();
         background = new Texture("background.jpg");
         heading = new Texture("heading.png");
         playBtn = new Texture("playBtn.png");
@@ -43,9 +43,9 @@ public class menuState extends abstractState implements Screen {
         playBtnY = (Core.HEIGHT - playHeight) / 2;
 
         exitButton=new Texture("exitButton.png");
-        exitWidth=exitButton.getWidth()*0.5f;
-        exitHeight=exitButton.getHeight()*0.5f;
-        exitBtnX=Core.WIDTH-50f;
+        exitWidth=exitButton.getWidth()*0.25f;
+        exitHeight=exitButton.getHeight()*0.25f;
+        exitBtnX=Core.WIDTH-50f-exitWidth;
         exitBtnY=20;
     }
 
@@ -64,6 +64,7 @@ public class menuState extends abstractState implements Screen {
             }else if(touchPos.x>exitBtnX && touchPos.x<=exitBtnX+exitWidth && touchPos.y>=exitBtnY && touchPos.y<=exitBtnY+exitHeight){
                 totalSaveGame.saveCurrentLevel(Core.currentLevel);
                 dispose();
+                Gdx.app.exit();
             }
         }
     }
@@ -94,6 +95,7 @@ public class menuState extends abstractState implements Screen {
             Core.HEIGHT - headingHeight - 50,
             headingWidth, headingHeight);
         game.batch.draw(playBtn, playBtnX, playBtnY, playWidth, playHeight);
+        game.batch.draw(exitButton,exitBtnX,exitBtnY,exitWidth,exitHeight);
         game.batch.end();
         handleInput();
     }
@@ -119,5 +121,6 @@ public class menuState extends abstractState implements Screen {
         background.dispose();
         heading.dispose();
         playBtn.dispose();
+        exitButton.dispose();
     }
 }

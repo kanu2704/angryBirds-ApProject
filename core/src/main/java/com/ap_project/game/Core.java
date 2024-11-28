@@ -35,7 +35,6 @@ public class Core extends Game implements Serializable {
         }else{
             currentLevel=(int) level;
         }
-        //System.out.println("core current level "+currentLevel);
         batch = new SpriteBatch();
         openingState openingState=new openingState(this);
         this.setScreen(openingState);

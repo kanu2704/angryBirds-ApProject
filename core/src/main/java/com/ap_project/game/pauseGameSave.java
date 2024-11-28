@@ -3,25 +3,18 @@ package com.ap_project.game;
 import com.ap_project.game.sprites.bird;
 import com.ap_project.game.sprites.block;
 import com.ap_project.game.sprites.pig;
-import com.ap_project.game.sprites.slingshot;
-import com.ap_project.game.states.levelManager;
 import com.ap_project.game.states.playState;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 
-import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class pauseGameSave implements Serializable{
     private static HashMap<Integer, gameData> levelWiseGameData=new HashMap<>();
-    public void saveGameState(ArrayList<block<?>> blocks, ArrayList<pig<?>> pigs, ArrayList<bird<?>> birds, int currentBirdIndex,int playingLevel,float timeGap,float gameWinTimer,float gameLoseTimer,ArrayList<Object> bodies) {
+    public void saveGameState(ArrayList<block<?>> blocks, ArrayList<pig<?>> pigs, ArrayList<bird<?>> birds, int currentBirdIndex, int playingLevel, float timeGap, float gameWinTimer, float gameLoseTimer, ArrayList<Object> bodies, List<block<?>> blocksDestroyed, List<pig<?>> pigsDestroyed) {
         ArrayList<Vector2> BirdPositions = new ArrayList<>();
         for (bird<?> b : birds) {
             BirdPositions.add(b.getPosition());
@@ -29,11 +22,19 @@ public class pauseGameSave implements Serializable{
         ArrayList<Vector2> BlockPositions = new ArrayList<>();
         System.out.println("block size beofr saving the game :"+blocks.size());
         for (block<?> b : blocks) {
-            BlockPositions.add(b.getPosition());
+            if(!b.isDestroyed()){
+                BlockPositions.add(b.getPosition());
+            }else{
+                BlockPositions.add(null);
+            }
         }
         ArrayList<Vector2> PigPositions = new ArrayList<>();
         for (pig<?> p : pigs) {
-            PigPositions.add(p.getPosition());
+            if(!p.isDestroyed()){
+                PigPositions.add(p.getPosition());
+            }else{
+                PigPositions.add(null);
+            }
         }
         ArrayList<Integer> PigHealth = new ArrayList<>();
         for (pig<?> p : pigs) {
@@ -45,39 +46,43 @@ public class pauseGameSave implements Serializable{
         }
         ArrayList<Vector2> blockVelocity = new ArrayList<>();
         for (block<?> b : blocks) {
-            blockVelocity.add(b.getVelocity());
+            if(!b.isDestroyed()){
+                blockVelocity.add(b.getVelocity());
+            }else{
+                blockVelocity.add(null);
+            }
         }
         System.out.println("before saving the block velocities :"+blockVelocity.size());
         ArrayList<Vector2> pigVelocity = new ArrayList<>();
         for (pig<?> p :pigs) {
-            pigVelocity.add(p.getVelocity());
+            if(!p.isDestroyed()){
+                pigVelocity.add(p.getVelocity());
+            }else{
+                pigVelocity.add(null);
+            }
         }
-        gameData gameData = new gameData(blocks,pigs,birds,currentBirdIndex,BlockPositions,BirdPositions,PigPositions,PigHealth,timeGap,gameWinTimer,gameLoseTimer,bodies,blockVelocity,birdVelocity,pigVelocity);
+        gameData gameData = new gameData(blocks,pigs,birds,currentBirdIndex,BlockPositions,BirdPositions,PigPositions,PigHealth,timeGap,gameWinTimer,gameLoseTimer,blockVelocity,birdVelocity,pigVelocity,bodies,blocksDestroyed,pigsDestroyed);
         saveLevelWise(playingLevel,gameData);
     }
-
     private static playState getPlayState(gameData gameData,Core game,int level) {
         System.out.println("im hereeee");
         playState playScreen= new playState(game, level,gameData);
         return playScreen;
     }
-
     public void saveLevelWise(int playingLevel, gameData gameData) {
-        String saveLevelFile=getSaveFilePath("level_" + playingLevel + "_data.dat");
-        File levelFile=new File(saveLevelFile);
-        String levelMapFilePath=getSaveFilePath("levelWiseData.dat");
-        File levelMapFile=new File(levelMapFilePath);
+        //String saveLevelFile=getSaveFilePath("level_" + playingLevel + "_data.dat");
+        File levelFile=new File("C:\\Users\\kanup\\Downloads\\school attachments\\cs\\AngryBirds\\saves\\level_"+playingLevel+"_data.dat");
+        //String levelMapFilePath=getSaveFilePath("levelWiseData.dat");
+
+        File levelMapFile=new File("C:\\Users\\kanup\\Downloads\\school attachments\\cs\\AngryBirds\\saves\\levelWiseData.dat");
+        //System.out.println(levelMapFilePath);
         try {
-
-            // Save gameData to a separate file for the level
-
             FileOutputStream gameDataOutputStream = new FileOutputStream(levelFile);
             ObjectOutputStream gameDataObjectOutputStream = new ObjectOutputStream(gameDataOutputStream);
             gameDataObjectOutputStream.writeObject(gameData);
             gameDataObjectOutputStream.close();
             System.out.println("Game data for level " + playingLevel + " saved successfully.");
-
-            levelWiseGameData.put(playingLevel, null); // Use null to avoid storing the actual gameData in memory
+            levelWiseGameData.put(playingLevel, null);
             FileOutputStream levelMapOutputStream = new FileOutputStream(levelMapFile);
             ObjectOutputStream levelMapObjectOutputStream = new ObjectOutputStream(levelMapOutputStream);
             levelMapObjectOutputStream.writeObject(levelWiseGameData);
@@ -89,18 +94,16 @@ public class pauseGameSave implements Serializable{
     }
 
     public playState loadLevelWiseGameData(int playingLevel,Core game) {
-        String saveLevelDataPath = getSaveFilePath("levelWiseData.dat");
-        File levelMapFile = new File(saveLevelDataPath);
+        File levelMapFile = new File("C:\\Users\\kanup\\Downloads\\school attachments\\cs\\AngryBirds\\saves\\levelWiseData.dat");
 
         try {
-            // Check if the level data file exists but is empty
             if (levelMapFile.exists() && levelMapFile.length() > 0) {
-                try (FileInputStream levelMapInputStream = new FileInputStream(saveLevelDataPath);
+                try (FileInputStream levelMapInputStream = new FileInputStream("C:\\Users\\kanup\\Downloads\\school attachments\\cs\\AngryBirds\\saves\\levelWiseData.dat");
                      ObjectInputStream levelMapObjectInputStream = new ObjectInputStream(levelMapInputStream)) {
                     levelWiseGameData = (HashMap<Integer, gameData>) levelMapObjectInputStream.readObject();
                     System.out.println("Level-wise metadata loaded successfully.");
                 } catch (EOFException e) {
-                    System.out.println("File is empty: " + saveLevelDataPath);
+                    System.out.println("File is empty: " +"C:\\Users\\kanup\\Downloads\\school attachments\\cs\\AngryBirds\\saves\\levelWiseData.dat");
                 } catch (IOException | ClassNotFoundException e) {
                     System.err.println("Error reading level metadata: " + e.getMessage());
                 }
@@ -108,29 +111,26 @@ public class pauseGameSave implements Serializable{
                 System.out.println("No level-wise metadata found or file is empty.");
             }
 
-            String savePATH = getSaveFilePath("level_" + playingLevel + "_data.dat");
-            File levelSaved = new File(savePATH);
+            File levelSaved = new File("C:\\Users\\kanup\\Downloads\\school attachments\\cs\\AngryBirds\\saves\\level_"+playingLevel+"_data.dat");
 
             if (levelSaved.exists() && levelSaved.length() > 0) {
-                try (FileInputStream gameDataInputStream = new FileInputStream(savePATH);
+                try (FileInputStream gameDataInputStream = new FileInputStream("C:\\Users\\kanup\\Downloads\\school attachments\\cs\\AngryBirds\\saves\\level_"+playingLevel+"_data.dat");
                      ObjectInputStream gameDataObjectInputStream = new ObjectInputStream(gameDataInputStream)) {
-
                     gameData gameData = (gameData) gameDataObjectInputStream.readObject();
                     System.out.println("Game data for level " + playingLevel + " loaded successfully.");
-                    playState playScreen = getPlayState(gameData,game,playingLevel);
                     Core.batch = new SpriteBatch();
-                    // Log game data sizes
+                    playState playScreen = getPlayState(gameData,game,playingLevel);
                     System.out.println("After loading ....");
-                    System.out.println("birds size: " + gameData.birds.size());
-                    System.out.println("birds velocity size: " + gameData.birdVelocities.size());
-                    System.out.println("blocks size: " + gameData.blocks.size());
-                    System.out.println("pigs size: " + gameData.pigs.size());
-                    clearFile(savePATH);
+                    System.out.println("birds size: "+ gameData.birds.size());
+                    System.out.println("birds velocity size: "+ gameData.birdVelocities.size());
+                    System.out.println("blocksDestroyed size: "+ gameData.blocksDestroyed.size());
+                    System.out.println("pigsDestroyed size: "+ gameData.pigsDestroyed.size());
+                    clearFile("C:\\Users\\kanup\\Downloads\\school attachments\\cs\\AngryBirds\\saves\\level_"+playingLevel+"_data.dat");
                     return playScreen;
                 } catch (EOFException e) {
                     System.out.println("Game data for level " + playingLevel + " is empty or corrupted.");
                     playState playScreen = getPlayState(null,game,playingLevel);
-                    clearFile(savePATH);
+                    clearFile("C:\\Users\\kanup\\Downloads\\school attachments\\cs\\AngryBirds\\saves\\level_"+playingLevel+"_data.dat");
                     return playScreen;
 
                 } catch (IOException | ClassNotFoundException e) {
@@ -139,8 +139,7 @@ public class pauseGameSave implements Serializable{
                 }
             } else {
                 System.out.println("No game data found for level " + playingLevel + ".");
-                gameData gameData=null;
-                playState playScreen = getPlayState(gameData,game,playingLevel);
+                playState playScreen = getPlayState(null,game,playingLevel);
                 return playScreen;
             }
         } catch (Exception e) {
@@ -149,20 +148,19 @@ public class pauseGameSave implements Serializable{
         return null;
     }
 
-    private String getSaveFilePath(String fileName) {
-        String userDir = System.getProperty("user.dir");
-        String saveDirPath = userDir + File.separator + "saves";
-        String saveFilePath = saveDirPath + File.separator + fileName;
-        File saveDir = new File(saveDirPath);
-        if (!saveDir.exists()) {
-            saveDir.mkdirs();
-        }
-        return saveFilePath;
-    }
+//    private String getSaveFilePath(String fileName) {
+//        String userDir = System.getProperty("user.dir");
+//        String saveDirPath = userDir + File.separator + "saves";
+//        String saveFilePath = saveDirPath + File.separator + fileName;
+//        File saveDir = new File(saveDirPath);
+//        if (!saveDir.exists()) {
+//            saveDir.mkdirs();
+//        }
+//        return saveFilePath;
+//    }
     private void clearFile(String filePath) {
-        // Open the file in write mode and truncate it to clear the contents
         try (FileOutputStream fos = new FileOutputStream(filePath)) {
-            fos.write(new byte[0]);  // Writing an empty byte array to clear the file
+            fos.write(new byte[0]);
             System.out.println("File cleared: " + filePath);
         } catch (IOException e) {
             System.err.println("Error clearing the file: " + e.getMessage());

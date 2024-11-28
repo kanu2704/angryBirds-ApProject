@@ -55,23 +55,12 @@ public class collisionHandler implements ContactListener {
     }
     private void checkAndRemoveBlock(block<?> block) {
         if (block.isDestroyed()) {
-            removeBlock(block);
+            playState.queueBodyForDestruction(block);
         }
     }
     private void checkAndRemovePig(pig<?> pig) {
         if (pig.isDestroyed()) {
-            removePig(pig);
+            playState.queueBodyForDestruction(pig);
         }
     }
-    private void removeBlock(block<?> block) {
-        playState.queueBodyForDestruction(block.getBody(),block);
-        //playState.getBlocks().remove(block);
-    }
-
-    private void removePig(pig<?> pig) {
-        playState.queueBodyForDestruction(pig.getBody(),pig);
-        //playState.getPigs().remove(pig);
-    }
-
-
 }

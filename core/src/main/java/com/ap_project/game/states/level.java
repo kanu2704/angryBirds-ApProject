@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class level {
     public static void getLevel1(World world, ArrayList<block<?>> blocks, ArrayList<pig<?>> pigs,ArrayList<bird<?>> birds, List<Vector2> blockPositions,List<Vector2> pigPositions,List<Vector2> birdsPositions){
@@ -233,20 +234,19 @@ public class level {
             pigs.get(i).setPosition(pigsPositionsLevel3.get(i));
         }
     }
-    public static void getLevel1Textures(World world, ArrayList<block<?>> blocks, ArrayList<pig<?>> pigs,ArrayList<bird<?>> birds, List<Vector2> blockPositions,List<Vector2> pigPositions,List<Vector2> birdsPositions,ArrayList<Vector2> birdsVelocity,ArrayList<Vector2> pigsVelocity,ArrayList<Vector2> blocksVelocity,ArrayList<Integer> pigsHealth){
-        blocks.get(0).setBlockTexture(new Texture("wb1.png"));
-        blocks.get(1).setBlockTexture(new Texture("wb6.png"));
-        blocks.get(2).setBlockTexture(new Texture("wb6.png"));
-        blocks.get(3).setBlockTexture(new Texture("wb1.png"));
-        blocks.get(4).setBlockTexture(new Texture("wb1r.png"));
-        blocks.get(5).setBlockTexture(new Texture("wb1r.png"));
-        blocks.get(6).setBlockTexture(new Texture("wb10.png"));
-        blocks.get(7).setBlockTexture(new Texture("wb10.png"));
-        blocks.get(8).setBlockTexture(new Texture("wb10.png"));
+    public static void getLevel1Textures(World world, ArrayList<block<?>> blocks, ArrayList<pig<?>> pigs,ArrayList<bird<?>> birds, List<Vector2> blockPositions,List<Vector2> pigPositions,List<Vector2> birdsPositions,ArrayList<Vector2> birdsVelocity,ArrayList<Vector2> pigsVelocity,ArrayList<Vector2> blocksVelocity,ArrayList<Integer> pigsHealth,List<block<?>> blocksDestroyed,List<pig<?>> pigsDestroyed){
+        String[] textures = {"wb1.png", "wb6.png", "wb6.png", "wb1.png", "wb1r.png", "wb1r.png", "wb10.png", "wb10.png", "wb10.png"};
+        for (int i = 0; i < blocks.size(); i++) {
+            blocks.get(i).setBlockTexture(new Texture(textures[i]));
+        }
 
-        pigs.get(0).setPigTexture(new Texture("pig1a.png"));
-        pigs.get(1).setPigTexture(new Texture("pig2a.png"));
-        pigs.get(2).setPigTexture(new Texture("pig2a.png"));
+        String[] pigTextures = {
+            "pig1a.png", "pig2a.png", "pig2a.png"
+        };
+
+        for (int i = 0; i < pigs.size(); i++) {
+            pigs.get(i).setPigTexture(new Texture(pigTextures[i]));
+        }
 
         birds.get(0).setBirdTexture(new Texture("redBird.png"));
         birds.get(1).setBirdTexture(new Texture("chuck.png"));
@@ -256,50 +256,56 @@ public class level {
             birds.get(i).createBody(world);
             System.out.println("bone 1");
             birds.get(i).setPosition(birdsPositions.get(i));
+            if(Objects.equals(birds.get(i).getPosition(), new Vector2(200, 215))){
+                birds.get(i).getBody().setGravityScale(0);
+            }
             System.out.println("bone 2");
             birds.get(i).setVelocity(birdsVelocity.get(i));
             System.out.println("bone 3");
         }
-        System.out.println("blocks size :"+blocks.size());
+        System.out.println("blocks size :" + blocks.size());
         for (int i = 0; i < blocks.size(); i++) {
-            if(!blocks.get(i).isDestroyed()){
+            if(!blocksDestroyed.contains(blocks.get(i))){
                 blocks.get(i).createBody(world);
+                System.out.println("done 1");
+                blocks.get(i).setPosition(blockPositions.get(i));
+                System.out.println("done 2");
+                System.out.println("size of block velocity " + blocksVelocity.size());
+                blocks.get(i).setVelocity(blocksVelocity.get(i));
+                System.out.println("done 3");
             }
-            System.out.println("done 1");
-            blocks.get(i).setPosition(blockPositions.get(i));
-            System.out.println("done 2");
-            System.out.println("size of block velocity "+blocksVelocity.size());
-            blocks.get(i).setVelocity(blocksVelocity.get(i));
-            System.out.println("done 3");
+
         }
-        System.out.println("pigs size: "+pigs.size());
+        System.out.println("pigs size: " + pigs.size());
         for (int i = 0; i < pigs.size(); i++) {
-            if(!pigs.get(i).isDestroyed()){
+            if(!pigsDestroyed.contains(pigs.get(i))){
                 pigs.get(i).createBody(world);
+                pigs.get(i).setPosition(pigPositions.get(i));
+                pigs.get(i).setHits(pigsHealth.get(i));
+                pigs.get(i).setVelocity(pigsVelocity.get(i));
             }
-            pigs.get(i).setPosition(pigPositions.get(i));
-            pigs.get(i).setHits(pigsHealth.get(i));
-            pigs.get(i).setVelocity(pigsVelocity.get(i));
         }
     }
-    public static void getLevel2Textures(World world, ArrayList<block<?>> blocks, ArrayList<pig<?>> pigs,ArrayList<bird<?>> birds, List<Vector2> blockPositions,List<Vector2> pigPositions,List<Vector2> birdsPositions,ArrayList<Vector2> birdsVelocity,ArrayList<Vector2> pigsVelocity,ArrayList<Vector2> blocksVelocity,ArrayList<Integer> pigsHealth) {
-        blocks.get(0).setBlockTexture(new Texture("sb4.png"));
-        blocks.get(1).setBlockTexture(new Texture("ib4.png"));
-        blocks.get(2).setBlockTexture(new Texture("ib4.png"));
-        blocks.get(3).setBlockTexture(new Texture("ib3.png"));
-        blocks.get(4).setBlockTexture(new Texture("sb3.png"));
-        blocks.get(5).setBlockTexture(new Texture("ib3.png"));
-        blocks.get(6).setBlockTexture(new Texture("sb2.png"));
-        blocks.get(7).setBlockTexture(new Texture("sb2.png"));
-        blocks.get(8).setBlockTexture(new Texture("sb2.png"));
-        blocks.get(9).setBlockTexture(new Texture("ib2.png"));
-        blocks.get(10).setBlockTexture(new Texture("sb1.png"));
-        blocks.get(11).setBlockTexture(new Texture("sb1.png"));
-        blocks.get(12).setBlockTexture(new Texture("ib1.png"));
+    public static void getLevel2Textures(World world, ArrayList<block<?>> blocks, ArrayList<pig<?>> pigs,ArrayList<bird<?>> birds, List<Vector2> blockPositions,List<Vector2> pigPositions,List<Vector2> birdsPositions,ArrayList<Vector2> birdsVelocity,ArrayList<Vector2> pigsVelocity,ArrayList<Vector2> blocksVelocity,ArrayList<Integer> pigsHealth,List<block<?>> blocksDestroyed,List<pig<?>> pigsDestroyed) {
+        String[] textures = {
+            "sb4.png", "ib4.png", "ib4.png", "ib3.png", "sb3.png", "ib3.png",
+            "sb2.png", "sb2.png", "sb2.png", "ib2.png", "sb1.png", "sb1.png", "ib1.png"
+        };
 
-        pigs.get(0).setPigTexture(new Texture("pig1a.png"));
-        pigs.get(1).setPigTexture(new Texture("pig1a.png"));
-        pigs.get(2).setPigTexture(new Texture("pig2a.png"));
+        for (int i = 0; i < blocks.size(); i++) {
+
+                blocks.get(i).setBlockTexture(new Texture(textures[i]));
+
+        }
+
+        String[] pigTextures = {
+            "pig1a.png", "pig1a.png", "pig2a.png"
+        };
+        for (int i = 0; i < pigs.size(); i++) {
+
+                pigs.get(i).setPigTexture(new Texture(pigTextures[i]));
+        }
+
 
         birds.get(0).setBirdTexture(new Texture("redBird.png"));
         birds.get(1).setBirdTexture(new Texture("chuck.png"));
@@ -309,51 +315,59 @@ public class level {
             birds.get(i).createBody(world);
             System.out.println("bone 1");
             birds.get(i).setPosition(birdsPositions.get(i));
+            if(Objects.equals(birds.get(i).getPosition(), new Vector2(200, 215))){
+                birds.get(i).getBody().setGravityScale(0);
+            }
             System.out.println("bone 2");
             birds.get(i).setVelocity(birdsVelocity.get(i));
             System.out.println("bone 3");
         }
         System.out.println("blocks size :" + blocks.size());
         for (int i = 0; i < blocks.size(); i++) {
-            blocks.get(i).createBody(world);
-            System.out.println("done 1");
-            blocks.get(i).setPosition(blockPositions.get(i));
-            System.out.println("done 2");
-            System.out.println("size of block velocity " + blocksVelocity.size());
-            blocks.get(i).setVelocity(blocksVelocity.get(i));
-            System.out.println("done 3");
+            if(!blocksDestroyed.contains(blocks.get(i))){
+                blocks.get(i).createBody(world);
+                System.out.println("done 1");
+                blocks.get(i).setPosition(blockPositions.get(i));
+                System.out.println("done 2");
+                System.out.println("size of block velocity " + blocksVelocity.size());
+                blocks.get(i).setVelocity(blocksVelocity.get(i));
+                System.out.println("done 3");
+            }
+
         }
         System.out.println("pigs size: " + pigs.size());
         for (int i = 0; i < pigs.size(); i++) {
-            pigs.get(i).createBody(world);
-            pigs.get(i).setPosition(pigPositions.get(i));
-            pigs.get(i).setHits(pigsHealth.get(i));
-            pigs.get(i).setVelocity(pigsVelocity.get(i));
+            if(!pigsDestroyed.contains(pigs.get(i))){
+                pigs.get(i).createBody(world);
+                pigs.get(i).setPosition(pigPositions.get(i));
+                pigs.get(i).setHits(pigsHealth.get(i));
+                pigs.get(i).setVelocity(pigsVelocity.get(i));
+            }
         }
     }
-    public static void getLevel3Textures(World world, ArrayList<block<?>> blocks, ArrayList<pig<?>> pigs,ArrayList<bird<?>> birds, List<Vector2> blockPositions,List<Vector2> pigPositions,List<Vector2> birdsPositions,ArrayList<Vector2> birdsVelocity,ArrayList<Vector2> pigsVelocity,ArrayList<Vector2> blocksVelocity,ArrayList<Integer> pigsHealth) {
-        blocks.get(0).setBlockTexture(new Texture("sb6.png"));
-        blocks.get(1).setBlockTexture(new Texture("wb17.png"));
-        blocks.get(2).setBlockTexture(new Texture("ib5.png"));
-        blocks.get(3).setBlockTexture(new Texture("ib1.png"));
-        blocks.get(4).setBlockTexture(new Texture("sb5.png"));
-        blocks.get(5).setBlockTexture(new Texture("ib6.png"));
-        blocks.get(6).setBlockTexture(new Texture("sb7.png"));
-        blocks.get(7).setBlockTexture(new Texture("ib7.png"));
-        blocks.get(8).setBlockTexture(new Texture("ib7.png"));
-        blocks.get(9).setBlockTexture(new Texture("ib7.png"));
-        blocks.get(10).setBlockTexture(new Texture("ib7.png"));
-        blocks.get(11).setBlockTexture(new Texture("ib7.png"));
-        blocks.get(12).setBlockTexture(new Texture("ib7.png"));
-        blocks.get(13).setBlockTexture(new Texture("ib6.png"));
-        blocks.get(14).setBlockTexture(new Texture("ib6.png"));
-        blocks.get(15).setBlockTexture(new Texture("wb15.png"));
-        blocks.get(16).setBlockTexture(new Texture("wb15.png"));
-        blocks.get(17).setBlockTexture(new Texture("wb16.png"));
+    public static void getLevel3Textures(World world, ArrayList<block<?>> blocks, ArrayList<pig<?>> pigs,ArrayList<bird<?>> birds, List<Vector2> blockPositions,List<Vector2> pigPositions,List<Vector2> birdsPositions,ArrayList<Vector2> birdsVelocity,ArrayList<Vector2> pigsVelocity,ArrayList<Vector2> blocksVelocity,ArrayList<Integer> pigsHealth,List<block<?>> blocksDestroyed,List<pig<?>> pigsDestroyed) {
+        String[] textures = {
+            "sb6.png", "wb17.png", "ib5.png", "ib1.png", "sb5.png", "ib6.png",
+            "sb7.png", "ib7.png", "ib7.png", "ib7.png", "ib7.png", "ib7.png",
+            "ib7.png", "ib6.png", "ib6.png", "wb15.png", "wb15.png", "wb16.png"
+        };
+        for (int i = 0; i < blocks.size(); i++) {
+//            if (!blocksDestroyed.contains(blocks.get(i))) {
+//                blocks.get(i).setBlockTexture(new Texture(textures[i]));
+//            }
+            blocks.get(i).setBlockTexture(new Texture(textures[i]));
 
-        pigs.get(0).setPigTexture(new Texture("pig2a.png"));
-        pigs.get(1).setPigTexture(new Texture("pig1a.png"));
-        pigs.get(2).setPigTexture(new Texture("pig2a.png"));
+        }
+        String[] pigTextures = {
+            "pig2a.png", "pig1a.png", "pig2a.png"
+        };
+        for (int i = 0; i < pigs.size(); i++) {
+//            if (!pigsDestroyed.contains(pigs.get(i))) {
+//                pigs.get(i).setPigTexture(new Texture(pigTextures[i]));
+//            }
+            pigs.get(i).setPigTexture(new Texture(pigTextures[i]));
+        }
+
 
         birds.get(0).setBirdTexture(new Texture("redBird.png"));
         birds.get(1).setBirdTexture(new Texture("chuck.png"));
@@ -363,27 +377,34 @@ public class level {
             birds.get(i).createBody(world);
             System.out.println("bone 1");
             birds.get(i).setPosition(birdsPositions.get(i));
+            if(Objects.equals(birds.get(i).getPosition(), new Vector2(200, 215))){
+                birds.get(i).getBody().setGravityScale(0);
+            }
             System.out.println("bone 2");
             birds.get(i).setVelocity(birdsVelocity.get(i));
             System.out.println("bone 3");
         }
         System.out.println("blocks size :" + blocks.size());
         for (int i = 0; i < blocks.size(); i++) {
-            blocks.get(i).createBody(world);
-            System.out.println("done 1");
-            blocks.get(i).setPosition(blockPositions.get(i));
-            System.out.println("done 2");
-            System.out.println("size of block velocity " + blocksVelocity.size());
-            blocks.get(i).setVelocity(blocksVelocity.get(i));
-            System.out.println("done 3");
+            if(!blocksDestroyed.contains(blocks.get(i))){
+                blocks.get(i).createBody(world);
+                System.out.println("done 1");
+                blocks.get(i).setPosition(blockPositions.get(i));
+                System.out.println("done 2");
+                System.out.println("size of block velocity " + blocksVelocity.size());
+                blocks.get(i).setVelocity(blocksVelocity.get(i));
+                System.out.println("done 3");
+            }
+
         }
         System.out.println("pigs size: " + pigs.size());
         for (int i = 0; i < pigs.size(); i++) {
-            pigs.get(i).createBody(world);
-            pigs.get(i).setPosition(pigPositions.get(i));
-            pigs.get(i).setHits(pigsHealth.get(i));
-            pigs.get(i).setVelocity(pigsVelocity.get(i));
+            if(!pigsDestroyed.contains(pigs.get(i))){
+                pigs.get(i).createBody(world);
+                pigs.get(i).setPosition(pigPositions.get(i));
+                pigs.get(i).setHits(pigsHealth.get(i));
+                pigs.get(i).setVelocity(pigsVelocity.get(i));
+            }
         }
     }
-
 }

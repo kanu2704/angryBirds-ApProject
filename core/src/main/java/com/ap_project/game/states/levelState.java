@@ -34,13 +34,11 @@ public class levelState extends abstractState implements Screen {
         level1Btn = new Texture("level1btn.png");
         level2Btn = new Texture("level2btn.png");
         level3Btn = new Texture("level3btn.png");
-
         backWidth = backButton.getWidth() * 0.5f;
         backHeight = backButton.getHeight() * 0.5f;
         levelBtnWidth = level1Btn.getWidth() * 0.7f;
         levelBtnHeight = level1Btn.getHeight() * 0.7f;
     }
-
     @Override
     protected void handleInput() {
         if (Gdx.input.justTouched()) {
@@ -48,29 +46,29 @@ public class levelState extends abstractState implements Screen {
             camera.unproject(touchPos);
             if(touchPos.x>=300 && touchPos.x<=300+level1Btn.getWidth() && touchPos.y>=400 && touchPos.y<=400+level1Btn.getHeight()){
                 playState playScreen=pauseGameSave.loadLevelWiseGameData(1,game);
-                //playState playScreen=new playState(game,1);
                 game.setScreen(playScreen);
                 dispose();
-            }else if(touchPos.x>=420+levelBtnWidth+10f && touchPos.x<=420+levelBtnWidth+10f +levelBtnWidth && touchPos.y>=400 && touchPos.y<=400+level2Btn.getHeight()){
+            }
+            else if(touchPos.x>=420+levelBtnWidth+10f && touchPos.x<=420+levelBtnWidth+10f +levelBtnWidth && touchPos.y>=400 && touchPos.y<=400+level2Btn.getHeight()){
                 if(Core.currentLevel>1){
                     System.out.println("clicked here...");
                     playState playScreen=pauseGameSave.loadLevelWiseGameData(2,game);
-                    //playState playScreen=new playState(game,2);
                     game.setScreen(playScreen);
+                    dispose();
                 }else{
                     System.out.println("previous levels not cleared......");
                 }
-                dispose();
-            }else if(touchPos.x>=540 + 2 * (levelBtnWidth + 10f) && touchPos.x<=540 + 2 * (levelBtnWidth + 10f) +levelBtnWidth && touchPos.y>=400 && touchPos.y<=400+level2Btn.getHeight()){
+            }
+            else if(touchPos.x>=540 + 2 * (levelBtnWidth + 10f) && touchPos.x<=540 + 2 * (levelBtnWidth + 10f) +levelBtnWidth && touchPos.y>=400 && touchPos.y<=400+level2Btn.getHeight()){
                 if(Core.currentLevel>2){
                     playState playScreen=pauseGameSave.loadLevelWiseGameData(3,game);
-                    //playState playScreen=new playState(game,3);
                     game.setScreen(playScreen);
+                    dispose();
                 }else{
                     System.out.println("previous levels not cleared.....");
                 }
-                dispose();
-            }else if(touchPos.x >= 20 && touchPos.x <= 20 + backWidth && touchPos.y >= 720 - backHeight - 20 && touchPos.y <= 720 - 20){
+            }
+            else if(touchPos.x >= 20 && touchPos.x <= 20 + backWidth && touchPos.y >= 720 - backHeight - 20 && touchPos.y <= 720 - 20){
                 game.setScreen(new menuState(game));
                 dispose();
             }

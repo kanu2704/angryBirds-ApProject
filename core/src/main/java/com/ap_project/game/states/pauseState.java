@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class pauseState extends abstractState implements Screen {
     private Texture background;
@@ -57,6 +60,7 @@ public class pauseState extends abstractState implements Screen {
             }
             if (touchPos.x >= exitBtnX && touchPos.x <= exitBtnX + exitBtn.getWidth() * 0.4f &&
                 touchPos.y >= exitBtnY && touchPos.y <= exitBtnY + exitBtn.getHeight() * 0.4f) {
+                clearFile("C:\\Users\\kanup\\Downloads\\school attachments\\cs\\AngryBirds\\saves\\level_"+level+"_data.dat");
                 game.setScreen(new menuState(game));
                 dispose();
             }
@@ -98,6 +102,13 @@ public class pauseState extends abstractState implements Screen {
     }
     @Override
     public void pause() {
+    }
+    private void clearFile(String filePath) {
+        try (FileWriter writer = new FileWriter(new File(filePath))) {
+            writer.write("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     @Override
     public void resume() {

@@ -14,18 +14,23 @@ public abstract class pig<T extends pig<T>> implements Serializable {
     protected transient Texture pigTexture;
     public float width;
     public float height;
-    protected transient final World world;
+    protected transient World world;
     protected int hits;
     private static final float PPM = 1.0f;
 
     public pig(String texturePath, World world) {
-        this.world = world;
-        this.pigTexture = new Texture(texturePath);
-        this.width = this.pigTexture.getWidth() * 0.2f;
-        this.height = this.pigTexture.getHeight() * 0.2f;
-        this.position = new Vector2(0, 0);
-        this.velocity = new Vector2(0, 0);
-        createBody(world);
+        if(texturePath!=null){
+            this.pigTexture = new Texture(texturePath);
+            this.width = this.pigTexture.getWidth() * 0.2f;
+            this.height = this.pigTexture.getHeight() * 0.2f;
+        }
+        if(world!=null){
+            this.world = world;
+            this.position = new Vector2(0, 0);
+            this.velocity = new Vector2(0, 0);
+            createBody(world);
+        }
+        //createBody(world);
     }
     public Vector2 getVelocity() {
         return velocity;
@@ -70,7 +75,7 @@ public abstract class pig<T extends pig<T>> implements Serializable {
         bodyDef.position.set(this.position.x/PPM,this.position.y/PPM);
         bodyDef.linearVelocity.set(0,0);
         //bodyDef.angularVelocity=0;
-        //bodyDef.angularDamping=0.8f;
+        bodyDef.angularDamping=2f;
         this.body = world.createBody(bodyDef);
         CircleShape shape = new CircleShape();
         shape.setRadius(Math.min(width, height)/2/PPM);

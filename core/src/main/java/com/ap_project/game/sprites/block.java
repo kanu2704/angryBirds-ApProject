@@ -20,14 +20,23 @@ public abstract class block<T extends block<T>> implements Serializable  {
     private static final float PPM = 1.0f;
     public int hits;
 
+
     public block(String texturePath, World world) {
-        this.world = world;
-        this.block = new Texture(texturePath);
-        this.width = this.block.getWidth() * 0.2f;
-        this.height = this.block.getHeight() * 0.2f;
-        this.position = new Vector2(0, 0);
-        this.velocity = new Vector2(0, 0);
-        createBody(world);
+        if(texturePath!=null){
+            this.block = new Texture(texturePath);
+            this.width = this.block.getWidth() * 0.2f;
+            this.height = this.block.getHeight() * 0.2f;
+        }
+        if(world!=null){
+            this.world = world;
+            this.position = new Vector2(0, 0);
+            this.velocity = new Vector2(0, 0);
+            createBody(world);
+
+        }
+
+
+
         bounds=new Rectangle(this.position.x,this.position.y,this.width,this.height);
     }
     public void setPosition(Vector2 position) {
@@ -83,6 +92,14 @@ public abstract class block<T extends block<T>> implements Serializable  {
         shape.dispose();
         this.body.setUserData(this);
     }
+    public int getHits() {
+        return hits;
+    }
+
+    public void setHits(int hits) {
+        this.hits = hits;
+    }
+
 
     public Body getBody() {
         return body;

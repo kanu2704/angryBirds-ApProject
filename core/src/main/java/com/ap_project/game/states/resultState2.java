@@ -54,7 +54,7 @@ public class resultState2 extends abstractState implements Screen {
 
             if (touchPos.x >= playAgainX && touchPos.x <= playAgainX + playAgainWidth &&
                 touchPos.y >= playAgainY && touchPos.y <= playAgainY + playAgainHeight) {
-                playState newPlayScreen=new playState(game,level,null);
+                playState newPlayScreen=new playState(game,level,null,false);
                 game.setScreen(newPlayScreen);
                 dispose();
             }

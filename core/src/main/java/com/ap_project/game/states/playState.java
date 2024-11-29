@@ -67,57 +67,66 @@ public class playState extends abstractState implements Screen,Serializable{
     private Box2DDebugRenderer debugRenderer;
 
 
-    public playState(Core game, int playingLevel,gameData gameData){
+    public playState(Core game, int playingLevel,gameData gameData,boolean isTest){
         super();
         this.game = game;
-        this.playingLevel=playingLevel;
-        this.levelConstructed=false;
-        camera=new OrthographicCamera();
-        camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
-        setTextures();
-        debugRenderer=new Box2DDebugRenderer();
-        pauseGameSave=new pauseGameSave();
-        if(gameData==null){
-            System.out.println("no game data initally ...");
-            this.world = new World(new Vector2(0, -12f), true);//
-            this.world.setContactListener(new collisionHandler(this));
-            this.blocks = new ArrayList<>();
-            this.pigs = new ArrayList<>();
-            this.birds = new ArrayList<>();
-            blockPositions=new ArrayList<>();
-            pigPositions=new ArrayList<>();
-            birdGroundPositions=new ArrayList<>();
-            bodiesToDestroy=new ArrayList<>();
-            currentBirdIndex = 0;
-            timeGap=0;
-            gameWinTimer=0;
-            gameLoseTimer=0;
-            blocksDestroyed=new ArrayList<>();
-            pigsDestroyed=new ArrayList<>();
-        }else{
-            this.world = new World(new Vector2(0, -12f), true);//
-            this.world.setContactListener(new collisionHandler(this));
-            System.out.println("assigning previous structures.......");
-            blocks=gameData.blocks;
-            birds=gameData.birds;
-            pigs=gameData.pigs;
-            blockPositions=gameData.blockPositions;
-            pigPositions=gameData.pigPositions;
-            birdGroundPositions=gameData.birdPositions;
-            currentBirdIndex= gameData.currentBirdIndex;
-            timeGap= gameData.timeGap;
-            gameWinTimer=gameData.gameWinTimer;
-            gameLoseTimer=gameData.gameLoseTimer;
-            bodiesToDestroy=gameData.bodiesToDestroy;
-            levelConstructed=true;
-            blocksDestroyed=gameData.blocksDestroyed;
-            pigsDestroyed=gameData.pigsDestroyed;
-            if(playingLevel==1){
-                level.getLevel1Textures(this.world,blocks,pigs,birds,blockPositions,pigPositions,birdGroundPositions, (ArrayList<Vector2>) gameData.birdVelocities, (ArrayList<Vector2>) gameData.pigVelocities, (ArrayList<Vector2>) gameData.blockVelocities,gameData.pigHealth,blocksDestroyed,pigsDestroyed);
-            }else if(playingLevel==2){
-                level.getLevel2Textures(this.world,blocks,pigs,birds,blockPositions,pigPositions,birdGroundPositions, (ArrayList<Vector2>) gameData.birdVelocities, (ArrayList<Vector2>) gameData.pigVelocities, (ArrayList<Vector2>) gameData.blockVelocities,gameData.pigHealth,blocksDestroyed,pigsDestroyed);
-            }else if(playingLevel==3){
-                level.getLevel3Textures(this.world,blocks,pigs,birds,blockPositions,pigPositions,birdGroundPositions, (ArrayList<Vector2>) gameData.birdVelocities, (ArrayList<Vector2>) gameData.pigVelocities, (ArrayList<Vector2>) gameData.blockVelocities,gameData.pigHealth,blocksDestroyed,pigsDestroyed);
+        if(!isTest){
+            if(gameData==null){
+                this.playingLevel=playingLevel;
+                this.levelConstructed=false;
+                camera=new OrthographicCamera();
+                camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
+                setTextures();
+                debugRenderer=new Box2DDebugRenderer();
+                pauseGameSave=new pauseGameSave();
+                System.out.println("no game data initally ...");
+                this.world = new World(new Vector2(0, -12f), true);//
+                this.world.setContactListener(new collisionHandler(this));
+                this.blocks = new ArrayList<>();
+                this.pigs = new ArrayList<>();
+                this.birds = new ArrayList<>();
+                blockPositions=new ArrayList<>();
+                pigPositions=new ArrayList<>();
+                birdGroundPositions=new ArrayList<>();
+                bodiesToDestroy=new ArrayList<>();
+                currentBirdIndex = 0;
+                timeGap=0;
+                gameWinTimer=0;
+                gameLoseTimer=0;
+                blocksDestroyed=new ArrayList<>();
+                pigsDestroyed=new ArrayList<>();
+            }else{
+                this.playingLevel=playingLevel;
+                this.levelConstructed=false;
+                camera=new OrthographicCamera();
+                camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
+                setTextures();
+                debugRenderer=new Box2DDebugRenderer();
+                pauseGameSave=new pauseGameSave();
+                this.world = new World(new Vector2(0, -12f), true);//
+                this.world.setContactListener(new collisionHandler(this));
+                System.out.println("assigning previous structures.......");
+                blocks=gameData.blocks;
+                birds=gameData.birds;
+                pigs=gameData.pigs;
+                blockPositions=gameData.blockPositions;
+                pigPositions=gameData.pigPositions;
+                birdGroundPositions=gameData.birdPositions;
+                currentBirdIndex= gameData.currentBirdIndex;
+                timeGap= gameData.timeGap;
+                gameWinTimer=gameData.gameWinTimer;
+                gameLoseTimer=gameData.gameLoseTimer;
+                bodiesToDestroy=gameData.bodiesToDestroy;
+                levelConstructed=true;
+                blocksDestroyed=gameData.blocksDestroyed;
+                pigsDestroyed=gameData.pigsDestroyed;
+                if(playingLevel==1){
+                    level.getLevel1Textures(this.world,blocks,pigs,birds,blockPositions,pigPositions,birdGroundPositions, (ArrayList<Vector2>) gameData.birdVelocities, (ArrayList<Vector2>) gameData.pigVelocities, (ArrayList<Vector2>) gameData.blockVelocities,gameData.pigHealth,blocksDestroyed,pigsDestroyed);
+                }else if(playingLevel==2){
+                    level.getLevel2Textures(this.world,blocks,pigs,birds,blockPositions,pigPositions,birdGroundPositions, (ArrayList<Vector2>) gameData.birdVelocities, (ArrayList<Vector2>) gameData.pigVelocities, (ArrayList<Vector2>) gameData.blockVelocities,gameData.pigHealth,blocksDestroyed,pigsDestroyed);
+                }else if(playingLevel==3){
+                    level.getLevel3Textures(this.world,blocks,pigs,birds,blockPositions,pigPositions,birdGroundPositions, (ArrayList<Vector2>) gameData.birdVelocities, (ArrayList<Vector2>) gameData.pigVelocities, (ArrayList<Vector2>) gameData.blockVelocities,gameData.pigHealth,blocksDestroyed,pigsDestroyed);
+                }
             }
         }
     }
@@ -216,9 +225,13 @@ public class playState extends abstractState implements Screen,Serializable{
     public void show() {
 
     }
+
+    public boolean checkLevelConstructed(){
+        return levelConstructed;
+    }
     @Override
     public void render(float delta){
-        if(levelConstructed){
+        if(checkLevelConstructed()){
             Gdx.graphics.setContinuousRendering(true);
             ScreenUtils.clear(0, 0, 0.2f, 1);
             camera.update();
@@ -324,23 +337,40 @@ public class playState extends abstractState implements Screen,Serializable{
             }
         }
     }
+
+    public boolean gameWon(ArrayList<pig<?>> p, List<pig<?>> Destroyed){
+        if(p.size()==Destroyed.size()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public boolean gameLose(int current,ArrayList<bird<?>> birdies){
+        if(current>=birdies.size()){
+            return true;
+        }else{
+            return false;
+        }
+    }
     public void checkGameOver(float delta){
-        if(pigs.size()==pigsDestroyed.size()){
+        if(gameWon(pigs,pigsDestroyed)){
             gameWinTimer+=delta;
             if(gameWinTimer>2){
                 if(currentBirdIndex<=birds.size()){
                     if(Core.currentLevel==getPlayingLevel() && Core.currentLevel<=2){
                         Core.currentLevel++;
                     }
+                    System.out.println("game Won");
                     game.setScreen(new resultState(game,playingLevel));
                     dispose();
                 }
             }
         }else{
-            if(currentBirdIndex>=birds.size()){
+            if(gameLose(currentBirdIndex,birds)){
                 gameLoseTimer+=delta;
                 if(gameLoseTimer>12){
                     game.setScreen(new resultState2(game,playingLevel));
+                    System.out.println("game Lost...");
                     dispose();
                 }
             }

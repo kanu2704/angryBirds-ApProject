@@ -9,16 +9,12 @@ buildscript {
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
   }
   dependencies {
-
-
   }
 }
 
 allprojects {
   apply plugin: 'eclipse'
   apply plugin: 'idea'
-
-  // This allows you to "Build and run using IntelliJ IDEA", an option in IDEA's Settings.
   idea {
     module {
       outputDir file('build/classes/java/main')
@@ -29,10 +25,13 @@ allprojects {
 
 configure(subprojects) {
   apply plugin: 'java-library'
-  sourceCompatibility = 11
+  sourceCompatibility = 8
 
-  // From https://lyze.dev/2021/04/29/libGDX-Internal-Assets-List/
-  // The article can be helpful when using assets.txt in your project.
+  // Add the JUnit 4 dependency for testing
+  dependencies {
+    testImplementation 'junit:junit:4.13.2' // JUnit 4 latest stable version
+  }
+
   tasks.register('generateAssetList') {
     inputs.dir("${project.rootDir}/assets/")
     // projectFolder/assets
@@ -41,11 +40,10 @@ configure(subprojects) {
     File assetsFile = new File(assetsFolder, "assets.txt")
     // delete that file in case we've already created it
     assetsFile.delete()
-
     // iterate through all files inside that folder
     // convert it to a relative path
     // and append it to the file assets.txt
-    fileTree(assetsFolder).collect { assetsFolder.relativePath(it) }.each {
+    fileTree(assetsFolder).collect { assetsFolder.relativePath(it) }.sort().each {
       assetsFile.append(it + "\n")
     }
   }
@@ -54,11 +52,16 @@ configure(subprojects) {
   compileJava {
     options.incremental = true
   }
+
+  // JUnit 4 does not require any special configuration for test tasks
+  test {
+    // Default configuration is sufficient for JUnit 4
+  }
 }
 
 subprojects {
   version = '$projectVersion'
-  ext.appName = 'AngryBirds'
+  ext.appName = 'APFinal'
   repositories {
     mavenCentral()
     maven { url 'https://s01.oss.sonatype.org' }
@@ -70,4 +73,4 @@ subprojects {
   }
 }
 
-eclipse.project.name = 'AngryBirds' + '-parent'
+eclipse.project.name = 'APFinal'+'-parent'

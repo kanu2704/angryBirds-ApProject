@@ -11,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 
 public class collisionHandler implements ContactListener {
     private final playState playState;
-    collisionHandler(playState playState){
+    public collisionHandler(playState playState){
         this.playState=playState;
     }
     @Override

@@ -25,11 +25,11 @@ level3btn.png
 levelSelectbg.png
 levelSelectbg2.png
 libgdx.png
-losebg.png
 loseBtn.png
+losebg.png
 nextLevelBtn.png
-pausebg.png
 pauseBtn.png
+pausebg.png
 pig1a.png
 pig1b.png
 pig1c.png
@@ -74,5 +74,5 @@ wb6.png
 wb7.png
 wb8.png
 wb9.png
-winbg.png
 winBtn.png
+winbg.png

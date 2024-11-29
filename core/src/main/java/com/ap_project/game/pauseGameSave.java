@@ -66,7 +66,7 @@ public class pauseGameSave implements Serializable{
     }
     private static playState getPlayState(gameData gameData,Core game,int level) {
         System.out.println("im hereeee");
-        playState playScreen= new playState(game, level,gameData);
+        playState playScreen= new playState(game, level,gameData,false);
         return playScreen;
     }
     public void saveLevelWise(int playingLevel, gameData gameData) {

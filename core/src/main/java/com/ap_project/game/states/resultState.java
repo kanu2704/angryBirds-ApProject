@@ -59,7 +59,7 @@ public class resultState extends abstractState implements Screen {
                 if(Core.currentLevel==level){
                     Core.currentLevel++;
                 }
-                playState newPlayScreen=new playState(game,level,null);
+                playState newPlayScreen=new playState(game,level,null,false);
                 game.setScreen(newPlayScreen);
                 dispose();
             }

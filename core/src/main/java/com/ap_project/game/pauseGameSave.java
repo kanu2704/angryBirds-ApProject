@@ -121,10 +121,10 @@ public class pauseGameSave implements Serializable{
                     Core.batch = new SpriteBatch();
                     playState playScreen = getPlayState(gameData,game,playingLevel);
                     System.out.println("After loading ....");
-                    System.out.println("birds size: "+ gameData.birds.size());
-                    System.out.println("birds velocity size: "+ gameData.birdVelocities.size());
-                    System.out.println("blocksDestroyed size: "+ gameData.blocksDestroyed.size());
-                    System.out.println("pigsDestroyed size: "+ gameData.pigsDestroyed.size());
+//                    System.out.println("birds size: "+ gameData.birds.size());
+//                    System.out.println("birds velocity size: "+ gameData.birdVelocities.size());
+//                    System.out.println("blocksDestroyed size: "+ gameData.blocksDestroyed.size());
+//                    System.out.println("pigsDestroyed size: "+ gameData.pigsDestroyed.size());
                     clearFile("C:\\Users\\kanup\\Downloads\\school attachments\\cs\\AngryBirds\\saves\\level_"+playingLevel+"_data.dat");
                     return playScreen;
                 } catch (EOFException e) {

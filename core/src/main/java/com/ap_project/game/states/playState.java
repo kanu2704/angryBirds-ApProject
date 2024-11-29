@@ -64,7 +64,6 @@ public class playState extends abstractState implements Screen,Serializable{
     public boolean levelConstructed;
     public List<block<?>> blocksDestroyed;
     public List<pig<?>> pigsDestroyed;
-    private Box2DDebugRenderer debugRenderer;
 
 
     public playState(Core game, int playingLevel,gameData gameData,boolean isTest){
@@ -77,7 +76,7 @@ public class playState extends abstractState implements Screen,Serializable{
                 camera=new OrthographicCamera();
                 camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
                 setTextures();
-                debugRenderer=new Box2DDebugRenderer();
+                //debugRenderer=new Box2DDebugRenderer();
                 pauseGameSave=new pauseGameSave();
                 System.out.println("no game data initally ...");
                 this.world = new World(new Vector2(0, -12f), true);//
@@ -101,7 +100,7 @@ public class playState extends abstractState implements Screen,Serializable{
                 camera=new OrthographicCamera();
                 camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
                 setTextures();
-                debugRenderer=new Box2DDebugRenderer();
+                //debugRenderer=new Box2DDebugRenderer();
                 pauseGameSave=new pauseGameSave();
                 this.world = new World(new Vector2(0, -12f), true);//
                 this.world.setContactListener(new collisionHandler(this));
@@ -295,7 +294,7 @@ public class playState extends abstractState implements Screen,Serializable{
             world.step(1/60f, 6, 2);
             world.step(1/60f, 6, 2);
             game.batch.end();
-            debugRenderer.render(world, camera.combined);
+            //debugRenderer.render(world, camera.combined);
         }
         update(delta);
     }
@@ -484,6 +483,6 @@ public class playState extends abstractState implements Screen,Serializable{
         for (pig<?> currentPig : pigs) {
             currentPig.getPigTexture().dispose();
         }
-        debugRenderer.dispose();
+        //debugRenderer.dispose();
     }
 }

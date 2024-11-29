@@ -32,12 +32,9 @@ public abstract class block<T extends block<T>> implements Serializable  {
             this.position = new Vector2(0, 0);
             this.velocity = new Vector2(0, 0);
             createBody(world);
-
         }
+        //bounds=new Rectangle(this.position.x,this.position.y,this.width,this.height);
 
-
-
-        bounds=new Rectangle(this.position.x,this.position.y,this.width,this.height);
     }
     public void setPosition(Vector2 position) {
 

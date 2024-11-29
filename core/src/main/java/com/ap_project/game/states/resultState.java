@@ -75,7 +75,6 @@ public class resultState extends abstractState implements Screen {
                 }
                 level++;
                 playState newPlayScreen=pauseGameSave.loadLevelWiseGameData(level,game);
-                //playState newPlayScreen=new playState(game,level,null);
                 game.setScreen(newPlayScreen);
                 dispose();
             }

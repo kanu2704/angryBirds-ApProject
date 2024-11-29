@@ -51,7 +51,7 @@ public class gameData implements Serializable {
         this.pigHealth=pigHealth;
         this.currentGameLevel=currentLevel;
         this.blockVelocities=blockVelocity;
-        System.out.println("when block velocity set the block velocity size is "+blockVelocities.size());
+        //System.out.println("when block velocity set the block velocity size is "+blockVelocities.size());
         this.pigVelocities=pigVelocity;
         this.birdVelocities=birdVelocity;
         this.pigsDestroyed=pigsDestroyed;

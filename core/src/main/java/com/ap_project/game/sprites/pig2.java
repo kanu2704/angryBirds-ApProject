@@ -7,6 +7,6 @@ import java.io.Serializable;
 public class pig2 extends pig implements Serializable{
     public pig2(String texturePath, World world) {
         super(texturePath,world);
-        this.hits=25;
+        this.hits=20;
     }
 }

@@ -1,5 +1,6 @@
 package com.ap_project.game.states;
 import com.ap_project.game.totalSaveGame;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ap_project.game.Core;
 import com.badlogic.gdx.Gdx;
@@ -7,6 +8,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class menuState extends abstractState implements Screen {
@@ -16,12 +21,27 @@ public class menuState extends abstractState implements Screen {
     final private Texture playBtn;
     private Texture heading;
     final private Texture exitButton;
+    private Texture soundOnBtn;
+    private ImageButton soundBtn;
+    //final private Texture soundOffBtn;
+
+    boolean soundOn=true;
 
     //  play button position attributes
     private float playBtnX;
     private float playBtnY;
     private float playWidth;
     private float playHeight;
+
+    private float soundOnBtnX;
+    private float soundOnBtnY;
+    private float soundOnBtnWidth;
+    private float soundOnBtnHeight;
+//
+//    private float soundOffBtnX;
+//    private float soundOffBtnY;
+//    private float soundOffBtnWidth;
+//    private float soundOffBtnHeight;
 
     private float exitBtnX;
     private float exitBtnY;
@@ -42,6 +62,19 @@ public class menuState extends abstractState implements Screen {
         playBtnX = (Core.WIDTH - playWidth) / 2 - 20;
         playBtnY = (Core.HEIGHT - playHeight) / 2;
 
+
+        soundOnBtn=new Texture("soundOnBtn.png");
+        //soundOffBtn=new Texture("soundOffBtn.png");
+        soundOnBtnX=30;
+        soundOnBtnY=30;
+        soundOnBtnWidth=soundOnBtn.getWidth()*0.2f;
+        soundOnBtnHeight=soundOnBtn.getHeight()*0.2f;
+//
+//        soundOffBtnX=30;
+//        soundOffBtnY=30;
+//        soundOffBtnWidth=soundOffBtn.getWidth()*0.4f;
+//        soundOffBtnHeight=soundOffBtn.getHeight()*0.4f;
+        //createBtn();
         exitButton=new Texture("exitButton.png");
         exitWidth=exitButton.getWidth()*0.25f;
         exitHeight=exitButton.getHeight()*0.25f;
@@ -65,6 +98,17 @@ public class menuState extends abstractState implements Screen {
                 totalSaveGame.saveCurrentLevel(Core.currentLevel);
                 dispose();
                 Gdx.app.exit();
+            }else if(touchPos.x >= soundOnBtnX && touchPos.x<= (soundOnBtnX + soundOnBtnWidth) &&
+                touchPos.y >= soundOnBtnY && touchPos.y <= (soundOnBtnY + soundOnBtnHeight)){
+                if(soundOn){
+                    game.backgroundMusic.pause();
+                    soundOnBtn=new Texture("soundOffBtn.png");
+                    soundOn=false;
+                }else{
+                    game.backgroundMusic.play();
+                    soundOnBtn=new Texture("soundOnBtn.png");
+                    soundOn=true;
+                }
             }
         }
     }
@@ -72,6 +116,17 @@ public class menuState extends abstractState implements Screen {
     @Override
     protected void update(float dt) {
         handleInput();
+    }
+    public void createBtn(){
+        soundBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(soundOnBtn)));
+        soundBtn.setSize(soundOnBtnWidth, soundOnBtnHeight);
+        soundBtn.setPosition(soundOnBtnX,soundOnBtnY);
+        soundBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+            }
+        });
     }
 
     @Override
@@ -96,6 +151,17 @@ public class menuState extends abstractState implements Screen {
             headingWidth, headingHeight);
         game.batch.draw(playBtn, playBtnX, playBtnY, playWidth, playHeight);
         game.batch.draw(exitButton,exitBtnX,exitBtnY,exitWidth,exitHeight);
+        //game.batch.draw(soundOnBtn,soundOnBtnX,soundOnBtnY,soundOnBtnWidth,soundOnBtnHeight);
+//        soundBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(soundOnBtn)));
+//        soundBtn.setSize(soundOnBtnWidth, soundOnBtnHeight);
+//        soundBtn.setPosition(soundOnBtnX,soundOnBtnY);
+//        soundBtn.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//
+//            }
+//        });
+        createBtn();
         game.batch.end();
         handleInput();
     }
@@ -122,5 +188,6 @@ public class menuState extends abstractState implements Screen {
         heading.dispose();
         playBtn.dispose();
         exitButton.dispose();
+        soundOnBtn.dispose();
     }
 }

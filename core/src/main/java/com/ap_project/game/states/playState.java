@@ -64,6 +64,8 @@ public class playState extends abstractState implements Screen,Serializable{
     public boolean levelConstructed;
     public List<block<?>> blocksDestroyed;
     public List<pig<?>> pigsDestroyed;
+    private Box2DDebugRenderer debugRenderer;
+
 
     public playState(Core game, int playingLevel,gameData gameData){
         super();
@@ -73,6 +75,7 @@ public class playState extends abstractState implements Screen,Serializable{
         camera=new OrthographicCamera();
         camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
         setTextures();
+        debugRenderer=new Box2DDebugRenderer();
         pauseGameSave=new pauseGameSave();
         if(gameData==null){
             System.out.println("no game data initally ...");
@@ -231,6 +234,7 @@ public class playState extends abstractState implements Screen,Serializable{
                 block<?> currentBlock = blocks.get(i);
                 if(!currentBlock.isDestroyed() && currentBlock.getBody()!=null){
                     float blockAngle = (float) Math.toDegrees(currentBlock.getBody().getAngle());
+                    //System.out.println(blockAngle);
                     game.batch.draw(new TextureRegion(blocks.get(i).getBlockTexture()),
                         currentBlock.getPosition().x * PPM - currentBlock.width / 4,
                         currentBlock.getPosition().y * PPM - currentBlock.height / 4,
@@ -278,6 +282,7 @@ public class playState extends abstractState implements Screen,Serializable{
             world.step(1/60f, 6, 2);
             world.step(1/60f, 6, 2);
             game.batch.end();
+            debugRenderer.render(world, camera.combined);
         }
         update(delta);
     }
@@ -341,23 +346,6 @@ public class playState extends abstractState implements Screen,Serializable{
             }
         }
     }
-//    public void queueBodyForDestruction(Object obj) {
-//        bodiesToDestroy.add(obj);
-//        if (obj instanceof block<?>) {
-//            block<?> block = (block<?>) obj; // safely cast
-//            if (block.getBody() != null && !bodiesToDestroy.contains(block)) {
-//                bodiesToDestroy.add(block);
-//                blocksDestroyed.add(block);
-//            }
-//        }
-//        else if (obj instanceof pig<?>) {
-//            pig<?> pig = (pig<?>) obj;
-//            if (pig.getBody() != null && !bodiesToDestroy.contains(pig)) {
-//                bodiesToDestroy.add(pig);
-//                pigsDestroyed.add(pig);
-//            }
-//        }
-//    }
 
     public void queueBodyForDestruction(Object obj) {
         if (!bodiesToDestroy.contains(obj)) {
@@ -466,5 +454,6 @@ public class playState extends abstractState implements Screen,Serializable{
         for (pig<?> currentPig : pigs) {
             currentPig.getPigTexture().dispose();
         }
+        debugRenderer.dispose();
     }
 }

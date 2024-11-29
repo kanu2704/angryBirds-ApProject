@@ -38,7 +38,7 @@ public abstract class block<T extends block<T>> implements Serializable  {
     public void setVelocity(Vector2 velocity){
         this.velocity=velocity;
         this.getBody().setLinearVelocity(velocity);
-        this.getBody().setAngularVelocity(0);
+        //this.getBody().setAngularVelocity(0);
     }
     public Vector2 getPosition() {
         return this.getBody().getPosition();

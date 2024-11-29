@@ -4,6 +4,7 @@ import com.ap_project.game.states.*;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -24,11 +25,16 @@ public class Core extends Game implements Serializable {
     public static transient SpriteBatch batch;
     public static int currentLevel;
     private totalSaveGame totalSaveGame;
+    public Music backgroundMusic;
 
 
     @Override
     public void create() {
         totalSaveGame=new totalSaveGame();
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("backgroundMusic.ogg"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(0.5f);
+        backgroundMusic.play();
         Integer level=totalSaveGame.loadCurrentLevel();
         if(level==null){
             currentLevel=1;

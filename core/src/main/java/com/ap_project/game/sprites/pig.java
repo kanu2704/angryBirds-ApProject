@@ -34,7 +34,7 @@ public abstract class pig<T extends pig<T>> implements Serializable {
     public void setVelocity(Vector2 velocity) {
         this.velocity = velocity;
         this.getBody().setLinearVelocity(velocity);
-        this.getBody().setAngularVelocity(0);
+        //this.getBody().setAngularVelocity(0);
     }
     public void setPosition(Vector2 position) {
         this.position.set(position);
@@ -69,8 +69,8 @@ public abstract class pig<T extends pig<T>> implements Serializable {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(this.position.x/PPM,this.position.y/PPM);
         bodyDef.linearVelocity.set(0,0);
-        bodyDef.angularVelocity=0;
-        bodyDef.angularDamping=0.8f;
+        //bodyDef.angularVelocity=0;
+        //bodyDef.angularDamping=0.8f;
         this.body = world.createBody(bodyDef);
         CircleShape shape = new CircleShape();
         shape.setRadius(Math.min(width, height)/2/PPM);

@@ -29,7 +29,7 @@ public class levelState extends abstractState implements Screen {
         camera=new OrthographicCamera();
         camera.setToOrtho(false,Core.WIDTH,Core.HEIGHT);
         this.pauseGameSave=new pauseGameSave();
-        background = new Texture("levelSelectbg.png");
+        background = new Texture("levelSelectbg2.png");
         backButton = new Texture("backButton.png");
         level1Btn = new Texture("level1btn.png");
         level2Btn = new Texture("level2btn.png");
@@ -44,12 +44,12 @@ public class levelState extends abstractState implements Screen {
         if (Gdx.input.justTouched()) {
             Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(),0);
             camera.unproject(touchPos);
-            if(touchPos.x>=300 && touchPos.x<=300+level1Btn.getWidth() && touchPos.y>=400 && touchPos.y<=400+level1Btn.getHeight()){
+            if(touchPos.x>=300 && touchPos.x<=300+level1Btn.getWidth() && touchPos.y>=300 && touchPos.y<=400+level1Btn.getHeight()){
                 playState playScreen=pauseGameSave.loadLevelWiseGameData(1,game);
                 game.setScreen(playScreen);
                 dispose();
             }
-            else if(touchPos.x>=420+levelBtnWidth+10f && touchPos.x<=420+levelBtnWidth+10f +levelBtnWidth && touchPos.y>=400 && touchPos.y<=400+level2Btn.getHeight()){
+            else if(touchPos.x>=420+levelBtnWidth+10f && touchPos.x<=420+levelBtnWidth+10f +levelBtnWidth && touchPos.y>=300 && touchPos.y<=400+level2Btn.getHeight()){
                 if(Core.currentLevel>1){
                     System.out.println("clicked here...");
                     playState playScreen=pauseGameSave.loadLevelWiseGameData(2,game);
@@ -59,7 +59,7 @@ public class levelState extends abstractState implements Screen {
                     System.out.println("previous levels not cleared......");
                 }
             }
-            else if(touchPos.x>=540 + 2 * (levelBtnWidth + 10f) && touchPos.x<=540 + 2 * (levelBtnWidth + 10f) +levelBtnWidth && touchPos.y>=400 && touchPos.y<=400+level2Btn.getHeight()){
+            else if(touchPos.x>=540 + 2 * (levelBtnWidth + 10f) && touchPos.x<=540 + 2 * (levelBtnWidth + 10f) +levelBtnWidth && touchPos.y>=300 && touchPos.y<=400+level2Btn.getHeight()){
                 if(Core.currentLevel>2){
                     playState playScreen=pauseGameSave.loadLevelWiseGameData(3,game);
                     game.setScreen(playScreen);
@@ -95,9 +95,9 @@ public class levelState extends abstractState implements Screen {
         game.batch.draw(background, 0, 0, 1280, 720);
         game.batch.draw(backButton, 20, 720 - backHeight - 20, backWidth, backHeight);
         float spacing = 10f;
-        game.batch.draw(level1Btn, 300, 400, levelBtnWidth, levelBtnHeight);
-        game.batch.draw(level2Btn, 420 + levelBtnWidth + spacing, 400, levelBtnWidth, levelBtnHeight);
-        game.batch.draw(level3Btn, 540 + 2 * (levelBtnWidth + spacing), 400, levelBtnWidth, levelBtnHeight);
+        game.batch.draw(level1Btn, 300, 300, levelBtnWidth, levelBtnHeight);
+        game.batch.draw(level2Btn, 420 + levelBtnWidth + spacing, 300, levelBtnWidth, levelBtnHeight);
+        game.batch.draw(level3Btn, 540 + 2 * (levelBtnWidth + spacing), 300, levelBtnWidth, levelBtnHeight);
         game.batch.end();
         handleInput();
     }

@@ -44,7 +44,7 @@ public abstract class bird<T extends bird<T>> implements Serializable {
     public void setVelocity(Vector2 velocity) {
         this.velocity.set(velocity);
         this.getBody().setLinearVelocity(velocity);
-        this.getBody().setAngularVelocity(0);
+        //this.getBody().setAngularVelocity(0);
     }
     public void setPosition(Vector2 position) {
         this.position.set(position);
@@ -76,8 +76,8 @@ public abstract class bird<T extends bird<T>> implements Serializable {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(this.position);
         bodyDef.linearVelocity.set(0,0);
-        bodyDef.angularVelocity=0;
-        bodyDef.angularDamping=10;
+        //bodyDef.angularVelocity=0;
+        bodyDef.angularDamping=10f;
         this.body = world.createBody(bodyDef);
         CircleShape shape = new CircleShape();
         shape.setRadius(Math.min(width, height) / 2/PPM);

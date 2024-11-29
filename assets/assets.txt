@@ -23,6 +23,7 @@ level1btn.png
 level2btn.png
 level3btn.png
 levelSelectbg.png
+levelSelectbg2.png
 libgdx.png
 losebg.png
 loseBtn.png
@@ -52,6 +53,8 @@ sb6.png
 sb7.png
 slingBack.png
 slingFront.png
+soundOffBtn.png
+soundOnBtn.png
 stars.png
 wb1.png
 wb10.png

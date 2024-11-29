@@ -70,12 +70,15 @@ public class pauseGameSave implements Serializable{
         return playScreen;
     }
     public void saveLevelWise(int playingLevel, gameData gameData) {
-        //String saveLevelFile=getSaveFilePath("level_" + playingLevel + "_data.dat");
-        File levelFile=new File("C:\\Users\\kanup\\Downloads\\school attachments\\cs\\AngryBirds\\saves\\level_"+playingLevel+"_data.dat");
-        //String levelMapFilePath=getSaveFilePath("levelWiseData.dat");
-
-        File levelMapFile=new File("C:\\Users\\kanup\\Downloads\\school attachments\\cs\\AngryBirds\\saves\\levelWiseData.dat");
+//
+//        File levelFile=new File("C:\\Users\\kanup\\Downloads\\school attachments\\cs\\AngryBirds\\saves\\level_"+playingLevel+"_data.dat");
+//        //String levelMapFilePath=getSaveFilePath("levelWiseData.dat");
+//
+//        File levelMapFile=new File("C:\\Users\\kanup\\Downloads\\school attachments\\cs\\AngryBirds\\saves\\levelWiseData.dat");
         //System.out.println(levelMapFilePath);
+        String baseDir = System.getProperty("user.dir");
+        File levelFile = new File(baseDir, "saves/level_" + playingLevel + "_data.dat");
+        File levelMapFile = new File(baseDir, "saves/levelWiseData.dat");
         try {
             FileOutputStream gameDataOutputStream = new FileOutputStream(levelFile);
             ObjectOutputStream gameDataObjectOutputStream = new ObjectOutputStream(gameDataOutputStream);
@@ -94,8 +97,9 @@ public class pauseGameSave implements Serializable{
     }
 
     public playState loadLevelWiseGameData(int playingLevel,Core game) {
-        File levelMapFile = new File("C:\\Users\\kanup\\Downloads\\school attachments\\cs\\AngryBirds\\saves\\levelWiseData.dat");
-
+        //File levelMapFile = new File("C:\\Users\\kanup\\Downloads\\school attachments\\cs\\AngryBirds\\saves\\levelWiseData.dat");
+        String baseDir = System.getProperty("user.dir");
+        File levelMapFile = new File(baseDir, "saves/levelWiseData.dat");
         try {
             if (levelMapFile.exists() && levelMapFile.length() > 0) {
                 try (FileInputStream levelMapInputStream = new FileInputStream("C:\\Users\\kanup\\Downloads\\school attachments\\cs\\AngryBirds\\saves\\levelWiseData.dat");

@@ -1,5 +1,8 @@
-<<<<<<< HEAD
 # AngryBirds
+Developed an Angry Birds game by applying OOPS principles, integrating LibGDX,
+Serialisation and designing multiple interactive game components with 25+ classes.
+Ensured robustness through unit tests and implemented key design patterns for 
+modularity.
 
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
